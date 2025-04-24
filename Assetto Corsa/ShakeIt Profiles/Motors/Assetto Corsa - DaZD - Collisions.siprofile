@@ -1,0 +1,72 @@
+{
+  "CarChoices": [],
+  "IncludeOutputSettingsInProfile": false,
+  "UnmuteEffectsAfterSimhubRestart": true,
+  "EffectsContainers": [
+    {
+      "ContainerType": "CustomEffectContainer",
+      "IsEnabled": true,
+      "Gain": 100.0,
+      "Description": "Collisions",
+      "FrontLeftFormula": {
+        "JSExt": 0,
+        "Interpreter": 1,
+        "Expression": "if( \r\n\t(getCollidedWith(150) != 'None') && \r\n\t(isnull($prop('UDPConnectorDataPlugin.CollisionPositionX'),0)>-0.5) && \r\n\t(isnull($prop('UDPConnectorDataPlugin.CollisionPositionZ'),0)>0.5) \r\n)\r\n    return 100 * getSpeedRatio();\r\nreturn 0;",
+        "PreExpression": "let collidedWith = 'None';\r\n//const TEMPO = 1000;\r\nlet nextUpdate = 0;\r\n\r\nfunction updateCollidedWith(tempo) {\r\n\tlet currentCollidedWith = isnull($prop('UDPConnectorDataPlugin.CollidedWith'), 'None');\r\n\tif (currentCollidedWith != 'None') {\r\n\t\tcollidedWith = currentCollidedWith;\r\n\t\tnextUpdate = Date.now() + tempo;//TEMPO;\r\n\t} else {\r\n\t\tif (nextUpdate <= Date.now())\r\n\t\t\tcollidedWith = 'None';\r\n\t}\r\n}\r\n\r\nfunction getCollidedWith(tempo) {\r\n\tupdateCollidedWith(tempo);\r\n\treturn collidedWith;\r\n}\r\n\r\nfunction getSpeedRatio() {\r\n    let speed = $prop('SpeedKmh');\r\n    if (speed <1) return 0;\r\n    return mapRange(speed, 1, 50, 0.5, 1);\r\n} \r\n\r\nfunction mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}"
+      },
+      "FrontRightFormula": {
+        "JSExt": 0,
+        "Interpreter": 1,
+        "Expression": "if( \r\n    (getCollidedWith(150) != 'None') && \r\n    (isnull($prop('UDPConnectorDataPlugin.CollisionPositionX'),0)<0.5) && \r\n    (isnull($prop('UDPConnectorDataPlugin.CollisionPositionZ'),0)>0.5) \r\n)\r\n    return 100 * getSpeedRatio();\r\nreturn 0;",
+        "PreExpression": "let collidedWith = 'None';\r\n//const TEMPO = 1000;\r\nlet nextUpdate = 0;\r\n\r\nfunction updateCollidedWith(tempo) {\r\n\tlet currentCollidedWith = isnull($prop('UDPConnectorDataPlugin.CollidedWith'), 'None');\r\n\tif (currentCollidedWith != 'None') {\r\n\t\tcollidedWith = currentCollidedWith;\r\n\t\tnextUpdate = Date.now() + tempo;//TEMPO;\r\n\t} else {\r\n\t\tif (nextUpdate <= Date.now())\r\n\t\t\tcollidedWith = 'None';\r\n\t}\r\n}\r\n\r\nfunction getCollidedWith(tempo) {\r\n\tupdateCollidedWith(tempo);\r\n\treturn collidedWith;\r\n}\r\n\r\nfunction getSpeedRatio() {\r\n    let speed = $prop('SpeedKmh');\r\n    if (speed <1) return 0;\r\n    return mapRange(speed, 1, 50, 0.5, 1);\r\n} \r\n\r\nfunction mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}"
+      },
+      "RearLeftFormula": {
+        "JSExt": 0,
+        "Interpreter": 1,
+        "Expression": "if( \r\n    (getCollidedWith(150) != 'None') && \r\n    (isnull($prop('UDPConnectorDataPlugin.CollisionPositionX'),0)>-0.5) && \r\n    (isnull($prop('UDPConnectorDataPlugin.CollisionPositionZ'),0)<-0.5) \r\n)\r\n    return 100 * getSpeedRatio();\r\nreturn 0;",
+        "PreExpression": "let collidedWith = 'None';\r\n//const TEMPO = 1000;\r\nlet nextUpdate = 0;\r\n\r\nfunction updateCollidedWith(tempo) {\r\n\tlet currentCollidedWith = isnull($prop('UDPConnectorDataPlugin.CollidedWith'), 'None');\r\n\tif (currentCollidedWith != 'None') {\r\n\t\tcollidedWith = currentCollidedWith;\r\n\t\tnextUpdate = Date.now() + tempo;//TEMPO;\r\n\t} else {\r\n\t\tif (nextUpdate <= Date.now())\r\n\t\t\tcollidedWith = 'None';\r\n\t}\r\n}\r\n\r\nfunction getCollidedWith(tempo) {\r\n\tupdateCollidedWith(tempo);\r\n\treturn collidedWith;\r\n}\r\n\r\nfunction getSpeedRatio() {\r\n    let speed = $prop('SpeedKmh');\r\n    if (speed <1) return 0;\r\n    return mapRange(speed, 1, 50, 0.5, 1);\r\n} \r\n\r\nfunction mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}"
+      },
+      "RearRightFormula": {
+        "JSExt": 0,
+        "Interpreter": 1,
+        "Expression": "if( \r\n    (getCollidedWith(150) != 'None') && \r\n    (isnull($prop('UDPConnectorDataPlugin.CollisionPositionX'),0)<0.5) && \r\n    (isnull($prop('UDPConnectorDataPlugin.CollisionPositionZ'),0)<-0.5) \r\n)\r\n    return 100 * getSpeedRatio();\r\nreturn 0;",
+        "PreExpression": "let collidedWith = 'None';\r\n//const TEMPO = 1000;\r\nlet nextUpdate = 0;\r\n\r\nfunction updateCollidedWith(tempo) {\r\n\tlet currentCollidedWith = isnull($prop('UDPConnectorDataPlugin.CollidedWith'), 'None');\r\n\tif (currentCollidedWith != 'None') {\r\n\t\tcollidedWith = currentCollidedWith;\r\n\t\tnextUpdate = Date.now() + tempo;//TEMPO;\r\n\t} else {\r\n\t\tif (nextUpdate <= Date.now())\r\n\t\t\tcollidedWith = 'None';\r\n\t}\r\n}\r\n\r\nfunction getCollidedWith(tempo) {\r\n\tupdateCollidedWith(tempo);\r\n\treturn collidedWith;\r\n}\r\n\r\nfunction getSpeedRatio() {\r\n    let speed = $prop('SpeedKmh');\r\n    if (speed <1) return 0;\r\n    return mapRange(speed, 1, 50, 0.5, 1);\r\n} \r\n\r\nfunction mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}"
+      },
+      "ForceFrequencies": false,
+      "FrontLeftFrequencyFormula": {
+        "Expression": ""
+      },
+      "FrontRightFrequencyFormula": {
+        "Expression": ""
+      },
+      "RearLeftFrequencyFormula": {
+        "Expression": ""
+      },
+      "RearRightFrequencyFormula": {
+        "Expression": ""
+      },
+      "ContainerId": "03b7ca8c-9a97-4688-8c5c-8f99ce2fc72a",
+      "AggregationMode": "Corners",
+      "Filter": {
+        "GammaValue": 1.0,
+        "InputGain": 100.0,
+        "MinimumForce": 0,
+        "Threshold": 0,
+        "FilterType": "GammaFilter"
+      },
+      "Output": {
+        "OutputType": "VibrationOutput"
+      }
+    }
+  ],
+  "AutoCalibrationRatio2": 100,
+  "OutputMode": 0,
+  "GlobalGain": 50.0,
+  "UseProfileGain": false,
+  "LastLoaded": "2024-01-04T13:27:57.464213+01:00",
+  "Description": "4 Corners collisions effect for Assetto Corsa",
+  "Name": "DaZD Collisions",
+  "ProfileId": "17ce81a5-f300-42ad-ada7-b4e2e5fa57b4",
+  "GameCode": "AssettoCorsa",
+  "CarChoice": null
+}

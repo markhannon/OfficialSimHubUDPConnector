@@ -1,0 +1,80 @@
+{
+  "CarChoices": [],
+  "IncludeOutputSettingsInProfile": false,
+  "UnmuteEffectsAfterSimhubRestart": true,
+  "EffectsContainers": [
+    {
+      "ContainerType": "CustomEffectContainer",
+      "IsEnabled": true,
+      "Gain": 100.0,
+      "Description": "Road Rumble",
+      "FrontLeftFormula": {
+        "JSExt": 0,
+        "Interpreter": 1,
+        "Expression": "return evaluateGain($prop('UDPConnectorDataPlugin.WheelFLSurface'), $prop('UDPConnectorDataPlugin.WheelFLSurfaceVibrationGain'));",
+        "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(surfaceProp, gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet surface = isnull(surfaceProp, 'Base');\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\tswitch (surface) {\r\n\t\tcase 'Base':\r\n\t\t\treturn 0;\r\n\t\tcase 'Grass':\r\n\t\t\treturn 45 * speedRatio;\r\n\t\tcase 'ExtraTurf':\r\n\t\t\treturn 30 * speedRatio;\r\n\t\tcase 'Gravel':\r\n\t\t\treturn 85 * speedRatio;\r\n\t\tcase 'Kerb':\r\n\t\t\treturn 100 * speedRatio;\r\n\t\tcase 'Old':\r\n\t\t\treturn 15 * speedRatio;\r\n\t\tcase 'Sand':\r\n\t\t\treturn 75 * speedRatio;\r\n\t\tcase 'Ice':\r\n\t\t\treturn 70 * speedRatio;\r\n\t\tcase 'Snow':\r\n\t\t\treturn 60 * speedRatio;\r\n\t\tdefault:\r\n\t\t\treturn 0;\r\n\t}\r\n}"
+      },
+      "FrontRightFormula": {
+        "JSExt": 0,
+        "Interpreter": 1,
+        "Expression": "return evaluateGain($prop('UDPConnectorDataPlugin.WheelFRSurface'), $prop('UDPConnectorDataPlugin.WheelFRSurfaceVibrationGain'));",
+        "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(surfaceProp, gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet surface = isnull(surfaceProp, 'Base');\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\tswitch (surface) {\r\n\t\tcase 'Base':\r\n\t\t\treturn 0;\r\n\t\tcase 'Grass':\r\n\t\t\treturn 45 * speedRatio;\r\n\t\tcase 'ExtraTurf':\r\n\t\t\treturn 30 * speedRatio;\r\n\t\tcase 'Gravel':\r\n\t\t\treturn 85 * speedRatio;\r\n\t\tcase 'Kerb':\r\n\t\t\treturn 100 * speedRatio;\r\n\t\tcase 'Old':\r\n\t\t\treturn 15 * speedRatio;\r\n\t\tcase 'Sand':\r\n\t\t\treturn 75 * speedRatio;\r\n\t\tcase 'Ice':\r\n\t\t\treturn 70 * speedRatio;\r\n\t\tcase 'Snow':\r\n\t\t\treturn 60 * speedRatio;\r\n\t\tdefault:\r\n\t\t\treturn 0;\r\n\t}\r\n}"
+      },
+      "RearLeftFormula": {
+        "JSExt": 0,
+        "Interpreter": 1,
+        "Expression": "\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelRLSurface'), $prop('UDPConnectorDataPlugin.WheelRLSurfaceVibrationGain'));\r\n",
+        "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(surfaceProp, gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet surface = isnull(surfaceProp, 'Base');\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\tswitch (surface) {\r\n\t\tcase 'Base':\r\n\t\t\treturn 0;\r\n\t\tcase 'Grass':\r\n\t\t\treturn 45 * speedRatio;\r\n\t\tcase 'ExtraTurf':\r\n\t\t\treturn 30 * speedRatio;\r\n\t\tcase 'Gravel':\r\n\t\t\treturn 85 * speedRatio;\r\n\t\tcase 'Kerb':\r\n\t\t\treturn 100 * speedRatio;\r\n\t\tcase 'Old':\r\n\t\t\treturn 15 * speedRatio;\r\n\t\tcase 'Sand':\r\n\t\t\treturn 75 * speedRatio;\r\n\t\tcase 'Ice':\r\n\t\t\treturn 70 * speedRatio;\r\n\t\tcase 'Snow':\r\n\t\t\treturn 60 * speedRatio;\r\n\t\tdefault:\r\n\t\t\treturn 0;\r\n\t}\r\n}"
+      },
+      "RearRightFormula": {
+        "JSExt": 0,
+        "Interpreter": 1,
+        "Expression": "\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelRRSurface'), $prop('UDPConnectorDataPlugin.WheelRRSurfaceVibrationGain'));\r\n",
+        "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(surfaceProp, gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet surface = isnull(surfaceProp, 'Base');\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\tswitch (surface) {\r\n\t\tcase 'Base':\r\n\t\t\treturn 0;\r\n\t\tcase 'Grass':\r\n\t\t\treturn 45 * speedRatio;\r\n\t\tcase 'ExtraTurf':\r\n\t\t\treturn 30 * speedRatio;\r\n\t\tcase 'Gravel':\r\n\t\t\treturn 85 * speedRatio;\r\n\t\tcase 'Kerb':\r\n\t\t\treturn 100 * speedRatio;\r\n\t\tcase 'Old':\r\n\t\t\treturn 15 * speedRatio;\r\n\t\tcase 'Sand':\r\n\t\t\treturn 75 * speedRatio;\r\n\t\tcase 'Ice':\r\n\t\t\treturn 70 * speedRatio;\r\n\t\tcase 'Snow':\r\n\t\t\treturn 60 * speedRatio;\r\n\t\tdefault:\r\n\t\t\treturn 0;\r\n\t}\r\n}"
+      },
+      "ForceFrequencies": false,
+      "FrontLeftFrequencyFormula": {
+        "Expression": ""
+      },
+      "FrontRightFrequencyFormula": {
+        "Expression": ""
+      },
+      "RearLeftFrequencyFormula": {
+        "Expression": ""
+      },
+      "RearRightFrequencyFormula": {
+        "Expression": ""
+      },
+      "ContainerId": "7ec91635-5a94-4c28-a242-be5bb87bb6a5",
+      "AggregationMode": "Corners",
+      "Filter": {
+        "GammaValue": 1.3,
+        "InputGain": 100.0,
+        "MinimumForce": 0,
+        "Threshold": 0,
+        "FilterType": "GammaFilter"
+      },
+      "Output": {
+        "UsePrehemptiveMode": false,
+        "Frequency": 32,
+        "UseHighFrequency": true,
+        "HighFrequency": 26,
+        "WhiteNoise": 2,
+        "UseWhiteNoise": true,
+        "FrequencyBasedOnPreFilter": false,
+        "Harmonics": 0,
+        "HoldMode": 1,
+        "OutputType": "ToneOutput"
+      }
+    }
+  ],
+  "AutoCalibrationRatio2": 100,
+  "OutputMode": 1,
+  "GlobalGain": 50.0,
+  "UseProfileGain": false,
+  "LastLoaded": "0001-01-01T00:00:00",
+  "Name": "DaZD - Road Rumble",
+  "ProfileId": "6c4cd8d8-9bf7-4645-b6bb-4c75aa5c0286",
+  "GameCode": "AssettoCorsa",
+  "CarChoice": null
+}

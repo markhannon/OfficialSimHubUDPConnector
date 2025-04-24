@@ -1,0 +1,539 @@
+{
+  "CarChoices": [],
+  "IncludeOutputSettingsInProfile": false,
+  "UnmuteEffectsAfterSimhubRestart": true,
+  "EffectsContainers": [
+    {
+      "ContainerType": "GroupContainer",
+      "IsEnabled": true,
+      "Gain": 100.0,
+      "Description": "Road Rumble",
+      "EffectsContainers": [
+        {
+          "ContainerType": "CustomEffectContainer",
+          "IsEnabled": true,
+          "Gain": 44.727272727272293,
+          "Description": "Road Rumble on Grass",
+          "FrontLeftFormula": {
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "if ($prop('UDPConnectorDataPlugin.WheelFLSurface') == 'Grass')\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelFLSurfaceVibrationGain'));\r\nreturn 0;",
+            "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\treturn 100 * speedRatio;\r\n}"
+          },
+          "FrontRightFormula": {
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "if ($prop('UDPConnectorDataPlugin.WheelFRSurface') == 'Grass')\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelFRSurfaceVibrationGain'));\r\nreturn 0;",
+            "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\treturn 100 * speedRatio;\r\n}"
+          },
+          "RearLeftFormula": {
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "if ($prop('UDPConnectorDataPlugin.WheelRLSurface') == 'Grass')\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelRLSurfaceVibrationGain'));\r\nreturn 0;",
+            "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\treturn 100 * speedRatio;\r\n}"
+          },
+          "RearRightFormula": {
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "\r\nif ($prop('UDPConnectorDataPlugin.WheelRRSurface') == 'Grass')\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelRRSurfaceVibrationGain'));\r\nreturn 0;",
+            "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\treturn 100 * speedRatio;\r\n}"
+          },
+          "ForceFrequencies": false,
+          "FrontLeftFrequencyFormula": {
+            "Expression": ""
+          },
+          "FrontRightFrequencyFormula": {
+            "Expression": ""
+          },
+          "RearLeftFrequencyFormula": {
+            "Expression": ""
+          },
+          "RearRightFrequencyFormula": {
+            "Expression": ""
+          },
+          "ContainerId": "7ec91635-5a94-4c28-a242-be5bb87bb6a5",
+          "AggregationMode": "Corners",
+          "Filter": {
+            "GammaValue": 1.3,
+            "InputGain": 100.0,
+            "MinimumForce": 0,
+            "Threshold": 0,
+            "FilterType": "GammaFilter"
+          },
+          "Output": {
+            "UsePrehemptiveMode": false,
+            "Frequency": 32,
+            "UseHighFrequency": true,
+            "HighFrequency": 26,
+            "WhiteNoise": 2,
+            "UseWhiteNoise": true,
+            "FrequencyBasedOnPreFilter": false,
+            "Harmonics": 0,
+            "HoldMode": 1,
+            "OutputType": "ToneOutput"
+          }
+        },
+        {
+          "ContainerType": "CustomEffectContainer",
+          "IsEnabled": true,
+          "Gain": 30.181818181818244,
+          "Description": "Road Rumble on ExtraTurf",
+          "FrontLeftFormula": {
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "if ($prop('UDPConnectorDataPlugin.WheelFLSurface') == 'ExtraTurf')\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelFLSurfaceVibrationGain'));\r\nreturn 0;",
+            "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\treturn 100 * speedRatio;\r\n}"
+          },
+          "FrontRightFormula": {
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "if ($prop('UDPConnectorDataPlugin.WheelFRSurface') == 'ExtraTurf')\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelFRSurfaceVibrationGain'));\r\nreturn 0;",
+            "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\treturn 100 * speedRatio;\r\n}"
+          },
+          "RearLeftFormula": {
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "if ($prop('UDPConnectorDataPlugin.WheelRLSurface') == 'ExtraTurf')\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelRLSurfaceVibrationGain'));\r\nreturn 0;",
+            "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\treturn 100 * speedRatio;\r\n}"
+          },
+          "RearRightFormula": {
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "\r\nif ($prop('UDPConnectorDataPlugin.WheelRRSurface') == 'ExtraTurf')\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelRRSurfaceVibrationGain'));\r\nreturn 0;",
+            "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\treturn 100 * speedRatio;\r\n}"
+          },
+          "ForceFrequencies": false,
+          "FrontLeftFrequencyFormula": {
+            "Expression": ""
+          },
+          "FrontRightFrequencyFormula": {
+            "Expression": ""
+          },
+          "RearLeftFrequencyFormula": {
+            "Expression": ""
+          },
+          "RearRightFrequencyFormula": {
+            "Expression": ""
+          },
+          "ContainerId": "3dcbb8f3-cbad-4c90-8c08-bad3503a40d9",
+          "AggregationMode": "Corners",
+          "Filter": {
+            "GammaValue": 1.3,
+            "InputGain": 100.0,
+            "MinimumForce": 0,
+            "Threshold": 0,
+            "FilterType": "GammaFilter"
+          },
+          "Output": {
+            "UsePrehemptiveMode": false,
+            "Frequency": 32,
+            "UseHighFrequency": true,
+            "HighFrequency": 26,
+            "WhiteNoise": 2,
+            "UseWhiteNoise": true,
+            "FrequencyBasedOnPreFilter": false,
+            "Harmonics": 0,
+            "HoldMode": 1,
+            "OutputType": "ToneOutput"
+          }
+        },
+        {
+          "ContainerType": "CustomEffectContainer",
+          "IsEnabled": true,
+          "Gain": 84.969696969697,
+          "Description": "Road Rumble on Gravel",
+          "FrontLeftFormula": {
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "if ($prop('UDPConnectorDataPlugin.WheelFLSurface') == 'Gravel')\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelFLSurfaceVibrationGain'));\r\nreturn 0;",
+            "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\treturn 100 * speedRatio;\r\n}"
+          },
+          "FrontRightFormula": {
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "if ($prop('UDPConnectorDataPlugin.WheelFRSurface') == 'Gravel')\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelFRSurfaceVibrationGain'));\r\nreturn 0;",
+            "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\treturn 100 * speedRatio;\r\n}"
+          },
+          "RearLeftFormula": {
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "if ($prop('UDPConnectorDataPlugin.WheelRLSurface') == 'Gravel')\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelRLSurfaceVibrationGain'));\r\nreturn 0;",
+            "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\treturn 100 * speedRatio;\r\n}"
+          },
+          "RearRightFormula": {
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "\r\nif ($prop('UDPConnectorDataPlugin.WheelRRSurface') == 'Gravel')\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelRRSurfaceVibrationGain'));\r\nreturn 0;",
+            "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\treturn 100 * speedRatio;\r\n}"
+          },
+          "ForceFrequencies": false,
+          "FrontLeftFrequencyFormula": {
+            "Expression": ""
+          },
+          "FrontRightFrequencyFormula": {
+            "Expression": ""
+          },
+          "RearLeftFrequencyFormula": {
+            "Expression": ""
+          },
+          "RearRightFrequencyFormula": {
+            "Expression": ""
+          },
+          "ContainerId": "df7c2d5f-8169-46a4-8d06-5c117ce473aa",
+          "AggregationMode": "Corners",
+          "Filter": {
+            "GammaValue": 1.3,
+            "InputGain": 100.0,
+            "MinimumForce": 0,
+            "Threshold": 0,
+            "FilterType": "GammaFilter"
+          },
+          "Output": {
+            "UsePrehemptiveMode": false,
+            "Frequency": 32,
+            "UseHighFrequency": true,
+            "HighFrequency": 26,
+            "WhiteNoise": 2,
+            "UseWhiteNoise": true,
+            "FrequencyBasedOnPreFilter": false,
+            "Harmonics": 0,
+            "HoldMode": 1,
+            "OutputType": "ToneOutput"
+          }
+        },
+        {
+          "ContainerType": "CustomEffectContainer",
+          "IsEnabled": true,
+          "Gain": 100.0,
+          "Description": "Road Rumble on Kerb",
+          "FrontLeftFormula": {
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "if ($prop('UDPConnectorDataPlugin.WheelFLSurface') == 'Kerb')\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelFLSurfaceVibrationGain'));\r\nreturn 0;",
+            "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\treturn 100 * speedRatio;\r\n}"
+          },
+          "FrontRightFormula": {
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "if ($prop('UDPConnectorDataPlugin.WheelFRSurface') == 'Kerb')\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelFRSurfaceVibrationGain'));\r\nreturn 0;",
+            "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\treturn 100 * speedRatio;\r\n}"
+          },
+          "RearLeftFormula": {
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "if ($prop('UDPConnectorDataPlugin.WheelRLSurface') == 'Kerb')\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelRLSurfaceVibrationGain'));\r\nreturn 0;",
+            "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\treturn 100 * speedRatio;\r\n}"
+          },
+          "RearRightFormula": {
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "\r\nif ($prop('UDPConnectorDataPlugin.WheelRRSurface') == 'Kerb')\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelRRSurfaceVibrationGain'));\r\nreturn 0;",
+            "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\treturn 100 * speedRatio;\r\n}"
+          },
+          "ForceFrequencies": false,
+          "FrontLeftFrequencyFormula": {
+            "Expression": ""
+          },
+          "FrontRightFrequencyFormula": {
+            "Expression": ""
+          },
+          "RearLeftFrequencyFormula": {
+            "Expression": ""
+          },
+          "RearRightFrequencyFormula": {
+            "Expression": ""
+          },
+          "ContainerId": "1261e52d-10b9-48ef-b9a1-b287441ef5fb",
+          "AggregationMode": "Corners",
+          "Filter": {
+            "GammaValue": 1.3,
+            "InputGain": 100.0,
+            "MinimumForce": 0,
+            "Threshold": 0,
+            "FilterType": "GammaFilter"
+          },
+          "Output": {
+            "UsePrehemptiveMode": false,
+            "Frequency": 32,
+            "UseHighFrequency": true,
+            "HighFrequency": 26,
+            "WhiteNoise": 2,
+            "UseWhiteNoise": true,
+            "FrequencyBasedOnPreFilter": false,
+            "Harmonics": 0,
+            "HoldMode": 1,
+            "OutputType": "ToneOutput"
+          }
+        },
+        {
+          "ContainerType": "CustomEffectContainer",
+          "IsEnabled": true,
+          "Gain": 14.666666666666515,
+          "Description": "Road Rumble on Old",
+          "FrontLeftFormula": {
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "if ($prop('UDPConnectorDataPlugin.WheelFLSurface') == 'Old')\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelFLSurfaceVibrationGain'));\r\nreturn 0;",
+            "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\treturn 100 * speedRatio;\r\n}"
+          },
+          "FrontRightFormula": {
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "if ($prop('UDPConnectorDataPlugin.WheelFRSurface') == 'Old')\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelFRSurfaceVibrationGain'));\r\nreturn 0;",
+            "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\treturn 100 * speedRatio;\r\n}"
+          },
+          "RearLeftFormula": {
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "if ($prop('UDPConnectorDataPlugin.WheelRLSurface') == 'Old')\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelRLSurfaceVibrationGain'));\r\nreturn 0;",
+            "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\treturn 100 * speedRatio;\r\n}"
+          },
+          "RearRightFormula": {
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "\r\nif ($prop('UDPConnectorDataPlugin.WheelRRSurface') == 'Old')\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelRRSurfaceVibrationGain'));\r\nreturn 0;",
+            "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\treturn 100 * speedRatio;\r\n}"
+          },
+          "ForceFrequencies": false,
+          "FrontLeftFrequencyFormula": {
+            "Expression": ""
+          },
+          "FrontRightFrequencyFormula": {
+            "Expression": ""
+          },
+          "RearLeftFrequencyFormula": {
+            "Expression": ""
+          },
+          "RearRightFrequencyFormula": {
+            "Expression": ""
+          },
+          "ContainerId": "df145dfc-87c2-462c-9412-e3f90b3a6a7e",
+          "AggregationMode": "Corners",
+          "Filter": {
+            "GammaValue": 1.3,
+            "InputGain": 100.0,
+            "MinimumForce": 0,
+            "Threshold": 0,
+            "FilterType": "GammaFilter"
+          },
+          "Output": {
+            "UsePrehemptiveMode": false,
+            "Frequency": 32,
+            "UseHighFrequency": true,
+            "HighFrequency": 26,
+            "WhiteNoise": 2,
+            "UseWhiteNoise": true,
+            "FrequencyBasedOnPreFilter": false,
+            "Harmonics": 0,
+            "HoldMode": 1,
+            "OutputType": "ToneOutput"
+          }
+        },
+        {
+          "ContainerType": "CustomEffectContainer",
+          "IsEnabled": true,
+          "Gain": 75.272727272727252,
+          "Description": "Road Rumble on Sand",
+          "FrontLeftFormula": {
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "if ($prop('UDPConnectorDataPlugin.WheelFLSurface') == 'Sand')\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelFLSurfaceVibrationGain'));\r\nreturn 0;",
+            "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\treturn 100 * speedRatio;\r\n}"
+          },
+          "FrontRightFormula": {
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "if ($prop('UDPConnectorDataPlugin.WheelFRSurface') == 'Sand')\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelFRSurfaceVibrationGain'));\r\nreturn 0;",
+            "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\treturn 100 * speedRatio;\r\n}"
+          },
+          "RearLeftFormula": {
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "if ($prop('UDPConnectorDataPlugin.WheelRLSurface') == 'Sand')\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelRLSurfaceVibrationGain'));\r\nreturn 0;",
+            "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\treturn 100 * speedRatio;\r\n}"
+          },
+          "RearRightFormula": {
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "\r\nif ($prop('UDPConnectorDataPlugin.WheelRRSurface') == 'Sand')\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelRRSurfaceVibrationGain'));\r\nreturn 0;",
+            "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\treturn 100 * speedRatio;\r\n}"
+          },
+          "ForceFrequencies": false,
+          "FrontLeftFrequencyFormula": {
+            "Expression": ""
+          },
+          "FrontRightFrequencyFormula": {
+            "Expression": ""
+          },
+          "RearLeftFrequencyFormula": {
+            "Expression": ""
+          },
+          "RearRightFrequencyFormula": {
+            "Expression": ""
+          },
+          "ContainerId": "1efea112-6bc2-46d8-bf82-d9b95d3e914a",
+          "AggregationMode": "Corners",
+          "Filter": {
+            "GammaValue": 1.3,
+            "InputGain": 100.0,
+            "MinimumForce": 0,
+            "Threshold": 0,
+            "FilterType": "GammaFilter"
+          },
+          "Output": {
+            "UsePrehemptiveMode": false,
+            "Frequency": 32,
+            "UseHighFrequency": true,
+            "HighFrequency": 26,
+            "WhiteNoise": 2,
+            "UseWhiteNoise": true,
+            "FrequencyBasedOnPreFilter": false,
+            "Harmonics": 0,
+            "HoldMode": 1,
+            "OutputType": "ToneOutput"
+          }
+        },
+        {
+          "ContainerType": "CustomEffectContainer",
+          "IsEnabled": true,
+          "Gain": 70.4242424242425,
+          "Description": "Road Rumble on Ice",
+          "FrontLeftFormula": {
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "if ($prop('UDPConnectorDataPlugin.WheelFLSurface') == 'Ice')\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelFLSurfaceVibrationGain'));\r\nreturn 0;",
+            "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\treturn 100 * speedRatio;\r\n}"
+          },
+          "FrontRightFormula": {
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "if ($prop('UDPConnectorDataPlugin.WheelFRSurface') == 'Ice')\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelFRSurfaceVibrationGain'));\r\nreturn 0;",
+            "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\treturn 100 * speedRatio;\r\n}"
+          },
+          "RearLeftFormula": {
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "if ($prop('UDPConnectorDataPlugin.WheelRLSurface') == 'Ice')\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelRLSurfaceVibrationGain'));\r\nreturn 0;",
+            "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\treturn 100 * speedRatio;\r\n}"
+          },
+          "RearRightFormula": {
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "\r\nif ($prop('UDPConnectorDataPlugin.WheelRRSurface') == 'Ice')\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelRRSurfaceVibrationGain'));\r\nreturn 0;",
+            "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\treturn 100 * speedRatio;\r\n}"
+          },
+          "ForceFrequencies": false,
+          "FrontLeftFrequencyFormula": {
+            "Expression": ""
+          },
+          "FrontRightFrequencyFormula": {
+            "Expression": ""
+          },
+          "RearLeftFrequencyFormula": {
+            "Expression": ""
+          },
+          "RearRightFrequencyFormula": {
+            "Expression": ""
+          },
+          "ContainerId": "0e3f5bc9-a255-4561-bdc6-af5e4f43b9db",
+          "AggregationMode": "Corners",
+          "Filter": {
+            "GammaValue": 1.3,
+            "InputGain": 100.0,
+            "MinimumForce": 0,
+            "Threshold": 0,
+            "FilterType": "GammaFilter"
+          },
+          "Output": {
+            "UsePrehemptiveMode": false,
+            "Frequency": 32,
+            "UseHighFrequency": true,
+            "HighFrequency": 26,
+            "WhiteNoise": 2,
+            "UseWhiteNoise": true,
+            "FrequencyBasedOnPreFilter": false,
+            "Harmonics": 0,
+            "HoldMode": 1,
+            "OutputType": "ToneOutput"
+          }
+        },
+        {
+          "ContainerType": "CustomEffectContainer",
+          "IsEnabled": true,
+          "Gain": 60.242424242424022,
+          "Description": "Road Rumble on Snow",
+          "FrontLeftFormula": {
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "if ($prop('UDPConnectorDataPlugin.WheelFLSurface') == 'Snow')\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelFLSurfaceVibrationGain'));\r\nreturn 0;",
+            "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\treturn 100 * speedRatio;\r\n}"
+          },
+          "FrontRightFormula": {
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "if ($prop('UDPConnectorDataPlugin.WheelFRSurface') == 'Snow')\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelFRSurfaceVibrationGain'));\r\nreturn 0;",
+            "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\treturn 100 * speedRatio;\r\n}"
+          },
+          "RearLeftFormula": {
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "if ($prop('UDPConnectorDataPlugin.WheelRLSurface') == 'Snow')\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelRLSurfaceVibrationGain'));\r\nreturn 0;",
+            "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\treturn 100 * speedRatio;\r\n}"
+          },
+          "RearRightFormula": {
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "\r\nif ($prop('UDPConnectorDataPlugin.WheelRRSurface') == 'Snow')\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelRRSurfaceVibrationGain'));\r\nreturn 0;",
+            "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\treturn 100 * speedRatio;\r\n}"
+          },
+          "ForceFrequencies": false,
+          "FrontLeftFrequencyFormula": {
+            "Expression": ""
+          },
+          "FrontRightFrequencyFormula": {
+            "Expression": ""
+          },
+          "RearLeftFrequencyFormula": {
+            "Expression": ""
+          },
+          "RearRightFrequencyFormula": {
+            "Expression": ""
+          },
+          "ContainerId": "ba97aa5a-74e4-42ce-ac35-124c3920a254",
+          "AggregationMode": "Corners",
+          "Filter": {
+            "GammaValue": 1.3,
+            "InputGain": 100.0,
+            "MinimumForce": 0,
+            "Threshold": 0,
+            "FilterType": "GammaFilter"
+          },
+          "Output": {
+            "UsePrehemptiveMode": false,
+            "Frequency": 32,
+            "UseHighFrequency": true,
+            "HighFrequency": 26,
+            "WhiteNoise": 2,
+            "UseWhiteNoise": true,
+            "FrequencyBasedOnPreFilter": false,
+            "Harmonics": 0,
+            "HoldMode": 1,
+            "OutputType": "ToneOutput"
+          }
+        }
+      ],
+      "ContainerId": "22acbdde-6bd5-4102-ab71-345d8ec5ea92",
+      "Filter": null,
+      "Output": null
+    }
+  ],
+  "AutoCalibrationRatio2": 100,
+  "OutputMode": 1,
+  "GlobalGain": 50.0,
+  "UseProfileGain": false,
+  "LastLoaded": "0001-01-01T00:00:00",
+  "Name": "DaZD - Road Rumble - Effects per texture",
+  "ProfileId": "89c2bcee-923b-45aa-8eed-ebd18ecde8b8",
+  "GameCode": "AssettoCorsa",
+  "CarChoice": null
+}
