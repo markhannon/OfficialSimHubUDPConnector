@@ -1,5 +1,6 @@
-carId = ac.getCarID(0)
-Ignition_RSS = ac.connect({
+local connection = {}
+local carId = ac.getCarID(0)
+local Ignition_RSS = ac.connect({
 	ac.StructItem.key(carId .. "_Ignition" .. "_" .. 0),
 	Mode = ac.StructItem.int32()
 }, true, ac.SharedNamespace.Shared)
@@ -11,13 +12,12 @@ local ECUsharedData = {
 	AutoClutch = ac.StructItem.int32(),
 	DisableIgnitionSequence = ac.StructItem.int32()
 }
-ECU = ac.connect(ECUsharedData, false, ac.SharedNamespace.Shared)
-ECU_Fields = {
-	"HedeSystemMessage", "AutoClutch", "DisableIgnitionSequence"
-}
+local ECU = ac.connect(ECUsharedData, false, ac.SharedNamespace.Shared)
 
-carScript = function(customData)
+function connection:carScript(customData)
 	customData.IgnitionMode = Ignition_RSS.Mode
-	addAllData(ECU, ECU_Fields, 'ECU_', customData)
+	addAllData(ECU, ECUsharedData, 'ECU_', customData)
 	customData.ECU_Antistall = ac.getCarPhysics(0).scriptControllerInputs[6]
 end
+
+return connection

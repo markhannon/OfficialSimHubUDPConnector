@@ -1,5 +1,6 @@
-carId = ac.getCarID(0)
-ECU_Cadenza = ac.connect({
+local connection = {}
+local carId = ac.getCarID(0)
+local ECU_Cadenza_Struct = {
     ac.StructItem.key(carId .. "_ecu_" .. 0),
     connected = ac.StructItem.boolean(),
     collisionDepth = ac.StructItem.float(),
@@ -62,24 +63,11 @@ ECU_Cadenza = ac.connect({
     driverTargetLapTime = ac.StructItem.int32(),
     isPitSpeedLimiterActive = ac.StructItem.boolean(),
     bumpPrimeEngineRequest = ac.StructItem.boolean(),
-}, true, ac.SharedNamespace.CarScript)
-ECU_Cadenza_fields = {
-    "connected", "collisionDepth", "collidedWith", "displayPage", "requestedEngineRPM", "throttleBodyPosition",
-    "requestedThrottleBodyPosition", "deploymentStrat", "diffPreset",
-    "pedalMap", "torqueMap", "torqueSplit", "fuelUsedLastLap", "kersTorqueLevel", "kersFrontMotorActive",
-    "kersFrontMotorPerc", "kersInput", "kersMinSpeedKmh", "kersMaxSpeedKmh",
-    "stintMaxEnergyMJ", "stintEnergyMJ", "stintEnergyMJLap", "stintEstimatedLapsRemaining", "stintEnergyLastLap",
-    "stintTargetEnergyGap", "stintTargetEnergyPerLap", "stintLapsCompleted",
-    "currentEnergyMJPerLap", "virtualEnergyTankMJ", "powerIllegal", "brakeBiasCoarse", "brakeBiasFine",
-    "brakeBiasLive", "brakeBiasPeak", "brakeMigration", "mgukRecovery", "kersRegenLevel",
-    "kersDeliveryLevel", "brakeLevel", "tcSlipSetting", "tcCutSetting", "tcCut", "tcLatSetting", "tcLongSetting",
-    "tcTargetSlip", "engineBrakeSetting", "antirollBarFrontPosition",
-    "antirollBarRearPosition", "isTCActive", "isAntistallActive", "isEngineStalled", "isEngineStarted",
-    "isEngineRunning", "isStarterCranking", "isIgnitionOn", "isElectronicsBooted",
-    "isKersOvertakeActive", "driverTargetStintLaps", "driverTargetLapTime", "isPitSpeedLimiterActive",
-    "bumpPrimeEngineRequest",
 }
+local ECU_Cadenza = ac.connect(ECU_Cadenza_Struct, true, ac.SharedNamespace.CarScript)
 
-carScript = function (customData)
-    addAllData(ECU_Cadenza, ECU_Cadenza_fields, 'ECU_', customData)
+function connection:carScript(customData)
+    addAllData(ECU_Cadenza, ECU_Cadenza_Struct, 'ECU_', customData)
 end
+
+return connection

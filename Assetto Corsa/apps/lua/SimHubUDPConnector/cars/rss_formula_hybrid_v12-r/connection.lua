@@ -1,9 +1,10 @@
-carId = ac.getCarID(0)
-Ignition_RSS = ac.connect({
+local connection = {}
+local carId = ac.getCarID(0)
+local Ignition_RSS = ac.connect({
     ac.StructItem.key(carId .. "_Ignition" .. "_" .. 0),
     Mode = ac.StructItem.int32()
 }, true, ac.SharedNamespace.Shared)
-FHSystemKey = "Formula_Hybrid_System"
+local FHSystemKey = "Formula_Hybrid_System"
 local FHSystemsharedData = {
     ac.StructItem.key(FHSystemKey .. "_" .. 0),
     BrakeMigration = ac.StructItem.float(),
@@ -16,13 +17,11 @@ local FHSystemsharedData = {
     StartMode = ac.StructItem.boolean(),
     AntiStall = ac.StructItem.boolean()
 }
-FHSystem = ac.connect(FHSystemsharedData, true, ac.SharedNamespace.Shared)
-FHSystem_Fields = {
-    "BrakeMigration", "BrakeMigrationRamp", "DiffEntry", "DiffMid",
-    "DiffExit", "DiffExitSpeed", "FuelTarget", "StartMode", "AntiStall"
-}
+local FHSystem = ac.connect(FHSystemsharedData, true, ac.SharedNamespace.Shared)
 
-carScript = function (customData)
-		customData.IgnitionMode = Ignition_RSS.Mode
-		addAllData(FHSystem, FHSystem_Fields, 'FHSystem_', customData)
+function connection:carScript(customData)
+    customData.IgnitionMode = Ignition_RSS.Mode
+    addAllData(FHSystem, FHSystemsharedData, 'FHSystem_', customData)
 end
+
+return connection

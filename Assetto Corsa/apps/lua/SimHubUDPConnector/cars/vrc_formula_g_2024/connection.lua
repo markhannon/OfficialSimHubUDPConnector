@@ -1,6 +1,7 @@
-carId = ac.getCarID(0)
-ECU_FG = ac.connect({
-    connected = ac.StructItem.boolean(),
+local connection = {}
+local carId = ac.getCarID(0)
+local ECU_FG_Struct = {
+	connected = ac.StructItem.boolean(),
 	displayPage = ac.StructItem.int16(),
 	requestedEngineRPM = ac.StructItem.float(),
 	throttleBodyPosition = ac.StructItem.float(),
@@ -42,30 +43,29 @@ ECU_FG = ac.connect({
 	isIgnitionOn = ac.StructItem.boolean(),
 	isElectronicsBooted = ac.StructItem.boolean(),
 	isEboostActive = ac.StructItem.boolean(),
-}, true, ac.SharedNamespace.CarScript)
-ECU_FG_fields = { "connected","displayPage","requestedEngineRPM","throttleBodyPosition","requestedThrottleBodyPosition","deploymentStrat",
-"pedalMap","torqueMap","torqueSplit","stintMaxEnergyMJ","stintEnergyMJ","stintEstimatedLapsRemaining","stintLapsCompleted",
-"currentEnergyMJPerLap","virtualEnergyTankMJ","brakeBiasLive","brakeBiasPeak","brakeMigration","tcSlipSetting","tcCutSetting",
-"tcCut","tcTargetSlip","diffModeCurrent","diffEntry","diffMid","diffExitHispd","damage","gearSync","gearsSynced",
-"isBrakeMagicActive","isConstantSpeedLimiterActive","engineBrakeSetting","antirollBarRearPosition","isTCActive","isAntistallActive",
-"isEngineStalled","isEngineStarted","isEngineRunning","isStarterCranking","isIgnitionOn","isElectronicsBooted","isEboostActive"}
+}
+local ECU_FG = ac.connect(ECU_FG_Struct, true, ac.SharedNamespace.CarScript)
 
-carScript = function (customData)
-    addAllData(ECU_FG, ECU_FG_fields, 'ECU_', customData)
-    customData.damage_1 = ECU_FG.damage[0]
-    customData.damage_2 = ECU_FG.damage[1]
-    customData.damage_3 = ECU_FG.damage[2]
-    customData.damage_4 = ECU_FG.damage[3]
-    customData.damage_5 = ECU_FG.damage[4]
-    customData.damage_6 = ECU_FG.damage[5]
-    customData.damage_7 = ECU_FG.damage[6]
-    customData.gearSync_1 = ECU_FG.gearSync[0]
-    customData.gearSync_2 = ECU_FG.gearSync[1]
-    customData.gearSync_3 = ECU_FG.gearSync[2]
-    customData.gearSync_4 = ECU_FG.gearSync[3]
-    customData.gearSync_5 = ECU_FG.gearSync[4]
-    customData.gearSync_6 = ECU_FG.gearSync[5]
-    customData.gearSync_7 = ECU_FG.gearSync[6]
-    customData.gearSync_8 = ECU_FG.gearSync[7]
-    customData.gearSync_9 = ECU_FG.gearSync[8]
+function connection:carScript(customData)
+	addAllData(ECU_FG, ECU_FG_Struct, 'ECU_', customData)
+	customData.ECU_Damage = nil
+	customData.ECU_Damage_1 = ECU_FG.damage[0]
+	customData.ECU_Damage_2 = ECU_FG.damage[1]
+	customData.ECU_Damage_3 = ECU_FG.damage[2]
+	customData.ECU_Damage_4 = ECU_FG.damage[3]
+	customData.ECU_Damage_5 = ECU_FG.damage[4]
+	customData.ECU_Damage_6 = ECU_FG.damage[5]
+	customData.ECU_Damage_7 = ECU_FG.damage[6]
+	customData.ECU_GearSync = nil
+	customData.ECU_GearSync_1 = ECU_FG.gearSync[0]
+	customData.ECU_GearSync_2 = ECU_FG.gearSync[1]
+	customData.ECU_GearSync_3 = ECU_FG.gearSync[2]
+	customData.ECU_GearSync_4 = ECU_FG.gearSync[3]
+	customData.ECU_GearSync_5 = ECU_FG.gearSync[4]
+	customData.ECU_GearSync_6 = ECU_FG.gearSync[5]
+	customData.ECU_GearSync_7 = ECU_FG.gearSync[6]
+	customData.ECU_GearSync_8 = ECU_FG.gearSync[7]
+	customData.ECU_GearSync_9 = ECU_FG.gearSync[8]
 end
+
+return connection

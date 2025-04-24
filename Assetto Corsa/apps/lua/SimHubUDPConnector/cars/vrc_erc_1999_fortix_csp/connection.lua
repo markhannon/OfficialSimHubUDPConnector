@@ -1,5 +1,6 @@
-carId = ac.getCarID(0)
-ECU_Fortix = ac.connect({
+local connection = {}
+local carId = ac.getCarID(0)
+local ECU_Fortix_Struct = {
 	ac.StructItem.key(carId .. "_ext_car_" .. 0),
 	connected = ac.StructItem.boolean(),
 	oilTemperature = ac.StructItem.float(),
@@ -11,23 +12,19 @@ ECU_Fortix = ac.connect({
 	isStarterCranking = ac.StructItem.boolean(),
 	isEngineStarted = ac.StructItem.boolean(),
 	isEngineRunning = ac.StructItem.boolean(),
-}, true, ac.SharedNamespace.CarScript)
-ECU_Fortix_fields = {
-	"connected", "oilTemperature", "antirollBarFrontPosition", "antirollBarRearPosition",
-	"brakeBiasPosition", "isIgnitionOn", "isElectronicsBooted", "isStarterCranking",
-	"isEngineStarted", "isEngineRunning",
 }
+local ECU_Fortix = ac.connect(ECU_Fortix_Struct, true, ac.SharedNamespace.CarScript)
 
-INPUTS_Fortix = ac.connect({
+local INPUTS_Fortix_Struct = {
 	ac.StructItem.key(carId .. "_ext_input_" .. 0),
 	connected = ac.StructItem.boolean(),
 	gas = ac.StructItem.float(),
-}, true, ac.SharedNamespace.CarScript)
-INPUTS_Fortix_fields = {
-	"connected", "gas"
 }
+local INPUTS_Fortix = ac.connect(ECU_Fortix_Struct, true, ac.SharedNamespace.CarScript)
 
-carScript = function(customData)
-	addAllData(ECU_Fortix, ECU_Fortix_fields, 'ECU_', customData)
-	addAllData(INPUTS_Fortix, INPUTS_Fortix_fields, 'INPUTS_', customData)
+function connection:carScript(customData)
+	addAllData(ECU_Fortix, ECU_Fortix_Struct, 'ECU_', customData)
+	addAllData(INPUTS_Fortix, INPUTS_Fortix_Struct, 'INPUTS_', customData)
 end
+
+return connection

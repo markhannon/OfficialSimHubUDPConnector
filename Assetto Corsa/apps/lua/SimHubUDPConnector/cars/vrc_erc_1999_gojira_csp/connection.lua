@@ -1,5 +1,6 @@
-carId = ac.getCarID(0)
-ECU_Gogira = ac.connect({
+local connection = {}
+local carId = ac.getCarID(0)
+local ECU_Gogira_Struct = {
 	ac.StructItem.key(carId .. "_ext_car_" .. 0),
 	connected = ac.StructItem.boolean(),
 	oilTemperature = ac.StructItem.float(),
@@ -11,23 +12,19 @@ ECU_Gogira = ac.connect({
 	isStarterCranking = ac.StructItem.boolean(),
 	isEngineStarted = ac.StructItem.boolean(),
 	isEngineRunning = ac.StructItem.boolean(),
-}, true, ac.SharedNamespace.CarScript)
-ECU_Gogira_fields = {
-	"connected", "oilTemperature", "antirollBarFrontPosition", "antirollBarRearPosition",
-	"brakeBiasPosition", "isIgnitionOn", "isElectronicsBooted", "isStarterCranking",
-	"isEngineStarted", "isEngineRunning",
 }
+local ECU_Gogira = ac.connect(ECU_Gogira_Struct, true, ac.SharedNamespace.CarScript)
 
-INPUTS_Gogira = ac.connect({
+local INPUTS_Gogira_Struct = {
 	ac.StructItem.key(carId .. "_ext_input_" .. 0),
 	connected = ac.StructItem.boolean(),
 	gas = ac.StructItem.float(),
-}, true, ac.SharedNamespace.CarScript)
-INPUTS_Gogira_fields = {
-	"connected", "gas"
 }
+local INPUTS_Gogira = ac.connect(INPUTS_Gogira_Struct, true, ac.SharedNamespace.CarScript)
 
-carScript = function(customData)
-	addAllData(ECU_Gogira, ECU_Gogira_fields, 'ECU_', customData)
-	addAllData(INPUTS_Gogira, INPUTS_Gogira_fields, 'INPUTS_', customData)
+function connection:carScript(customData)
+	addAllData(ECU_Gogira, ECU_Gogira_Struct, 'ECU_', customData)
+	addAllData(INPUTS_Gogira, INPUTS_Gogira_Struct, 'INPUTS_', customData)
 end
+
+return connection

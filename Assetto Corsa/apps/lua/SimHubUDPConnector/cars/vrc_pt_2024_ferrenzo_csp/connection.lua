@@ -1,5 +1,6 @@
-carId = ac.getCarID(0)
-ECU_Ferrenzo = ac.connect({
+local connection = {}
+local carId = ac.getCarID(0)
+local ECU_Ferrenzo_Struct = {
     ac.StructItem.key(carId .. "_ecu_" .. 0),
     connected = ac.StructItem.boolean(),
     collisionDepth = ac.StructItem.float(),
@@ -52,22 +53,10 @@ ECU_Ferrenzo = ac.connect({
     isIgnitionOn = ac.StructItem.boolean(),
     isElectronicsBooted = ac.StructItem.boolean(),
     isKersOvertakeActive = ac.StructItem.boolean(),
-}, true, ac.SharedNamespace.CarScript)
-ECU_Ferrenzo_fields = { "connected", "collisionDepth", "collidedWith", "displayPage", "requestedEngineRPM",
-    "throttleBodyPosition", "requestedThrottleBodyPosition",
-    "deploymentStrat", "pedalMap", "torqueMap", "torqueSplit", "fuelUsedLastLap", "kersTorqueLevel",
-    "kersFrontMotorActive", "kersFrontMotorPerc", "kersInput", "kersMinSpeedKmh",
-    "kersMaxSpeedKmh", "stintMaxEnergyMJ", "stintEnergyMJ", "stintEnergyMJLap", "stintEstimatedLapsRemaining",
-    "stintLapsCompleted", "currentEnergyMJPerLap", "virtualEnergyTankMJ",
-    "brakeBiasCoarse", "brakeBiasFine", "brakeBiasLive", "brakeBiasPeak", "brakeMigration", "mgukRecovery",
-    "recoveryLevel", "brakeLevel", "tcSlipSetting", "tcCutSetting", "tcCut",
-    "tcTargetSlip", "tcPickupSetting", "tcExitSetting", "engineBrakeSetting", "antirollBarFrontPosition",
-    "antirollBarRearPosition", "isTCActive", "isAntistallActive", "isEngineStalled",
-    "isEngineStarted", "isEngineRunning", "isStarterCranking", "isIgnitionOn", "isElectronicsBooted",
-    "isKersOvertakeActive",
 }
+local ECU_Ferrenzo = ac.connect(ECU_Ferrenzo_Struct, true, ac.SharedNamespace.CarScript)
 
-CANBUS_Ferrenzo = ac.connect({
+local CANBUS_Ferrenzo_Struct = {
     ac.StructItem.key(carId .. "_can_bus_" .. 0),
     connected = ac.StructItem.boolean(),
     isIgnitionOn = ac.StructItem.boolean(),
@@ -99,18 +88,10 @@ CANBUS_Ferrenzo = ac.connect({
     bumpStartEngineRequest = ac.StructItem.boolean(),
     bumpPrimeEngineRequest = ac.StructItem.boolean(),
     engineKillRequest = ac.StructItem.boolean(),
-}, true, ac.SharedNamespace.CarScript)
-CANBUS_Ferrenzo_fields = {
-    "connected", "isIgnitionOn", "isStarterEngaged", "isAntistallActive", "isTCActive", "tcTargetSlip",
-    "puStintMaxMJ", "awdFrontTorque", "kersInputAvailable", "kersMinSpeedKmh", "kersMaxSpeedKmh",
-    "kersRequestInput", "kersOvertakeButtonPressed", "overrideTorque", "antirollBarFront", "antirollBarRear",
-    "brakeBiasCoarse", "brakeMigration", "brakeLevel", "kersRegenLevel", "brakeMigrationRampUp",
-    "brakeMigrationRampDown", "bumpRequestEngineRPM", "starterRequestEngineRPM", "ddtRequestThrottleBodyPosition",
-    "idleRequestThrottleBodyPosition", "starterStartEngineRequest", "bumpStartEngineRequest",
-    "bumpPrimeEngineRequest", "engineKillRequest",
 }
+local CANBUS_Ferrenzo = ac.connect(CANBUS_Ferrenzo_Struct, true, ac.SharedNamespace.CarScript)
 
-SENSORS_Ferrenzo = ac.connect({
+local SENSORS_Ferrenzo_Struct = {
     ac.StructItem.key(carId .. "_sensors_" .. 0),
     connected = ac.StructItem.boolean(),
     powerUnitTorque = ac.StructItem.float(),
@@ -132,18 +113,13 @@ SENSORS_Ferrenzo = ac.connect({
     rearDifferentialPower = ac.StructItem.float(),
     rearDifferentialCoast = ac.StructItem.float(),
     rearDifferentialPreload = ac.StructItem.int16(),
-}, true, ac.SharedNamespace.CarScript)
-SENSORS_Ferrenzo_fields = {
-    "connected", "powerUnitTorque", "powerUnitDischargeMJ", "engineBaseTorque",
-    "engineTorque", "engineTorqueMax", "fuelConsumption", "boostTorque",
-    "kersTorque", "kersTorqueMax", "kersCoastTorque", "kersCoastTorqueMax",
-    "kersRegenMJ", "kersDischargeMJ", "kersChargingEnergyStore",
-    "drivetrainTorque", "throttleBodyPosition", "rearDifferentialPower",
-    "rearDifferentialCoast", "rearDifferentialPreload",
 }
+local SENSORS_Ferrenzo = ac.connect(SENSORS_Ferrenzo_Struct, true, ac.SharedNamespace.CarScript)
 
-carScript = function (customData)
-    addAllData(ECU_Ferrenzo, ECU_Ferrenzo_fields, 'ECU_', customData)
-    addAllData(CANBUS_Ferrenzo, CANBUS_Ferrenzo_fields, 'CANBUS_', customData)
-    addAllData(SENSORS_Ferrenzo, SENSORS_Ferrenzo_fields, 'Sensors_', customData)
+function connection:carScript(customData)
+    addAllData(ECU_Ferrenzo, ECU_Ferrenzo_Struct, 'ECU_', customData)
+    addAllData(CANBUS_Ferrenzo, CANBUS_Ferrenzo_Struct, 'CANBUS_', customData)
+    addAllData(SENSORS_Ferrenzo, SENSORS_Ferrenzo_Struct, 'Sensors_', customData)
 end
+
+return connection

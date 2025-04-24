@@ -1,5 +1,6 @@
-carId = ac.getCarID(0)
-ECU_Isola = ac.connect({
+local connection = {}
+local carId = ac.getCarID(0)
+local ECU_Isola_Struct = {
     ac.StructItem.key(carId .. "_ecu_" .. 0),
     connected = ac.StructItem.boolean(),
     collisionDepth = ac.StructItem.float(),
@@ -54,25 +55,10 @@ ECU_Isola = ac.connect({
     isElectronicsBooted = ac.StructItem.boolean(),
     isKersOvertakeActive = ac.StructItem.boolean(),
     isPitSpeedLimiterActive = ac.StructItem.boolean(),
-}, true, ac.SharedNamespace.CarScript)
-ECU_Isola_fields = {
-    "connected", "collisionDepth", "collidedWith", "displayPage", "requestedEngineRPM", "throttleBodyPosition",
-    "requestedThrottleBodyPosition", "deploymentStrat", "pedalMap", "torqueMap", "torqueSplit", "fuelUsedLastLap",
-    "kersTorqueLevel", "kersFrontMotorActive", "kersFrontMotorPerc", "kersInput", "kersMinSpeedKmh",
-    "kersMaxSpeedKmh",
-    "stintMaxEnergyMJ", "stintEnergyMJ", "stintEnergyMJLap", "stintEstimatedLapsRemaining", "stintLapsCompleted",
-    "currentEnergyMJPerLap", "virtualEnergyTankMJ", "virtualEnergyTank", "brakeBiasCoarse", "brakeBiasFine",
-    "brakeBiasLive",
-    "brakeBiasPeak", "brakeMigration", "mgukRecovery", "recoveryLevel", "brakeLevel", "tcSlipSetting", "tcCutSetting",
-    "tcCut",
-    "tcTargetSlip", "tcPickupSetting", "tcExitSetting", "engineBrakeSetting", "antirollBarFrontPosition",
-    "antirollBarRearPosition",
-    "isTCActive", "isAntistallActive", "isEngineStalled", "isEngineStarted", "isEngineRunning", "isStarterCranking",
-    "isIgnitionOn",
-    "isElectronicsBooted", "isKersOvertakeActive", "isPitSpeedLimiterActive",
 }
+local ECU_Isola = ac.connect(ECU_Isola_Struct, true, ac.SharedNamespace.CarScript)
 
-SENSORS_Isola = ac.connect({
+local SENSORS_Isola_Struct = {
     ac.StructItem.key(carId .. "_sensors_" .. 0),
     connected = ac.StructItem.boolean(),
     clutchPedal = ac.StructItem.float(),
@@ -100,17 +86,12 @@ SENSORS_Isola = ac.connect({
     rearDifferentialPower = ac.StructItem.float(),
     rearDifferentialCoast = ac.StructItem.float(),
     rearDifferentialPreload = ac.StructItem.int16(),
-}, true, ac.SharedNamespace.CarScript)
-SENSORS_Isola_fields = {
-    "connected", "clutchPedal", "brakePedal", "gasPedal", "clutch",
-    "gas", "neutralGear", "powerUnitTorque", "powerUnitDischargeMJ",
-    "engineBaseTorque", "engineTorque", "engineTorqueMax", "fuelConsumption",
-    "boostTorque", "kersTorque", "kersTorqueMax", "kersCoastTorque", "kersCoastTorqueMax",
-    "kersRegenMJ", "kersDischargeMJ", "kersChargingEnergyStore", "drivetrainTorque", "throttleBodyPosition",
-    "rearDifferentialPower", "rearDifferentialCoast", "rearDifferentialPreload"
 }
+local SENSORS_Isola = ac.connect(SENSORS_Isola_Struct, true, ac.SharedNamespace.CarScript)
 
-carScript = function (customData)
-    addAllData(ECU_Isola, ECU_Isola_fields, 'ECU_', customData)
-    addAllData(SENSORS_Isola, SENSORS_Isola_fields, 'Sensors_', customData)
+function connection:carScript(customData)
+    addAllData(ECU_Isola, ECU_Isola_Struct, 'ECU_', customData)
+    addAllData(SENSORS_Isola, SENSORS_Isola_Struct, 'Sensors_', customData)
 end
+
+return connection

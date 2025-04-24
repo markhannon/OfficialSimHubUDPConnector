@@ -1,5 +1,6 @@
-carId = ac.getCarID(0)
-ECU_Vorax = ac.connect({
+local connection = {}
+local carId = ac.getCarID(0)
+local ECU_Vorax_Struct = {
 	ac.StructItem.key(carId .. "_ext_car_" .. 0),
 	connected = ac.StructItem.boolean(),
 	oilTemperature = ac.StructItem.float(),
@@ -11,23 +12,19 @@ ECU_Vorax = ac.connect({
 	isStarterCranking = ac.StructItem.boolean(),
 	isEngineStarted = ac.StructItem.boolean(),
 	isEngineRunning = ac.StructItem.boolean(),
-}, true, ac.SharedNamespace.CarScript)
-ECU_Vorax_fields = {
-	"connected", "oilTemperature", "antirollBarFrontPosition", "antirollBarRearPosition",
-	"brakeBiasPosition", "isIgnitionOn", "isElectronicsBooted", "isStarterCranking",
-	"isEngineStarted", "isEngineRunning",
 }
+local ECU_Vorax = ac.connect(ECU_Vorax_Struct, true, ac.SharedNamespace.CarScript)
 
-INPUTS_Vorax = ac.connect({
+local INPUTS_Vorax_Struct = {
 	ac.StructItem.key(carId .. "_ext_input_" .. 0),
 	connected = ac.StructItem.boolean(),
 	gas = ac.StructItem.float(),
-}, true, ac.SharedNamespace.CarScript)
-INPUTS_Vorax_fields = {
-	"connected", "gas"
 }
+local INPUTS_Vorax = ac.connect(INPUTS_Vorax_Struct, true, ac.SharedNamespace.CarScript)
 
-carScript = function(customData)
-	addAllData(ECU_Vorax, ECU_Vorax_fields, 'ECU_', customData)
-	addAllData(INPUTS_Vorax, INPUTS_Vorax_fields, 'INPUTS_', customData)
+function connection:carScript(customData)
+	addAllData(ECU_Vorax, ECU_Vorax_Struct, 'ECU_', customData)
+	addAllData(INPUTS_Vorax, INPUTS_Vorax_Struct, 'INPUTS_', customData)
 end
+
+return connection

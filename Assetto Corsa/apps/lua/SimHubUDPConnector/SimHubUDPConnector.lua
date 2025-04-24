@@ -1,14 +1,15 @@
----@diagnostic disable: cast-local-type, duplicate-set-field, lowercase-global, need-check-nil
-local appConfig = ac.INIConfig.load(ac.dirname().."/config.ini")
+---@diagnostic disable: cast-local-type, duplicate-set-field, lowercase-global, need-check-nil, undefined-field
+local appConfig = ac.INIConfig.load(ac.dirname() .. "/config.ini")
 
 local socket = require('shared/socket')
 local udp = socket.udp()
 udp:settimeout(0)
-udp:setpeername(appConfig:get("UDP", "host","127.0.0.1"), appConfig:get("UDP", "port",20777))
-local DEBUG_ON = appConfig:get("debug", "log",false)
+udp:setpeername(appConfig:get("UDP", "host", "127.0.0.1"), appConfig:get("UDP", "port", 20777))
+local DEBUG_ON = appConfig:get("debug", "log", false)
 local customData
 local carState = ac.getCar(0)
 local cspVersion = ac.getPatchVersion()
+local carScript = nil
 
 function checkHasCarConnection()
 	local carPath, ret
@@ -18,13 +19,14 @@ function checkHasCarConnection()
 	if io.fileExists(carPath .. "/connection.lua") then
 		try(
 			function() --try
-				ret = require("cars."..carId..".connection")
+				ret = require("cars." .. carId .. ".connection")
 				if ret then
 					success = true
+					carScript = ret
 				end
 			end,
 			function(err) --catch
-				ac.debug("Car script ERROR: "..err.."\n"..carPath)
+				ac.debug("Car script ERROR: " .. err .. "\n" .. carPath)
 				success = false
 			end
 		)
@@ -34,7 +36,7 @@ end
 
 local hasCarConnection = checkHasCarConnection()
 
-local extensions = {}-- = {'LegacyDataExtension', 'CollisionsExtension', 'RoadRumbleExtension'}
+local extensions = {} -- = {'LegacyDataExtension', 'CollisionsExtension', 'RoadRumbleExtension'}
 local loadedExtensions = {}
 function loadExtension(extName)
 	local ret
@@ -42,10 +44,10 @@ function loadExtension(extName)
 	if io.fileExists(extPath .. ".lua") then
 		try(
 			function() --try
-				ret = require("extensions."..extName)
+				ret = require("extensions." .. extName)
 			end,
 			function(err) --catch
-				ac.debug("extension " ..extName.." ERROR ", err)
+				ac.debug("extension " .. extName .. " ERROR ", err)
 			end
 		)
 	else
@@ -53,20 +55,24 @@ function loadExtension(extName)
 	end
 	return ret
 end
+
 for index, key in appConfig:iterateValues('extensions', "ext", false) do
-	extensions[index] = appConfig:get("extensions",key,'')
+	extensions[index] = appConfig:get("extensions", key, '')
 end
 function loadExtensions()
-	for k,ext in pairs(extensions) do
+	for k, ext in pairs(extensions) do
 		loadedExtensions[ext] = loadExtension(ext)
 	end
 end
+
 loadExtensions()
 
-function addAllData(from, fields, prefix, to)
-	for k, v in pairs(fields) do
-		local name = prefix .. v:sub(1, 1):upper() .. v:sub(2)
-		to[name] = from[v]
+function addAllData(connection, struct, prefix, to)
+	for k, _ in pairs(struct) do
+		if type(k) == "string" then
+			local name = prefix .. k:sub(1, 1):upper() .. k:sub(2)
+			to[name] = connection[k]
+		end
 	end
 end
 
@@ -87,7 +93,7 @@ function script.update(dt)
 	end
 
 	if (hasCarConnection) then
-		carScript(customData)
+		carScript:carScript(customData)
 	end
 	local jsonData = JSON.stringify(customData)
 	udp:send(jsonData)

@@ -1,5 +1,6 @@
-carId = ac.getCarID(0)
-ECU_Pageau = ac.connect({
+local connection = {}
+local carId = ac.getCarID(0)
+local ECU_Pageau_Struct = {
 	ac.StructItem.key(carId .. "_ext_car_" .. 0),
 	connected = ac.StructItem.boolean(),
 	oilTemperature = ac.StructItem.float(),
@@ -11,23 +12,19 @@ ECU_Pageau = ac.connect({
 	isStarterCranking = ac.StructItem.boolean(),
 	isEngineStarted = ac.StructItem.boolean(),
 	isEngineRunning = ac.StructItem.boolean(),
-}, true, ac.SharedNamespace.CarScript)
-ECU_Pageau_fields = {
-	"connected", "oilTemperature", "antirollBarFrontPosition", "antirollBarRearPosition",
-	"brakeBiasPosition", "isIgnitionOn", "isElectronicsBooted", "isStarterCranking",
-	"isEngineStarted", "isEngineRunning",
 }
+local ECU_Pageau = ac.connect(ECU_Pageau_Struct, true, ac.SharedNamespace.CarScript)
 
-INPUTS_Pageau = ac.connect({
+local INPUTS_Pageau_Struct = {
 	ac.StructItem.key(carId .. "_ext_input_" .. 0),
 	connected = ac.StructItem.boolean(),
 	gas = ac.StructItem.float(),
-}, true, ac.SharedNamespace.CarScript)
-INPUTS_Pageau_fields = {
-	"connected", "gas"
 }
+local INPUTS_Pageau = ac.connect(INPUTS_Pageau_Struct, true, ac.SharedNamespace.CarScript)
 
-carScript = function(customData)
-	addAllData(ECU_Pageau, ECU_Pageau_fields, 'ECU_', customData)
-	addAllData(INPUTS_Pageau, INPUTS_Pageau_fields, 'INPUTS_', customData)
+function connection:carScript(customData)
+	addAllData(ECU_Pageau, ECU_Pageau_Struct, 'ECU_', customData)
+	addAllData(INPUTS_Pageau, INPUTS_Pageau_Struct, 'INPUTS_', customData)
 end
+
+return connection
