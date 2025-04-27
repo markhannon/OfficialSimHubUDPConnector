@@ -1,5 +1,7 @@
 ---@diagnostic disable: cast-local-type, duplicate-set-field, lowercase-global, need-check-nil, undefined-field
 local appConfig = ac.INIConfig.load(ac.dirname() .. "/config.ini") ---@type ac.INIConfig
+local manifest = ac.INIConfig.load(ac.dirname() .. '/manifest.ini', ac.INIFormat.Extended)
+local app_version = manifest:get('ABOUT', 'VERSION', 0.001)
 local socket = require('shared/socket')
 local udp = socket.udp()
 local DEBUG_ON = appConfig:get("debug", "log", false) ---@type boolean
@@ -7,7 +9,7 @@ local customData
 local carState = ac.getCar(0)
 local cspVersion = ac.getPatchVersion()
 local carScript = nil
-local extensions = {}
+local extensions = {} ---@type table
 local loadedExtensions = {}
 
 ---Loads a lua script.
@@ -38,19 +40,18 @@ local function tryLoadCarConnection()
 	carScript = loadLuaScript("connection", carFolder)
 end
 
---[[ for index, key in appConfig:iterateValues('extensions', "ext", false) do
-	extensions[index] = appConfig:get("extensions", key, '')
-end ]]
-for k, _ in pairs(appConfig.sections.extensions) do
-	ac.debug(k, appConfig:get("extensions", k, ''))
-	if appConfig:get("extensions", k, 0) > 0 then
-		extensions[k] = k
-	end
-end
 local function loadExtensions()
-	for k, ext in pairs(extensions) do
-		loadedExtensions[ext] = loadLuaScript(ext, "extensions")
+	local i = 1
+	for k, _ in pairs(appConfig.sections.extensions) do
+		extensions[i] = k
+		i = i + 1
+		if appConfig:get("extensions", k, 0) > 0 then
+			loadedExtensions[k] = loadLuaScript(k, "extensions")
+		end
 	end
+	table.sort(extensions, function(a, b)
+		return a < b
+	end)
 end
 
 ---Check if a list contains a value.
@@ -112,7 +113,7 @@ function script.update(dt)
 		CSPVersion = cspVersion
 	}
 
-	for k, ext in pairs(loadedExtensions) do
+	for _, ext in pairs(loadedExtensions) do
 		ext:update(dt, customData)
 	end
 
@@ -131,4 +132,32 @@ end
 
 function script.onStop()
 	udp:close()
+end
+
+function script.windowMain(dt)
+	ui.text("Version " .. app_version)
+	if ui.checkbox("Debug", DEBUG_ON) then
+		if DEBUG_ON then
+			ac.clearDebug()
+		end
+		DEBUG_ON = not DEBUG_ON
+		appConfig:set("debug", "log", DEBUG_ON and 1 or 0)
+	end
+
+	for k, _ in pairs(extensions) do
+		local value = (appConfig:get("extensions", extensions[k], 0) > 0)
+		if ui.checkbox(extensions[k], value) then
+			value = not value
+			appConfig:set("extensions", extensions[k], value)
+			if value then
+				loadedExtensions[k] = loadLuaScript(extensions[k], "extensions")
+			else
+				loadedExtensions[k] = nil
+			end
+		end
+	end
+
+	if ui.button('Save') then
+		appConfig:save(ac.dirname() .. "/config.ini")
+	end
 end
