@@ -1,8 +1,8 @@
 ---@diagnostic disable: cast-local-type, duplicate-set-field, lowercase-global, need-check-nil, undefined-field
-local appConfig = ac.INIConfig.load(ac.dirname() .. "/config.ini")
+local appConfig = ac.INIConfig.load(ac.dirname() .. "/config.ini") ---@type ac.INIConfig
 local socket = require('shared/socket')
 local udp = socket.udp()
-local DEBUG_ON = appConfig:get("debug", "log", false)
+local DEBUG_ON = appConfig:get("debug", "log", false) ---@type boolean
 local customData
 local carState = ac.getCar(0)
 local cspVersion = ac.getPatchVersion()
@@ -10,6 +10,10 @@ local carScript = nil
 local extensions = {}
 local loadedExtensions = {}
 
+---Loads a lua script.
+---@param scriptName string
+---@param scriptFolder string
+---@return unknown ret the loaded script or false.
 local function loadLuaScript(scriptName, scriptFolder)
 	local ret
 	scriptPath = ac.dirname() .. "/" .. scriptFolder .. "/" .. scriptName
@@ -43,6 +47,10 @@ local function loadExtensions()
 	end
 end
 
+---Check if a list contains a value.
+---@param list table?
+---@param value string
+---@return boolean
 local function contains(list, value)
 	if list == nil then return false end
 	for _, v in ipairs(list) do
@@ -53,6 +61,8 @@ local function contains(list, value)
 	return false
 end
 
+---Display all the properies in the lua debug app.
+---@param data table list of properties to print. Usually that's customData the object sent to simhub.
 local function debugData(data)
 	for k, v in pairs(data) do
 		ac.debug(k, v)
@@ -64,6 +74,12 @@ udp:setpeername(appConfig:get("UDP", "host", "127.0.0.1"), appConfig:get("UDP", 
 loadExtensions()
 tryLoadCarConnection()
 
+---Add the car script data to a list.
+---@param connection any ac.connect connection to the car script.
+---@param struct table layout/structure used for the ac.connect.
+---@param prefix string a prefix to add to the properties name.
+---@param to table list to add the properties to. Usually that's customData the object sent to simhub.
+---@param excludedFields table? @Optional a list of fields to exclude from the exported list.
 function addCarData(connection, struct, prefix, to, excludedFields)
 	local propName
 	for k, _ in pairs(struct) do
@@ -74,6 +90,11 @@ function addCarData(connection, struct, prefix, to, excludedFields)
 	end
 end
 
+---Add a property to a list.
+---@param prefix string a prefix to add to the properties name.
+---@param obj table object that holds the field.
+---@param fieldName string name of the field to add as a property.
+---@param to any
 function addProp(prefix, obj, fieldName, to)
 	local propName = prefix .. fieldName:sub(1, 1):upper() .. fieldName:sub(2)
 	to[propName] = obj[fieldName]
