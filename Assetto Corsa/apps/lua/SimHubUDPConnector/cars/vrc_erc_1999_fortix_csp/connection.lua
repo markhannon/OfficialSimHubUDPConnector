@@ -20,7 +20,8 @@ local INPUTS_Fortix_Struct = {
 	connected = ac.StructItem.boolean(),
 	gas = ac.StructItem.float(),
 }
-local INPUTS_Fortix = ac.connect(ECU_Fortix_Struct, true, ac.SharedNamespace.CarScript)
+
+local INPUTS_Fortix = ac.connect(INPUTS_Fortix_Struct, true, ac.SharedNamespace.CarScript)
 
 function connection:carScript(customData)
 	addCarData(ECU_Fortix, ECU_Fortix_Struct, 'ECU_', customData)
