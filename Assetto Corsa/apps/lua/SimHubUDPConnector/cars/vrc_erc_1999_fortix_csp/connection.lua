@@ -23,8 +23,8 @@ local INPUTS_Fortix_Struct = {
 local INPUTS_Fortix = ac.connect(ECU_Fortix_Struct, true, ac.SharedNamespace.CarScript)
 
 function connection:carScript(customData)
-	addAllData(ECU_Fortix, ECU_Fortix_Struct, 'ECU_', customData)
-	addAllData(INPUTS_Fortix, INPUTS_Fortix_Struct, 'INPUTS_', customData)
+	addCarData(ECU_Fortix, ECU_Fortix_Struct, 'ECU_', customData)
+	addCarData(INPUTS_Fortix, INPUTS_Fortix_Struct, 'INPUTS_', customData)
 end
 
 return connection

@@ -67,7 +67,7 @@ local ECU_Arden_Struct = {
 local ECU_Arden = ac.connect(ECU_Arden_Struct, true, ac.SharedNamespace.CarScript)
 
 function connection:carScript(customData)
-    addAllData(ECU_Arden, ECU_Arden_Struct, 'ECU_', customData)
+    addCarData(ECU_Arden, ECU_Arden_Struct, 'ECU_', customData)
 end
 
 return connection

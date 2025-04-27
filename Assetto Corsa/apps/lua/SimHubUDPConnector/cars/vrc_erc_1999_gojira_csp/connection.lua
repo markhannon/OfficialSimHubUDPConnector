@@ -23,8 +23,8 @@ local INPUTS_Gogira_Struct = {
 local INPUTS_Gogira = ac.connect(INPUTS_Gogira_Struct, true, ac.SharedNamespace.CarScript)
 
 function connection:carScript(customData)
-	addAllData(ECU_Gogira, ECU_Gogira_Struct, 'ECU_', customData)
-	addAllData(INPUTS_Gogira, INPUTS_Gogira_Struct, 'INPUTS_', customData)
+	addCarData(ECU_Gogira, ECU_Gogira_Struct, 'ECU_', customData)
+	addCarData(INPUTS_Gogira, INPUTS_Gogira_Struct, 'INPUTS_', customData)
 end
 
 return connection

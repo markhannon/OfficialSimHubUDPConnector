@@ -1,85 +1,82 @@
 ---@diagnostic disable: cast-local-type, duplicate-set-field, lowercase-global, need-check-nil, undefined-field
 local appConfig = ac.INIConfig.load(ac.dirname() .. "/config.ini")
-
 local socket = require('shared/socket')
 local udp = socket.udp()
-udp:settimeout(0)
-udp:setpeername(appConfig:get("UDP", "host", "127.0.0.1"), appConfig:get("UDP", "port", 20777))
 local DEBUG_ON = appConfig:get("debug", "log", false)
 local customData
 local carState = ac.getCar(0)
 local cspVersion = ac.getPatchVersion()
 local carScript = nil
-
-function checkHasCarConnection()
-	local carPath, ret
-	local success = false
-	local carId = ac.getCarID(0)
-	carPath = ac.dirname() .. "/cars/" .. carId
-	if io.fileExists(carPath .. "/connection.lua") then
-		try(
-			function() --try
-				ret = require("cars." .. carId .. ".connection")
-				if ret then
-					success = true
-					carScript = ret
-				end
-			end,
-			function(err) --catch
-				ac.debug("Car script ERROR: " .. err .. "\n" .. carPath)
-				success = false
-			end
-		)
-	end
-	return success
-end
-
-local hasCarConnection = checkHasCarConnection()
-
-local extensions = {} -- = {'LegacyDataExtension', 'CollisionsExtension', 'RoadRumbleExtension'}
+local extensions = {}
 local loadedExtensions = {}
-function loadExtension(extName)
+
+local function loadLuaScript(scriptName, scriptFolder)
 	local ret
-	extPath = ac.dirname() .. "/extensions/" .. extName
-	if io.fileExists(extPath .. ".lua") then
+	scriptPath = ac.dirname() .. "/" .. scriptFolder .. "/" .. scriptName
+	if io.fileExists(scriptPath .. ".lua") then
 		try(
 			function() --try
-				ret = require("extensions." .. extName)
+				ret = require(scriptFolder:replace("/", ".") .. "." .. scriptName)
 			end,
 			function(err) --catch
-				ac.debug("extension " .. extName .. " ERROR ", err)
+				ac.debug("script " .. scriptName .. " ERROR ", err)
 			end
 		)
 	else
-		ac.debug("extension not found", extName .. ".lua")
+		ac.debug("script not found", scriptName .. ".lua")
 	end
 	return ret
+end
+
+local function tryLoadCarConnection()
+	local carId = ac.getCarID(0)
+	local carFolder = "cars/" .. carId
+	carScript = loadLuaScript("connection", carFolder)
 end
 
 for index, key in appConfig:iterateValues('extensions', "ext", false) do
 	extensions[index] = appConfig:get("extensions", key, '')
 end
-function loadExtensions()
+local function loadExtensions()
 	for k, ext in pairs(extensions) do
-		loadedExtensions[ext] = loadExtension(ext)
+		loadedExtensions[ext] = loadLuaScript(ext, "extensions")
 	end
 end
 
-loadExtensions()
-
-function addAllData(connection, struct, prefix, to)
-	for k, _ in pairs(struct) do
-		if type(k) == "string" then
-			local name = prefix .. k:sub(1, 1):upper() .. k:sub(2)
-			to[name] = connection[k]
+local function contains(list, value)
+	if list == nil then return false end
+	for _, v in ipairs(list) do
+		if v == value then
+			return true
 		end
 	end
+	return false
 end
 
 local function debugData(data)
 	for k, v in pairs(data) do
 		ac.debug(k, v)
 	end
+end
+
+udp:settimeout(0)
+udp:setpeername(appConfig:get("UDP", "host", "127.0.0.1"), appConfig:get("UDP", "port", 20777))
+loadExtensions()
+tryLoadCarConnection()
+
+function addCarData(connection, struct, prefix, to, excludedFields)
+	local propName
+	for k, _ in pairs(struct) do
+		if type(k) == "string" and not contains(excludedFields, k) then
+			propName = prefix .. k:sub(1, 1):upper() .. k:sub(2)
+			to[propName] = connection[k]
+		end
+	end
+end
+
+function addProp(prefix, obj, fieldName, to)
+	local propName = prefix .. fieldName:sub(1, 1):upper() .. fieldName:sub(2)
+	to[propName] = obj[fieldName]
 end
 
 function script.update(dt)
@@ -92,7 +89,7 @@ function script.update(dt)
 		ext:update(dt, customData)
 	end
 
-	if (hasCarConnection) then
+	if (carScript ~= nil) then
 		carScript:carScript(customData)
 	end
 	local jsonData = JSON.stringify(customData)

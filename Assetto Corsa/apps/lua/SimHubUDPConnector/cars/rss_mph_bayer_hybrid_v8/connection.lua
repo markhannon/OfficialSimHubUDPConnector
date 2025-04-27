@@ -16,7 +16,7 @@ local ECU = ac.connect(ECUsharedData, false, ac.SharedNamespace.Shared)
 
 function connection:carScript(customData)
 	customData.IgnitionMode = Ignition_RSS.Mode
-	addAllData(ECU, ECUsharedData, 'ECU_', customData)
+	addCarData(ECU, ECUsharedData, 'ECU_', customData)
 	customData.ECU_Antistall = ac.getCarPhysics(0).scriptControllerInputs[6]
 end
 

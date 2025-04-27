@@ -67,7 +67,7 @@ local ECU_Cadenza_Struct = {
 local ECU_Cadenza = ac.connect(ECU_Cadenza_Struct, true, ac.SharedNamespace.CarScript)
 
 function connection:carScript(customData)
-    addAllData(ECU_Cadenza, ECU_Cadenza_Struct, 'ECU_', customData)
+    addCarData(ECU_Cadenza, ECU_Cadenza_Struct, 'ECU_', customData)
 end
 
 return connection

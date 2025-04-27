@@ -26,8 +26,8 @@ local CarSystem = ac.connect(CarSystemsharedData, true, ac.SharedNamespace.Share
 
 function connection:carScript(customData)
 	customData.IgnitionMode = Ignition_RSS.Mode
-	addAllData(GTMSystem, ConnectsharedData, 'GTMSystem_', customData)
-	addAllData(CarSystem, CarSystemsharedData, 'CarSystem_', customData)
+	addCarData(GTMSystem, ConnectsharedData, 'GTMSystem_', customData)
+	addCarData(CarSystem, CarSystemsharedData, 'CarSystem_', customData)
 end
 
 return connection

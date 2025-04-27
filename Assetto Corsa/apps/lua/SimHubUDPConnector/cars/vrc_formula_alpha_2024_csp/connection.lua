@@ -62,8 +62,7 @@ local ECU_FA_Struct = {
 local ECU_FA = ac.connect(ECU_FA_Struct, true, ac.SharedNamespace.CarScript)
 
 function connection:carScript(customData)
-    addAllData(ECU_FA, ECU_FA_Struct, 'ECU_', customData)
-    customData.ECU_Damage = nil 
+    addCarData(ECU_FA, ECU_FA_Struct, 'ECU_', customData, {"damage", "gearSync"})
     customData.ECU_Damage_1 = ECU_FA.damage[0]
     customData.ECU_Damage_2 = ECU_FA.damage[1]
     customData.ECU_Damage_3 = ECU_FA.damage[2]
@@ -71,7 +70,6 @@ function connection:carScript(customData)
     customData.ECU_Damage_5 = ECU_FA.damage[4]
     customData.ECU_Damage_6 = ECU_FA.damage[5]
     customData.ECU_Damage_7 = ECU_FA.damage[6]
-    customData.ECU_GearSync = nil
     customData.ECU_GearSync_1 = ECU_FA.gearSync[0]
     customData.ECU_GearSync_2 = ECU_FA.gearSync[1]
     customData.ECU_GearSync_3 = ECU_FA.gearSync[2]

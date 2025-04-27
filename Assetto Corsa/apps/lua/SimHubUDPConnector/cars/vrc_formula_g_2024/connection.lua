@@ -47,7 +47,7 @@ local ECU_FG_Struct = {
 local ECU_FG = ac.connect(ECU_FG_Struct, true, ac.SharedNamespace.CarScript)
 
 function connection:carScript(customData)
-	addAllData(ECU_FG, ECU_FG_Struct, 'ECU_', customData)
+	addCarData(ECU_FG, ECU_FG_Struct, 'ECU_', customData)
 	customData.ECU_Damage = nil
 	customData.ECU_Damage_1 = ECU_FG.damage[0]
 	customData.ECU_Damage_2 = ECU_FG.damage[1]
