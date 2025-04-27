@@ -38,8 +38,14 @@ local function tryLoadCarConnection()
 	carScript = loadLuaScript("connection", carFolder)
 end
 
-for index, key in appConfig:iterateValues('extensions', "ext", false) do
+--[[ for index, key in appConfig:iterateValues('extensions', "ext", false) do
 	extensions[index] = appConfig:get("extensions", key, '')
+end ]]
+for k, _ in pairs(appConfig.sections.extensions) do
+	ac.debug(k, appConfig:get("extensions", k, ''))
+	if appConfig:get("extensions", k, 0) > 0 then
+		extensions[k] = k
+	end
 end
 local function loadExtensions()
 	for k, ext in pairs(extensions) do
