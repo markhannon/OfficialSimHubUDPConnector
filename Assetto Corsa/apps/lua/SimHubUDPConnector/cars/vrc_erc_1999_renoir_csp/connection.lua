@@ -23,8 +23,8 @@ local INPUTS_Renoir_Struct = {
 local INPUTS_Renoir = ac.connect(INPUTS_Renoir_Struct, true, ac.SharedNamespace.CarScript)
 
 function connection:carScript(customData)
-	addAllData(ECU_Renoir, ECU_Renoir_Struct, 'ECU_', customData)
-	addAllData(INPUTS_Renoir, INPUTS_Renoir_Struct, 'INPUTS_', customData)
+	addCarData(ECU_Renoir, ECU_Renoir_Struct, 'ECU_', customData)
+	addCarData(INPUTS_Renoir, INPUTS_Renoir_Struct, 'INPUTS_', customData)
 end
 
 return connection

@@ -117,9 +117,9 @@ local SENSORS_Ferrenzo_Struct = {
 local SENSORS_Ferrenzo = ac.connect(SENSORS_Ferrenzo_Struct, true, ac.SharedNamespace.CarScript)
 
 function connection:carScript(customData)
-    addAllData(ECU_Ferrenzo, ECU_Ferrenzo_Struct, 'ECU_', customData)
-    addAllData(CANBUS_Ferrenzo, CANBUS_Ferrenzo_Struct, 'CANBUS_', customData)
-    addAllData(SENSORS_Ferrenzo, SENSORS_Ferrenzo_Struct, 'Sensors_', customData)
+    addCarData(ECU_Ferrenzo, ECU_Ferrenzo_Struct, 'ECU_', customData)
+    addCarData(CANBUS_Ferrenzo, CANBUS_Ferrenzo_Struct, 'CANBUS_', customData)
+    addCarData(SENSORS_Ferrenzo, SENSORS_Ferrenzo_Struct, 'Sensors_', customData)
 end
 
 return connection

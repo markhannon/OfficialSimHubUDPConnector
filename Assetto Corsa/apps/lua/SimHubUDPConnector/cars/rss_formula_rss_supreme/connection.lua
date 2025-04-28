@@ -29,8 +29,8 @@ local RSSSupreme = ac.connect(RSSSupremeSystemsharedData, true, ac.SharedNamespa
 
 function connection:carScript(customData)
 	customData.IgnitionMode = Ignition_RSS.Mode
-	addAllData(OvertakeSystem, OvertakeSystemharedData, 'OvertakeSystem_', customData)
-	addAllData(RSSSupreme, RSSSupremeSystemsharedData, 'RSSSupreme_', customData)
+	addCarData(OvertakeSystem, OvertakeSystemharedData, 'OvertakeSystem_', customData)
+	addCarData(RSSSupreme, RSSSupremeSystemsharedData, 'RSSSupreme_', customData)
 end
 
 return connection

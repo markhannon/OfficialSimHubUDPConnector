@@ -21,7 +21,7 @@ local FHSystem = ac.connect(FHSystemsharedData, true, ac.SharedNamespace.Shared)
 
 function connection:carScript(customData)
     customData.IgnitionMode = Ignition_RSS.Mode
-    addAllData(FHSystem, FHSystemsharedData, 'FHSystem_', customData)
+    addCarData(FHSystem, FHSystemsharedData, 'FHSystem_', customData)
 end
 
 return connection

@@ -23,8 +23,8 @@ local INPUTS_Pageau_Struct = {
 local INPUTS_Pageau = ac.connect(INPUTS_Pageau_Struct, true, ac.SharedNamespace.CarScript)
 
 function connection:carScript(customData)
-	addAllData(ECU_Pageau, ECU_Pageau_Struct, 'ECU_', customData)
-	addAllData(INPUTS_Pageau, INPUTS_Pageau_Struct, 'INPUTS_', customData)
+	addCarData(ECU_Pageau, ECU_Pageau_Struct, 'ECU_', customData)
+	addCarData(INPUTS_Pageau, INPUTS_Pageau_Struct, 'INPUTS_', customData)
 end
 
 return connection

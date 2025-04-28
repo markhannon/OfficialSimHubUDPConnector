@@ -23,8 +23,8 @@ local INPUTS_Vorax_Struct = {
 local INPUTS_Vorax = ac.connect(INPUTS_Vorax_Struct, true, ac.SharedNamespace.CarScript)
 
 function connection:carScript(customData)
-	addAllData(ECU_Vorax, ECU_Vorax_Struct, 'ECU_', customData)
-	addAllData(INPUTS_Vorax, INPUTS_Vorax_Struct, 'INPUTS_', customData)
+	addCarData(ECU_Vorax, ECU_Vorax_Struct, 'ECU_', customData)
+	addCarData(INPUTS_Vorax, INPUTS_Vorax_Struct, 'INPUTS_', customData)
 end
 
 return connection

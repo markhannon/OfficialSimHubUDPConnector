@@ -90,8 +90,8 @@ local SENSORS_Isola_Struct = {
 local SENSORS_Isola = ac.connect(SENSORS_Isola_Struct, true, ac.SharedNamespace.CarScript)
 
 function connection:carScript(customData)
-    addAllData(ECU_Isola, ECU_Isola_Struct, 'ECU_', customData)
-    addAllData(SENSORS_Isola, SENSORS_Isola_Struct, 'Sensors_', customData)
+    addCarData(ECU_Isola, ECU_Isola_Struct, 'ECU_', customData)
+    addCarData(SENSORS_Isola, SENSORS_Isola_Struct, 'Sensors_', customData)
 end
 
 return connection
