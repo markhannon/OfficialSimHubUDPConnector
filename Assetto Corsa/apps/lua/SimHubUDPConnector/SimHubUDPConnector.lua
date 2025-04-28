@@ -1,22 +1,42 @@
 ---@diagnostic disable: cast-local-type, duplicate-set-field, lowercase-global, need-check-nil, undefined-field
-local appConfig = ac.INIConfig.load(ac.dirname() .. "/config.ini") ---@type ac.INIConfig
+
+local AppSettings = ac.storage {
+	log = false
+}
+
+local UDPSettings = table.chain(
+	{ host = '127.0.0.1', port = 20777 },
+	stringify.tryParse(ac.storage.UDPSettings, {}))
+---@diagnostic disable-next-line: inject-field
+ac.storage.UDPSettings = stringify(UDPSettings)
+
+local ExtensionsSettings
+local ExtensionsSettingsLayout = {
+	LegacyDataExtension = true,
+	CollisionsExtension = true,
+	RoadRumbleExtension = true,
+	OnlineOvertakeExtension = false,
+	TyreOptimalTempExtension = false,
+	WheelExtension = false
+}
 local manifest = ac.INIConfig.load(ac.dirname() .. '/manifest.ini', ac.INIFormat.Extended)
 local app_version = manifest:get('ABOUT', 'VERSION', 0.001)
 local socket = require('shared/socket')
 local udp = socket.udp()
-local DEBUG_ON = appConfig:get("debug", "log", false) ---@type boolean
+local DEBUG_ON = AppSettings.log and type(AppSettings.log) == "boolean" or
+	false ---@type boolean                    -- appConfig:get("debug", "log", false) ---@type boolean
 local customData
 local carState = ac.getCar(0)
 local cspVersion = ac.getPatchVersion()
 local carScript = nil
-local extensions = {} ---@type table
+local detectedExtensions = {} ---@type string[]
 local loadedExtensions = {}
-
 ---Loads a lua script.
 ---@param scriptName string
 ---@param scriptFolder string
+---@param silent boolean?
 ---@return unknown ret the loaded script or false.
-local function loadLuaScript(scriptName, scriptFolder)
+local function loadLuaScript(scriptName, scriptFolder, silent)
 	local ret
 	scriptPath = ac.dirname() .. "/" .. scriptFolder .. "/" .. scriptName
 	if io.fileExists(scriptPath .. ".lua") then
@@ -29,7 +49,9 @@ local function loadLuaScript(scriptName, scriptFolder)
 			end
 		)
 	else
-		ac.debug("script not found", scriptName .. ".lua")
+		if not silent then
+			ac.debug("script not found", scriptName .. ".lua")
+		end
 	end
 	return ret
 end
@@ -37,21 +59,7 @@ end
 local function tryLoadCarConnection()
 	local carId = ac.getCarID(0)
 	local carFolder = "cars/" .. carId
-	carScript = loadLuaScript("connection", carFolder)
-end
-
-local function loadExtensions()
-	local i = 1
-	for k, _ in pairs(appConfig.sections.extensions) do
-		extensions[i] = k
-		i = i + 1
-		if appConfig:get("extensions", k, 0) > 0 then
-			loadedExtensions[k] = loadLuaScript(k, "extensions")
-		end
-	end
-	table.sort(extensions, function(a, b)
-		return a < b
-	end)
+	carScript = loadLuaScript("connection", carFolder, true)
 end
 
 ---Check if a list contains a value.
@@ -68,6 +76,26 @@ local function contains(list, value)
 	return false
 end
 
+local function loadExtensions()
+	-- Scan for new extensions.
+	io.scanDir(ac.dirname() .. "/extensions", function(fileName, fileAttributes, callbackData)
+		local extName = fileName:replace(".lua", "")
+		if extName ~= "Extension" and extName ~= "SampleUserExtension" then
+			if ExtensionsSettingsLayout[extName] == nil then
+				ExtensionsSettingsLayout[extName] = false
+			end
+			detectedExtensions[#detectedExtensions + 1] = extName
+		end
+	end)
+	ExtensionsSettings = ac.storage(ExtensionsSettingsLayout)
+	table.sort(detectedExtensions)
+	for _, extName in pairs(detectedExtensions) do
+		if ExtensionsSettings[extName] then
+			loadedExtensions[extName] = loadLuaScript(extName, "extensions")
+		end
+	end
+end
+
 ---Display all the properies in the lua debug app.
 ---@param data table list of properties to print. Usually that's customData the object sent to simhub.
 local function debugData(data)
@@ -77,7 +105,8 @@ local function debugData(data)
 end
 
 udp:settimeout(0)
-udp:setpeername(appConfig:get("UDP", "host", "127.0.0.1"), appConfig:get("UDP", "port", 20777))
+-- udp:setpeername(appConfig:get("UDP", "host", "127.0.0.1"), appConfig:get("UDP", "port", 20777))
+udp:setpeername(UDPSettings.host, UDPSettings.port)
 loadExtensions()
 tryLoadCarConnection()
 
@@ -136,28 +165,32 @@ end
 
 function script.windowMain(dt)
 	ui.text("Version " .. app_version)
+	ui.text("UDP host " .. UDPSettings.host)
+	ui.text("UDP port " .. UDPSettings.port)
+	if ui.button("Edit Settings file (restart needed)") then
+		os.openInExplorer(ac.getFolder(ac.FolderID.ScriptConfig) .. ".ini")
+	end
 	if ui.checkbox("Debug", DEBUG_ON) then
 		if DEBUG_ON then
 			ac.clearDebug()
 		end
 		DEBUG_ON = not DEBUG_ON
-		appConfig:set("debug", "log", DEBUG_ON and 1 or 0)
+		AppSettings.log = DEBUG_ON
 	end
-
-	for k, _ in pairs(extensions) do
-		local value = (appConfig:get("extensions", extensions[k], 0) > 0)
-		if ui.checkbox(extensions[k], value) then
+	for _, extName in pairs(detectedExtensions) do
+		local value = ExtensionsSettings[extName]
+		if ui.checkbox(extName, value) then
+			if DEBUG_ON then
+				ac.clearDebug()
+			end
+			customData = {}
 			value = not value
-			appConfig:set("extensions", extensions[k], value)
+			ExtensionsSettings[extName] = value
 			if value then
-				loadedExtensions[k] = loadLuaScript(extensions[k], "extensions")
+				loadedExtensions[extName] = loadLuaScript(extName, "extensions")
 			else
-				loadedExtensions[k] = nil
+				loadedExtensions[extName] = nil
 			end
 		end
-	end
-
-	if ui.button('Save') then
-		appConfig:save(ac.dirname() .. "/config.ini")
 	end
 end

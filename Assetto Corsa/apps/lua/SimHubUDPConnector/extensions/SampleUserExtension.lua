@@ -1,3 +1,6 @@
+--[[ 
+    RENAME THIS FILE TO UserExtension.lua TO ACTIVATE IT 
+]]
 require("extensions.Extension")
 
 UserExtension = {}
@@ -13,6 +16,9 @@ local carState = ac.getCar(0)
 local sim = ac.getSim()
 
 function UserExtension:update(dt, customData)
+--[[ 
+    RENAME THIS FILE TO UserExtension.lua TO ACTIVATE IT 
+]]
     -- here you can add the properies you need 
     -- example :
     -- customData.AmbientTemperature = sim.ambientTemperature
