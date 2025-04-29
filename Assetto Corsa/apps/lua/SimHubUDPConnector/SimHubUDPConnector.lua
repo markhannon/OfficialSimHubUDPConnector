@@ -1,7 +1,8 @@
 ---@diagnostic disable: cast-local-type, duplicate-set-field, lowercase-global, need-check-nil, undefined-field
 
 local AppSettings = ac.storage {
-	log = false
+	log = false,
+	autoUpdate = true
 }
 
 local UDPSettings = table.chain(
@@ -20,17 +21,19 @@ local ExtensionsSettingsLayout = {
 	WheelExtension = false
 }
 local manifest = ac.INIConfig.load(ac.dirname() .. '/manifest.ini', ac.INIFormat.Extended)
-local app_version = manifest:get('ABOUT', 'VERSION', 0.001)
+local appVersion = manifest:get('ABOUT', 'VERSION', "0.0.0")
 local socket = require('shared/socket')
 local udp = socket.udp()
-local DEBUG_ON = AppSettings.log and type(AppSettings.log) == "boolean" or
-	false ---@type boolean                    -- appConfig:get("debug", "log", false) ---@type boolean
+local debugOn = AppSettings.log and type(AppSettings.log) == "boolean" or
+	false ---@type boolean
 local customData
 local carState = ac.getCar(0)
 local cspVersion = ac.getPatchVersion()
 local carScript = nil
 local detectedExtensions = {} ---@type string[]
 local loadedExtensions = {}
+local repoVersion = "0.0.0"
+local updatingApp = false
 ---Loads a lua script.
 ---@param scriptName string
 ---@param scriptFolder string
@@ -45,12 +48,12 @@ local function loadLuaScript(scriptName, scriptFolder, silent)
 				ret = require(scriptFolder:replace("/", ".") .. "." .. scriptName)
 			end,
 			function(err) --catch
-				ac.debug("script " .. scriptName .. " ERROR ", err)
+				print("script " .. scriptName .. " ERROR : " .. err)
 			end
 		)
 	else
 		if not silent then
-			ac.debug("script not found", scriptName .. ".lua")
+			print("script not found : " .. scriptName .. ".lua")
 		end
 	end
 	return ret
@@ -104,9 +107,57 @@ local function debugData(data)
 	end
 end
 
+local function updateApp(version)
+	updatingApp = true
+	local urlRelease = "https://github.com/Dasde/SimHubUDPConnector/releases/download/v" ..
+		version .. "/SimHubUDPConnector.zip"
+	web.get(urlRelease, function(errRelease, responseRelease)
+		if errRelease then
+			updatingApp = false
+			print(errRelease)
+			error(errRelease)
+		end
+		local acFolder = ac.getFolder(ac.FolderID.Root)
+		for _, file in ipairs(io.scanZip(responseRelease.body)) do
+			local content = io.loadFromZip(responseRelease.body, file)
+			if content then
+				local filename = acFolder .. "\\" .. file -- :match("/(.*)")
+				filename = filename:replace("/", "\\")
+				if not io.dirExists(filename) then
+					io.createFileDir(filename)
+				end
+				-- print(filename)
+				if io.save(filename, content) then
+					-- print(filename .. " successfully written to disk")
+				else
+					print("Error writing " .. filename)
+				end
+			end
+		end
+	end)
+	updatingApp = false
+end
+
+local function getLatestVersion()
+	local urlManifest =
+	"https://raw.githubusercontent.com/Dasde/SimHubUDPConnector/refs/heads/main/Assetto%20Corsa/apps/lua/SimHubUDPConnector/manifest.ini"
+	web.get(urlManifest, function(err, response)
+		if err then error(err) end
+		local repoManifest = response.body
+		if not repoManifest then return print('Missing manifest on the repo.') end
+		repoVersion = ac.INIConfig.parse(repoManifest, ac.INIFormat.Extended):get('ABOUT', 'VERSION', "0.0.0")
+		if repoVersion:versionCompare(appVersion) <= 0 then
+			return
+		end
+		if AppSettings.autoUpdate then
+			updateApp(repoVersion)
+		end
+	end)
+end
+
 udp:settimeout(0)
--- udp:setpeername(appConfig:get("UDP", "host", "127.0.0.1"), appConfig:get("UDP", "port", 20777))
 udp:setpeername(UDPSettings.host, UDPSettings.port)
+getLatestVersion()
 loadExtensions()
 tryLoadCarConnection()
 
@@ -142,18 +193,26 @@ function script.update(dt)
 		CSPVersion = cspVersion
 	}
 
-	for _, ext in pairs(loadedExtensions) do
-		ext:update(dt, customData)
+	for extName, ext in pairs(loadedExtensions) do
+		try(function()
+			ext:update(dt, customData)
+		end, function(err)
+			print("Extension " .. extName .. " generated an error : " .. err)
+		end)
 	end
 
 	if (carScript ~= nil) then
-		carScript:carScript(customData)
+		try(function()
+			carScript:carScript(customData)
+		end, function(err)
+			print("Car script for " .. ac.getCarID(0) .. " generated an error : " .. err)
+		end)
 	end
 	local jsonData = JSON.stringify(customData)
 	udp:send(jsonData)
 
 	-- for debug only
-	if DEBUG_ON then
+	if debugOn then
 		debugData(customData)
 		-- ac.debug("jsonData", jsonData)
 	end
@@ -164,33 +223,76 @@ function script.onStop()
 end
 
 function script.windowMain(dt)
-	ui.text("Version " .. app_version)
-	ui.text("UDP host " .. UDPSettings.host)
-	ui.text("UDP port " .. UDPSettings.port)
-	if ui.button("Edit Settings file (restart needed)") then
-		os.openInExplorer(ac.getFolder(ac.FolderID.ScriptConfig) .. ".ini")
+	if updatingApp then
+		ui.text("Updating app, please wait...")
+		ui.newLine()
+		ui.icon(ui.Icons.LoadingSpinner, 160)
+		ui.newLine()
+		return
 	end
-	if ui.checkbox("Debug", DEBUG_ON) then
-		if DEBUG_ON then
-			ac.clearDebug()
-		end
-		DEBUG_ON = not DEBUG_ON
-		AppSettings.log = DEBUG_ON
-	end
-	for _, extName in pairs(detectedExtensions) do
-		local value = ExtensionsSettings[extName]
-		if ui.checkbox(extName, value) then
-			if DEBUG_ON then
-				ac.clearDebug()
+	ui.tabBar('someTabBarID', function()
+		ui.tabItem('Extensions', function()
+			for _, extName in pairs(detectedExtensions) do
+				local value = ExtensionsSettings[extName]
+				if ui.checkbox(extName, value) then
+					if debugOn then
+						ac.clearDebug()
+					end
+					customData = {}
+					value = not value
+					ExtensionsSettings[extName] = value
+					if value then
+						loadedExtensions[extName] = loadLuaScript(extName, "extensions")
+					else
+						loadedExtensions[extName] = nil
+					end
+				end
 			end
-			customData = {}
-			value = not value
-			ExtensionsSettings[extName] = value
-			if value then
-				loadedExtensions[extName] = loadLuaScript(extName, "extensions")
+		end)
+		ui.tabItem('Settings', function()
+			if ui.checkbox("Debug", debugOn) then
+				if debugOn then
+					ac.clearDebug()
+				end
+				debugOn = not debugOn
+				AppSettings.log = debugOn
+			end
+			ui.text("Version " .. appVersion)
+			if repoVersion:versionCompare(appVersion) > 0 then
+				if not AppSettings.autoUpdate then
+					ui.textColored("A new version (" .. repoVersion .. ") is available", rgbm.colors.red)
+					if ui.button("Update...") then
+						updateApp(repoVersion)
+					end
+				end
 			else
-				loadedExtensions[extName] = nil
+				ui.textColored("The latest version is installed.", rgbm.colors.green)
+				if ui.button("Reset app..", ui.ButtonFlags.Confirm) then
+					updateApp(repoVersion)
+				end
 			end
-		end
-	end
+			if ui.checkbox("Auto-Update", AppSettings.autoUpdate) then
+				AppSettings.autoUpdate = not AppSettings.autoUpdate
+			end
+			ui.text("UDP Settings")
+			local hostChanged
+			UDPSettings.host, hostChanged = ui.inputText("host", UDPSettings.host,
+				ui.InputTextFlags.CharsDecimal and ui.InputTextFlags.CharsNoBlank)
+			if hostChanged then
+				UDPSettingsChanged = true
+			end
+			local portChanged
+			UDPSettings.port, portChanged = ui.inputText("port", tostring(UDPSettings.port),
+				ui.InputTextFlags.CharsDecimal and ui.InputTextFlags.CharsNoBlank)
+			if portChanged then
+				UDPSettingsChanged = true
+			end
+			if UDPSettingsChanged then
+				if ui.button("Restart UDP connection") then
+					udp:close()
+					udp:setpeername(UDPSettings.host, UDPSettings.port)
+				end
+			end
+		end)
+	end)
 end
