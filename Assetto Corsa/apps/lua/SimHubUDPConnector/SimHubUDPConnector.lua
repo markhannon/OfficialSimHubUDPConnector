@@ -281,13 +281,17 @@ function script.windowMain(dt)
 			if hostChanged then
 				UDPSettingsChanged = true
 			end
-			local portChanged
-			UDPSettings.port, portChanged = ui.inputText("port", tostring(UDPSettings.port),
+			local portChanged, udpPort
+			udpPort, portChanged = ui.inputText("port", tostring(UDPSettings.port),
 				ui.InputTextFlags.CharsDecimal and ui.InputTextFlags.CharsNoBlank)
 			if portChanged then
+				ac.debug("port : ", udpPort)
+				UDPSettings.port = tonumber(udpPort)
 				UDPSettingsChanged = true
 			end
 			if UDPSettingsChanged then
+---@diagnostic disable-next-line: inject-field
+				ac.storage.UDPSettings = stringify(UDPSettings)
 				if ui.button("Restart UDP connection") then
 					udp:close()
 					udp:setpeername(UDPSettings.host, UDPSettings.port)
