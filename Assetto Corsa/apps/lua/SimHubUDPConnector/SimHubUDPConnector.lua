@@ -107,8 +107,30 @@ local function debugData(data)
 	end
 end
 
+---Write a file on disk
+---@param file string relative path of the file
+---@param content string content of the file
+---@param folder string destinatin folder
+local function writeFile(file, content, folder)
+	local filename = folder .. "\\" .. file -- :match("/(.*)")
+	filename = filename:replace("/", "\\")
+	if not io.dirExists(filename) then
+		io.createFileDir(filename)
+	end
+	-- print(filename)
+	if io.save(filename, content) then
+		-- print(filename .. " successfully written to disk")
+	else
+		print("Error writing " .. filename)
+	end
+end
+
+---Update the app to a specific version
+---@param version string
 local function updateApp(version)
 	updatingApp = true
+---@diagnostic disable-next-line: inject-field
+	ac.storage.updateToVersion = version
 	local urlRelease = "https://github.com/Dasde/SimHubUDPConnector/releases/download/v" ..
 		version .. "/SimHubUDPConnector.zip"
 	web.get(urlRelease, function(errRelease, responseRelease)
@@ -118,21 +140,20 @@ local function updateApp(version)
 			error(errRelease)
 		end
 		local acFolder = ac.getFolder(ac.FolderID.Root)
+		local appFile, appContent
 		for _, file in ipairs(io.scanZip(responseRelease.body)) do
 			local content = io.loadFromZip(responseRelease.body, file)
 			if content then
-				local filename = acFolder .. "\\" .. file -- :match("/(.*)")
-				filename = filename:replace("/", "\\")
-				if not io.dirExists(filename) then
-					io.createFileDir(filename)
-				end
-				-- print(filename)
-				if io.save(filename, content) then
-					-- print(filename .. " successfully written to disk")
+				if (file:endsWith("SimHubUDPConnector.lua") ) then
+					appFile = file
+					appContent = content
 				else
-					print("Error writing " .. filename)
+					writeFile(file, content, acFolder)
 				end
 			end
+		end
+		if appContent then
+			writeFile(appFile, appContent, acFolder)
 		end
 	end)
 	updatingApp = false
@@ -142,22 +163,32 @@ local function getLatestVersion()
 	local urlManifest =
 	"https://raw.githubusercontent.com/Dasde/SimHubUDPConnector/refs/heads/main/Assetto%20Corsa/apps/lua/SimHubUDPConnector/manifest.ini"
 	web.get(urlManifest, function(err, response)
-		if err then error(err) end
+		if err then print(error(err)) end
 		local repoManifest = response.body
 		if not repoManifest then return print('Missing manifest on the repo.') end
 		repoVersion = ac.INIConfig.parse(repoManifest, ac.INIFormat.Extended):get('ABOUT', 'VERSION', "0.0.0")
-		if repoVersion:versionCompare(appVersion) <= 0 then
-			return
-		end
-		if AppSettings.autoUpdate then
-			updateApp(repoVersion)
-		end
+		-- print(repoVersion)
 	end)
+end
+
+local function checkForUpdate()
+	if ac.storage.updateToVersion and ac.storage.updateToVersion:versionCompare(appVersion) == 0 then
+		print("App successfully updated to version " .. appVersion)
+---@diagnostic disable-next-line: inject-field
+		ac.storage.updateToVersion = "0.0.0"
+	end
+	getLatestVersion()
+	if repoVersion:versionCompare(appVersion) <= 0 then
+		return
+	end
+	if AppSettings.autoUpdate then
+		updateApp(repoVersion)
+	end
 end
 
 udp:settimeout(0)
 udp:setpeername(UDPSettings.host, UDPSettings.port)
-getLatestVersion()
+checkForUpdate()
 loadExtensions()
 tryLoadCarConnection()
 
@@ -268,6 +299,7 @@ function script.windowMain(dt)
 			else
 				ui.textColored("The latest version is installed.", rgbm.colors.green)
 				if ui.button("Reset app..", ui.ButtonFlags.Confirm) then
+					getLatestVersion()
 					updateApp(repoVersion)
 				end
 			end
