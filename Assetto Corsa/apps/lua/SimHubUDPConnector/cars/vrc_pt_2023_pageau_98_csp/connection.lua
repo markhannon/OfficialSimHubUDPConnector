@@ -123,9 +123,9 @@ local SENSORS_Pageau_Struct = {
 local SENSORS_Pageau = ac.connect(SENSORS_Pageau_Struct, true, ac.SharedNamespace.CarScript)
 
 function connection:carScript(customData)
-    addCarData(ECU_Pageau, self.ECU_Pageau_fields, 'ECU_', customData)
-    addCarData(CANBUS_Pageau, self.CANBUS_Pageau_fields, 'CANBUS_', customData)
-    addCarData(SENSORS_Pageau, self.SENSORS_Pageau_fields, 'Sensors_', customData)
+    addCarData(ECU_Pageau, ECU_Pageau_Struct, 'ECU_', customData)
+    addCarData(CANBUS_Pageau, CANBUS_Pageau_Struct, 'CANBUS_', customData)
+    addCarData(SENSORS_Pageau, SENSORS_Pageau_Struct, 'Sensors_', customData)
 end
 
 return connection
