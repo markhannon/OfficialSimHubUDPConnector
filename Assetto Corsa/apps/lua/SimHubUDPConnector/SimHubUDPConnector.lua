@@ -129,7 +129,7 @@ end
 ---@param version string
 local function updateApp(version)
 	updatingApp = true
----@diagnostic disable-next-line: inject-field
+	---@diagnostic disable-next-line: inject-field
 	ac.storage.updateToVersion = version
 	local urlRelease = "https://github.com/Dasde/SimHubUDPConnector/releases/download/v" ..
 		version .. "/SimHubUDPConnector.zip"
@@ -144,7 +144,7 @@ local function updateApp(version)
 		for _, file in ipairs(io.scanZip(responseRelease.body)) do
 			local content = io.loadFromZip(responseRelease.body, file)
 			if content then
-				if (file:endsWith("SimHubUDPConnector.lua") ) then
+				if (file:endsWith("SimHubUDPConnector.lua")) then
 					appFile = file
 					appContent = content
 				else
@@ -159,7 +159,10 @@ local function updateApp(version)
 	updatingApp = false
 end
 
-local function getLatestVersion()
+---Get the latest version from the repo and update if asked.
+---@param update boolean
+---@param force? boolean
+local function getLatestVersion(update, force)
 	local urlManifest =
 	"https://raw.githubusercontent.com/Dasde/SimHubUDPConnector/refs/heads/main/Assetto%20Corsa/apps/lua/SimHubUDPConnector/manifest.ini"
 	web.get(urlManifest, function(err, response)
@@ -167,23 +170,23 @@ local function getLatestVersion()
 		local repoManifest = response.body
 		if not repoManifest then return print('Missing manifest on the repo.') end
 		repoVersion = ac.INIConfig.parse(repoManifest, ac.INIFormat.Extended):get('ABOUT', 'VERSION', "0.0.0")
-		-- print(repoVersion)
+		if (update) then
+			if repoVersion:versionCompare(appVersion) <= 0 then
+				print("no update. versions : repo " .. repoVersion .. " app " .. appVersion)
+				if (not force) then return end
+			end
+			updateApp(repoVersion)
+		end
 	end)
 end
 
 local function checkForUpdate()
 	if ac.storage.updateToVersion and ac.storage.updateToVersion:versionCompare(appVersion) == 0 then
 		print("App successfully updated to version " .. appVersion)
----@diagnostic disable-next-line: inject-field
+		---@diagnostic disable-next-line: inject-field
 		ac.storage.updateToVersion = "0.0.0"
 	end
-	getLatestVersion()
-	if repoVersion:versionCompare(appVersion) <= 0 then
-		return
-	end
-	if AppSettings.autoUpdate then
-		updateApp(repoVersion)
-	end
+	getLatestVersion(AppSettings.autoUpdate)
 end
 
 udp:settimeout(0)
@@ -299,8 +302,7 @@ function script.windowMain(dt)
 			else
 				ui.textColored("The latest version is installed.", rgbm.colors.green)
 				if ui.button("Reset app..", ui.ButtonFlags.Confirm) then
-					getLatestVersion()
-					updateApp(repoVersion)
+					getLatestVersion(true, true)
 				end
 			end
 			if ui.checkbox("Auto-Update", AppSettings.autoUpdate) then
@@ -322,7 +324,7 @@ function script.windowMain(dt)
 				UDPSettingsChanged = true
 			end
 			if UDPSettingsChanged then
----@diagnostic disable-next-line: inject-field
+				---@diagnostic disable-next-line: inject-field
 				ac.storage.UDPSettings = stringify(UDPSettings)
 				if ui.button("Restart UDP connection") then
 					udp:close()
