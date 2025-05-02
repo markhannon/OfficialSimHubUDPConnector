@@ -9,15 +9,23 @@ The SimHub UDPConnector plugin is available here for free : [overtake.gg](https:
 > The plugin is not limited to Assetto Corsa, it is agnostic to the sim used, you can send data from whatever sources as long as it's simple json (key/value) sent via UDP on the port configured in the plugin settings. 
 
 ### Assetto Corsa ###
-The only app you need is SimHubUDPConnector.lua, you can drag and drop the 7zip archive directly into ContentManager to install or update it. By default it will send [additional data](#default_data) to SimHub and enable Collisions effect and Road Rumble (with road textures) effect for ShakeIt (motors and bass shakers).  
-If you need to send other data edit the file extensions/UserExtension.lua and add your code there.  
-To activate the extension edit the config.ini file and uncomment the line :
-`;ext_4=UserExtension` (remove the ';')  
-If you made a great addition that you want to share with others you can create your own Extension (take a look at the folder extensions for examples) and submit a PR.  
-Don't forget to add your extension to the config.ini file :
-`ext_7=MyNewExtension` 
+The only app you need is SimHubUDPConnector.lua, you can drag and drop the zip archive directly into ContentManager to install or update it. Once installed you don't need to update it manually it should update automatically when an update is available. 
+
 > [!NOTE]
-> the number after the ext_ must be unique. 
+> You can force an update by clicking on the "Reset app" button in the app settings.  
+![Settings.](documentation-assets/settings.png)  
+
+
+By default it will send [additional data](#default_data) to SimHub and enable Collisions effect and Road Rumble (with road textures) effect for ShakeIt (motors and bass shakers).  
+If you need to send other data copy the file extensions/SampleUserExtension.lua and rename the copy to UserExtension.lua and add your custom code there (update function).  
+To activate the extension open the app window in assetto and check the extension you want to activate :
+
+![Extensions.](documentation-assets/extensions.png)  
+
+If you made a great addition that you want to share with others you can create your own Extension (take a look at the folder extensions for examples) and submit a PR.  
+
+> [!NOTE]
+> Don't forget to activate your extension, it will be automatically detected as long as it's in the extension folder but deactivated by default.
 
 If you need support with the plugin or the apps feel free to join our [Discord](https://discord.gg/CftwCDXEvv) 
 
