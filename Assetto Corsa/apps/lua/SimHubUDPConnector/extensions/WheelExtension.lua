@@ -77,7 +77,11 @@ function WheelExtension:update(dt, customData)
         addProp(prefix, wheel, "isHot", customData)
         addProp(prefix, wheel, "isSpecialSurface", customData)
         addProp(prefix, wheel, "surfaceType", customData)
-        addProp(prefix, wheel, "surfaceExtendedType", customData)
+        if ac.getPatchVersionCode() >= 3334 then
+            addProp(prefix, wheel, "surfaceExtendedType", customData)
+        else
+            customData.WheelSurfaceError = "Please upgrade your csp to version 0.2.7 min."
+        end
     end
 end
 

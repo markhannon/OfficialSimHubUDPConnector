@@ -23,7 +23,7 @@ local wheelsState = carState.wheels ---@type ac.StateWheel
 ---
 ---@param compoundName string name of the compound
 ---@param minTemp number minimalOptimalTemperature
----@return number maximumOptimalTemperature
+---@return number|nil maximumOptimalTemperature
 local function maximumOptimalTemperature(compoundName, minTemp)
 	if (compoundName == nil) then
 		-- in replays those values are nil
