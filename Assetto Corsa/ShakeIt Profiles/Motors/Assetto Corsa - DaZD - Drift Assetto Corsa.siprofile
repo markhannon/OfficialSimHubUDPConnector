@@ -61,7 +61,7 @@
     {
       "ContainerType": "GroupContainer",
       "IsEnabled": true,
-      "Gain": 49.575757575757052,
+      "Gain": 51.575757575757052,
       "Description": "Road Rumble",
       "EffectsContainers": [
         {
@@ -237,25 +237,25 @@
           "FrontLeftFormula": {
             "JSExt": 0,
             "Interpreter": 1,
-            "Expression": "if ($prop('UDPConnectorDataPlugin.WheelFLSurface') == 'Kerb' || isnull($prop('UDPConnectorDataPlugin.WheelFLSurfaceVibrationGain'),0) > 0)\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelFLSurfaceVibrationGain'));\r\nreturn 0;",
+            "Expression": "if ($prop('UDPConnectorDataPlugin.WheelFLSurface') == 'Kerb')\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelFLSurfaceVibrationGain'));\r\nreturn 0;",
             "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\treturn 100 * speedRatio;\r\n}"
           },
           "FrontRightFormula": {
             "JSExt": 0,
             "Interpreter": 1,
-            "Expression": "if ($prop('UDPConnectorDataPlugin.WheelFRSurface') == 'Kerb' || isnull($prop('UDPConnectorDataPlugin.WheelFRSurfaceVibrationGain'),0) > 0)\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelFRSurfaceVibrationGain'));\r\nreturn 0;",
+            "Expression": "if ($prop('UDPConnectorDataPlugin.WheelFRSurface') == 'Kerb')\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelFRSurfaceVibrationGain'));\r\nreturn 0;",
             "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\treturn 100 * speedRatio;\r\n}"
           },
           "RearLeftFormula": {
             "JSExt": 0,
             "Interpreter": 1,
-            "Expression": "if ($prop('UDPConnectorDataPlugin.WheelRLSurface') == 'Kerb' || isnull($prop('UDPConnectorDataPlugin.WheelRLSurfaceVibrationGain'),0) > 0)\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelRLSurfaceVibrationGain'));\r\nreturn 0;",
+            "Expression": "if ($prop('UDPConnectorDataPlugin.WheelRLSurface') == 'Kerb')\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelRLSurfaceVibrationGain'));\r\nreturn 0;",
             "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\treturn 100 * speedRatio;\r\n}"
           },
           "RearRightFormula": {
             "JSExt": 0,
             "Interpreter": 1,
-            "Expression": "\r\nif ($prop('UDPConnectorDataPlugin.WheelRRSurface') == 'Kerb' || isnull($prop('UDPConnectorDataPlugin.WheelRRSurfaceVibrationGain'),0) > 0)\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelRRSurfaceVibrationGain'));\r\nreturn 0;",
+            "Expression": "\r\nif ($prop('UDPConnectorDataPlugin.WheelRRSurface') == 'Kerb')\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelRRSurfaceVibrationGain'));\r\nreturn 0;",
             "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\treturn 100 * speedRatio;\r\n}"
           },
           "ForceFrequencies": false,
@@ -508,6 +508,73 @@
       "ContainerId": "86b21a5c-7009-422d-b870-50f4fd51d1f7",
       "Filter": null,
       "Output": null
+    },
+    {
+      "ContainerType": "CustomEffectContainer",
+      "IsEnabled": true,
+      "Gain": 58.666666666666288,
+      "Description": "Rangey 4 Wheel tyre slip x surge brakes only",
+      "FrontLeftFormula": {
+        "JSExt": 1,
+        "Interpreter": 1,
+        "Expression": "//Tyre Slip\r\nvar fl = longitudinalWheelSlipPercent($prop('UDPConnectorDataPlugin.WheelExt_0_RimRadius'), $prop('UDPConnectorDataPlugin.WheelExt_0_AngularSpeed'));\r\n//Sway Acceleration\r\n\r\nvar sway = Math.pow ($prop('AccelerationSway'),2)\r\n//surge Acceleration\r\nvar surge = Math.pow ($prop('AccelerationSurge'),2)\r\nvar limited = fl * surge;\r\nif (($prop('Brake')) > 10 || $prop('UDPConnectorDataPlugin.Handbrake')>0.1) {\r\nreturn Math.min(Math.max(parseInt(limited), 0), 100);\r\n}\r\nreturn 0",
+        "PreExpression": "function longitudinalWheelSlipPercent(radius, angularSpeed) {\r\n    let speedKMH = $prop('MaxSpeedKmh');\r\n    let speedMS = speedKMH * (5/18);\r\n    let groundSpeedMS = radius * angularSpeed;\r\n    return (speedMS - groundSpeedMS) / Math.max(groundSpeedMS, speedMS);\r\n}"
+      },
+      "FrontRightFormula": {
+        "JSExt": 1,
+        "Interpreter": 1,
+        "Expression": "//Tyre Slip\r\nvar fr = longitudinalWheelSlipPercent($prop('UDPConnectorDataPlugin.WheelExt_1_RimRadius'), $prop('UDPConnectorDataPlugin.WheelExt_1_AngularSpeed'));\r\n//Sway Acceleration\r\nvar sway = Math.pow ($prop('AccelerationSway'),2)\r\n//surge Acceleration\r\nvar surge = Math.pow ($prop('AccelerationSurge'),2)\r\nvar limited = fr * surge\r\nif (($prop('Brake')) > 10  || $prop('UDPConnectorDataPlugin.Handbrake')>0.1) {\r\nreturn Math.min(Math.max(parseInt(limited), 0), 100);\r\n}\r\nreturn 0",
+        "PreExpression": "function longitudinalWheelSlipPercent(radius, angularSpeed) {\r\n    let speedKMH = $prop('MaxSpeedKmh');\r\n    let speedMS = speedKMH * (5/18);\r\n    let groundSpeedMS = radius * angularSpeed;\r\n    return (speedMS - groundSpeedMS) / Math.max(groundSpeedMS, speedMS);\r\n}"
+      },
+      "RearLeftFormula": {
+        "JSExt": 1,
+        "Interpreter": 1,
+        "Expression": "//Tyre Slip\r\nvar rl = longitudinalWheelSlipPercent($prop('UDPConnectorDataPlugin.WheelExt_2_RimRadius'), $prop('UDPConnectorDataPlugin.WheelExt_2_AngularSpeed'));\r\n//Sway Acceleration\r\nvar sway = Math.pow ($prop('AccelerationSway'),2)\r\n//surge Acceleration\r\nvar surge = Math.pow ($prop('AccelerationSurge'),2)\r\nvar limited = rl * surge\r\nif (($prop('Brake')) > 10  || $prop('UDPConnectorDataPlugin.Handbrake')>0.1)  {\r\nreturn Math.min(Math.max(parseInt(limited), 0), 100);\r\n}\r\nreturn 0\r\n ",
+        "PreExpression": "function longitudinalWheelSlipPercent(radius, angularSpeed) {\r\n    let speedKMH = $prop('MaxSpeedKmh');\r\n    let speedMS = speedKMH * (5/18);\r\n    let groundSpeedMS = radius * angularSpeed;\r\n    return (speedMS - groundSpeedMS) / Math.max(groundSpeedMS, speedMS);\r\n}"
+      },
+      "RearRightFormula": {
+        "JSExt": 1,
+        "Interpreter": 1,
+        "Expression": "//Tyre Slip\r\nvar rr = longitudinalWheelSlipPercent($prop('UDPConnectorDataPlugin.WheelExt_3_RimRadius'), $prop('UDPConnectorDataPlugin.WheelExt_3_AngularSpeed'));\r\n//Sway Acceleration\r\nvar sway = Math.pow ($prop('AccelerationSway'),2)\r\n//surge Acceleration\r\nvar surge = Math.pow ($prop('AccelerationSurge'),2)\r\nvar limited = rr * surge\r\nif (($prop('Brake')) > 10  || $prop('UDPConnectorDataPlugin.Handbrake')>0.1) {\r\nreturn Math.min(Math.max(parseInt(limited), 0), 100);\r\n}\r\nreturn 0",
+        "PreExpression": "function longitudinalWheelSlipPercent(radius, angularSpeed) {\r\n    let speedKMH = $prop('MaxSpeedKmh');\r\n    let speedMS = speedKMH * (5/18);\r\n    let groundSpeedMS = radius * angularSpeed;\r\n    return (speedMS - groundSpeedMS) / Math.max(groundSpeedMS, speedMS);\r\n}"
+      },
+      "ForceFrequencies": true,
+      "FrontLeftFrequencyFormula": {
+        "JSExt": 0,
+        "Interpreter": 1,
+        "Expression": "var flrps = revolutionPerSecond($prop('UDPConnectorDataPlugin.WheelExt_0_AngularSpeed'));\r\n// Lockup percentage (0.0 to 1.0)\r\nvar lockup = longitudinalWheelSlipPercent($prop('UDPConnectorDataPlugin.WheelExt_0_RimRadius'), $prop('UDPConnectorDataPlugin.WheelExt_0_AngularSpeed'));\r\n\r\n// Additional rising frequency element (only applies if lockup > 0.75)\r\nvar risingFrequency = 0;\r\nif (lockup > 0.75) {\r\n    // Scale the rising element from 0 to a max value (e.g., 40) as lockup moves from 0.75 to 1.0\r\n    risingFrequency = (lockup - 0.75) / 0.25 * 40; // Adjust \"40\" to control the maximum added frequency\r\n}\r\n\r\n// Final frequency calculation\r\nvar frequency = ((flrps+30) + risingFrequency)*-1;\r\nvar frequency = Math.max(frequency, 30);\r\n\r\n// Return the resulting frequency\r\nreturn frequency;\r\n",
+        "PreExpression": "function longitudinalWheelSlipPercent(radius, angularSpeed) {\r\n    let speedKMH = $prop('MaxSpeedKmh');\r\n    let speedMS = speedKMH * (5/18);\r\n    let groundSpeedMS = radius * angularSpeed;\r\n    return (groundSpeedMS - speedMS) / Math.max(groundSpeedMS, speedMS);\r\n}\r\n\r\nfunction revolutionPerSecond(angularSpeed) {\r\n    return angularSpeed/6.28;\r\n}"
+      },
+      "FrontRightFrequencyFormula": {
+        "JSExt": 0,
+        "Interpreter": 1,
+        "Expression": "var frrps = revolutionPerSecond($prop('UDPConnectorDataPlugin.WheelExt_1_AngularSpeed'));\r\n// Lockup percentage (0.0 to 1.0)\r\nvar lockup = longitudinalWheelSlipPercent($prop('UDPConnectorDataPlugin.WheelExt_1_RimRadius'), $prop('UDPConnectorDataPlugin.WheelExt_1_AngularSpeed'));\r\n\r\n// Additional rising frequency element (only applies if lockup > 0.75)\r\nvar risingFrequency = 0;\r\nif (lockup > 0.75) {\r\n    // Scale the rising element from 0 to a max value (e.g., 40) as lockup moves from 0.75 to 1.0\r\n    risingFrequency = (lockup - 0.75) / 0.25 * 40; // Adjust \"40\" to control the maximum added frequency\r\n}\r\n\r\n// Final frequency calculation\r\nvar frequency = ((frrps+30) + risingFrequency)*-1;\r\nvar frequency = Math.max(frequency, 30);\r\n\r\n// Return the resulting frequency\r\nreturn frequency;",
+        "PreExpression": "function longitudinalWheelSlipPercent(radius, angularSpeed) {\r\n    let speedKMH = $prop('MaxSpeedKmh');\r\n    let speedMS = speedKMH * (5/18);\r\n    let groundSpeedMS = radius * angularSpeed;\r\n    return (groundSpeedMS - speedMS) / Math.max(groundSpeedMS, speedMS);\r\n}\r\n\r\nfunction revolutionPerSecond(angularSpeed) {\r\n    return angularSpeed/6.28;\r\n}"
+      },
+      "RearLeftFrequencyFormula": {
+        "JSExt": 0,
+        "Interpreter": 1,
+        "Expression": "var rlrps = revolutionPerSecond($prop('UDPConnectorDataPlugin.WheelExt_2_AngularSpeed'));\r\n// Lockup percentage (0.0 to 1.0)\r\nvar lockup = longitudinalWheelSlipPercent($prop('UDPConnectorDataPlugin.WheelExt_2_RimRadius'), $prop('UDPConnectorDataPlugin.WheelExt_2_AngularSpeed'));\r\n\r\n// Additional rising frequency element (only applies if lockup > 0.75)\r\nvar risingFrequency = 0;\r\nif (lockup > 0.75) {\r\n    // Scale the rising element from 0 to a max value (e.g., 40) as lockup moves from 0.75 to 1.0\r\n    risingFrequency = (lockup - 0.75) / 0.25 * 40; // Adjust \"40\" to control the maximum added frequency\r\n}\r\n\r\n// Final frequency calculation\r\nvar frequency = ((rlrps+30) + risingFrequency)*-1;\r\nvar frequency = Math.max(frequency, 30);\r\n\r\n// Return the resulting frequency\r\nreturn frequency;\r\n",
+        "PreExpression": "function longitudinalWheelSlipPercent(radius, angularSpeed) {\r\n    let speedKMH = $prop('MaxSpeedKmh');\r\n    let speedMS = speedKMH * (5/18);\r\n    let groundSpeedMS = radius * angularSpeed;\r\n    return (groundSpeedMS - speedMS) / Math.max(groundSpeedMS, speedMS);\r\n}\r\n\r\nfunction revolutionPerSecond(angularSpeed) {\r\n    return angularSpeed/6.28;\r\n}"
+      },
+      "RearRightFrequencyFormula": {
+        "JSExt": 0,
+        "Interpreter": 1,
+        "Expression": "var rrrps = revolutionPerSecond($prop('UDPConnectorDataPlugin.WheelExt_3_AngularSpeed'));\r\n// Lockup percentage (0.0 to 1.0)\r\nvar lockup = longitudinalWheelSlipPercent($prop('UDPConnectorDataPlugin.WheelExt_3_RimRadius'), $prop('UDPConnectorDataPlugin.WheelExt_3_AngularSpeed'));\r\n\r\n// Additional rising frequency element (only applies if lockup > 0.75)\r\nvar risingFrequency = 0;\r\nif (lockup > 0.75) {\r\n    // Scale the rising element from 0 to a max value (e.g., 40) as lockup moves from 0.75 to 1.0\r\n    risingFrequency = (lockup - 0.75) / 0.25 * 40; // Adjust \"40\" to control the maximum added frequency\r\n}\r\n\r\n// Final frequency calculation\r\nvar frequency = ((rrrps+30) + risingFrequency)*-1;\r\nvar frequency = Math.max(frequency, 30);\r\n\r\n// Return the resulting frequency\r\nreturn frequency;",
+        "PreExpression": "function longitudinalWheelSlipPercent(radius, angularSpeed) {\r\n    let speedKMH = $prop('MaxSpeedKmh');\r\n    let speedMS = speedKMH * (5/18);\r\n    let groundSpeedMS = radius * angularSpeed;\r\n    return (groundSpeedMS - speedMS) / Math.max(groundSpeedMS, speedMS);\r\n}\r\n\r\nfunction revolutionPerSecond(angularSpeed) {\r\n    return angularSpeed/6.28;\r\n}"
+      },
+      "ContainerId": "0b65364f-701c-451d-89dc-6764f75fb9c6",
+      "AggregationMode": "Corners",
+      "Filter": {
+        "GammaValue": 1.0,
+        "InputGain": 100.0,
+        "MinimumForce": 0,
+        "Threshold": 5,
+        "FilterType": "GammaFilter"
+      },
+      "Output": {
+        "OutputType": "VibrationOutput"
+      }
     },
     {
       "ContainerType": "CustomEffectContainer",
@@ -816,13 +883,13 @@
     },
     {
       "ContainerType": "CustomEffectContainer",
-      "IsEnabled": true,
-      "Gain": 50.36363636363626,
+      "IsEnabled": false,
+      "Gain": 49.36363636363626,
       "Description": "Turbo",
       "FrontLeftFormula": {
         "JSExt": 0,
         "Interpreter": 1,
-        "Expression": "if ($prop('DataCorePlugin.GameRunning'))\r\n\treturn Math.max(5, $prop('Turbo')) ;\r\nreturn 0;\r\n\r\n\r\n"
+        "Expression": "if ($prop('DataCorePlugin.GameRunning'))\r\n\treturn $prop('Turbo') ;\r\nreturn 0;\r\n\r\n\r\n"
       },
       "FrontRightFormula": {
         "Expression": ""
@@ -867,7 +934,7 @@
   "GlobalGain": 50.0,
   "UseProfileGain": false,
   "LastLoaded": "2024-01-04T13:27:57.464213+01:00",
-  "Name": "DaZD Drift Asstto Corsa",
+  "Name": "DaZD - Drift Assetto Corsa",
   "ProfileId": "4271909f-fa20-4b14-84f7-441bedb8be5d",
   "GameCode": "AssettoCorsa",
   "CarChoice": null

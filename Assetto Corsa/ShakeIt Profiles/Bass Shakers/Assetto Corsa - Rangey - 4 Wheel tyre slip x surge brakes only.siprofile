@@ -1,0 +1,96 @@
+{
+  "CarChoices": [],
+  "IncludeOutputSettingsInProfile": false,
+  "UnmuteEffectsAfterSimhubRestart": false,
+  "EffectsContainers": [
+    {
+      "ContainerType": "CustomEffectContainer",
+      "IsEnabled": true,
+      "Gain": 59.666666666666288,
+      "Description": "Rangey 4 Wheel tyre slip x surge brakes only",
+      "FrontLeftFormula": {
+        "JSExt": 1,
+        "Interpreter": 1,
+        "Expression": "//Tyre Slip\r\nvar fl = longitudinalWheelSlipPercent($prop('UDPConnectorDataPlugin.WheelExt_0_RimRadius'), $prop('UDPConnectorDataPlugin.WheelExt_0_AngularSpeed'));\r\n//Sway Acceleration\r\n\r\nvar sway = Math.pow ($prop('AccelerationSway'),2)\r\n//surge Acceleration\r\nvar surge = Math.pow ($prop('AccelerationSurge'),2)\r\nvar limited = fl * surge\r\nif (($prop('Brake')) > 10  || $prop('UDPConnectorDataPlugin.Handbrake')>0.1) {\r\nreturn Math.min(Math.max(parseInt(limited), 0), 100);\r\n}\r\nreturn 0",
+        "PreExpression": "function longitudinalWheelSlipPercent(radius, angularSpeed) {\r\n    let speedKMH = $prop('MaxSpeedKmh');\r\n    let speedMS = speedKMH * (5/18);\r\n    let groundSpeedMS = radius * angularSpeed;\r\n    return (speedMS - groundSpeedMS) / Math.max(groundSpeedMS, speedMS);\r\n}"
+      },
+      "FrontRightFormula": {
+        "JSExt": 1,
+        "Interpreter": 1,
+        "Expression": "//Tyre Slip\r\nvar fr = longitudinalWheelSlipPercent($prop('UDPConnectorDataPlugin.WheelExt_1_RimRadius'), $prop('UDPConnectorDataPlugin.WheelExt_1_AngularSpeed'));\r\n//Sway Acceleration\r\nvar sway = Math.pow ($prop('AccelerationSway'),2)\r\n//surge Acceleration\r\nvar surge = Math.pow ($prop('AccelerationSurge'),2)\r\nvar limited = fr * surge\r\nif (($prop('Brake')) > 10  || $prop('UDPConnectorDataPlugin.Handbrake')>0.1) {\r\nreturn Math.min(Math.max(parseInt(limited), 0), 100);\r\n}\r\nreturn 0",
+        "PreExpression": "function longitudinalWheelSlipPercent(radius, angularSpeed) {\r\n    let speedKMH = $prop('MaxSpeedKmh');\r\n    let speedMS = speedKMH * (5/18);\r\n    let groundSpeedMS = radius * angularSpeed;\r\n    return (speedMS - groundSpeedMS) / Math.max(groundSpeedMS, speedMS);\r\n}"
+      },
+      "RearLeftFormula": {
+        "JSExt": 1,
+        "Interpreter": 1,
+        "Expression": "//Tyre Slip\r\nvar rl = longitudinalWheelSlipPercent($prop('UDPConnectorDataPlugin.WheelExt_2_RimRadius'), $prop('UDPConnectorDataPlugin.WheelExt_2_AngularSpeed'));\r\n//Sway Acceleration\r\nvar sway = Math.pow ($prop('AccelerationSway'),2)\r\n//surge Acceleration\r\nvar surge = Math.pow ($prop('AccelerationSurge'),2)\r\nvar limited = rl * surge\r\nif (($prop('Brake')) > 10  || $prop('UDPConnectorDataPlugin.Handbrake')>0.1)  {\r\nreturn Math.min(Math.max(parseInt(limited), 0), 100);\r\n}\r\nreturn 0\r\n ",
+        "PreExpression": "function longitudinalWheelSlipPercent(radius, angularSpeed) {\r\n    let speedKMH = $prop('MaxSpeedKmh');\r\n    let speedMS = speedKMH * (5/18);\r\n    let groundSpeedMS = radius * angularSpeed;\r\n    return (speedMS - groundSpeedMS) / Math.max(groundSpeedMS, speedMS);\r\n}"
+      },
+      "RearRightFormula": {
+        "JSExt": 1,
+        "Interpreter": 1,
+        "Expression": "//Tyre Slip\r\nvar rr = longitudinalWheelSlipPercent($prop('UDPConnectorDataPlugin.WheelExt_3_RimRadius'), $prop('UDPConnectorDataPlugin.WheelExt_3_AngularSpeed'));\r\n//Sway Acceleration\r\nvar sway = Math.pow ($prop('AccelerationSway'),2)\r\n//surge Acceleration\r\nvar surge = Math.pow ($prop('AccelerationSurge'),2)\r\nvar limited = rr * surge\r\nif (($prop('Brake')) > 10  || $prop('UDPConnectorDataPlugin.Handbrake')>0.1) {\r\nreturn Math.min(Math.max(parseInt(limited), 0), 100);\r\n}\r\nreturn 0",
+        "PreExpression": "function longitudinalWheelSlipPercent(radius, angularSpeed) {\r\n    let speedKMH = $prop('MaxSpeedKmh');\r\n    let speedMS = speedKMH * (5/18);\r\n    let groundSpeedMS = radius * angularSpeed;\r\n    return (speedMS - groundSpeedMS) / Math.max(groundSpeedMS, speedMS);\r\n}"
+      },
+      "ForceFrequencies": true,
+      "FrontLeftFrequencyFormula": {
+        "JSExt": 0,
+        "Interpreter": 1,
+        "Expression": "var flrps = revolutionPerSecond($prop('UDPConnectorDataPlugin.WheelExt_0_AngularSpeed'));\r\n// Lockup percentage (0.0 to 1.0)\r\nvar lockup = longitudinalWheelSlipPercent($prop('UDPConnectorDataPlugin.WheelExt_0_RimRadius'), $prop('UDPConnectorDataPlugin.WheelExt_0_AngularSpeed'));\r\n\r\n// Additional rising frequency element (only applies if lockup > 0.75)\r\nvar risingFrequency = 0;\r\nif (lockup > 0.75) {\r\n    // Scale the rising element from 0 to a max value (e.g., 40) as lockup moves from 0.75 to 1.0\r\n    risingFrequency = (lockup - 0.75) / 0.25 * 40; // Adjust \"40\" to control the maximum added frequency\r\n}\r\n\r\n// Final frequency calculation\r\nvar frequency = ((flrps+30) + risingFrequency)*-1;\r\nvar frequency = Math.max(frequency, 30);\r\n\r\n// Return the resulting frequency\r\nreturn frequency;\r\n",
+        "PreExpression": "function longitudinalWheelSlipPercent(radius, angularSpeed) {\r\n    let speedKMH = $prop('MaxSpeedKmh');\r\n    let speedMS = speedKMH * (5/18);\r\n    let groundSpeedMS = radius * angularSpeed;\r\n    return (speedMS - groundSpeedMS) / Math.max(groundSpeedMS, speedMS);\r\n}\r\n\r\nfunction revolutionPerSecond(angularSpeed) {\r\n    return angularSpeed/6.28;\r\n}"
+      },
+      "FrontRightFrequencyFormula": {
+        "JSExt": 0,
+        "Interpreter": 1,
+        "Expression": "var frrps = revolutionPerSecond($prop('UDPConnectorDataPlugin.WheelExt_1_AngularSpeed'));\r\n// Lockup percentage (0.0 to 1.0)\r\nvar lockup = longitudinalWheelSlipPercent($prop('UDPConnectorDataPlugin.WheelExt_1_RimRadius'), $prop('UDPConnectorDataPlugin.WheelExt_1_AngularSpeed'));\r\n\r\n// Additional rising frequency element (only applies if lockup > 0.75)\r\nvar risingFrequency = 0;\r\nif (lockup > 0.75) {\r\n    // Scale the rising element from 0 to a max value (e.g., 40) as lockup moves from 0.75 to 1.0\r\n    risingFrequency = (lockup - 0.75) / 0.25 * 40; // Adjust \"40\" to control the maximum added frequency\r\n}\r\n\r\n// Final frequency calculation\r\nvar frequency = ((frrps+30) + risingFrequency)*-1;\r\nvar frequency = Math.max(frequency, 30);\r\n\r\n// Return the resulting frequency\r\nreturn frequency;",
+        "PreExpression": "function longitudinalWheelSlipPercent(radius, angularSpeed) {\r\n    let speedKMH = $prop('MaxSpeedKmh');\r\n    let speedMS = speedKMH * (5/18);\r\n    let groundSpeedMS = radius * angularSpeed;\r\n    return (speedMS - groundSpeedMS) / Math.max(groundSpeedMS, speedMS);\r\n}\r\n\r\nfunction revolutionPerSecond(angularSpeed) {\r\n    return angularSpeed/6.28;\r\n}"
+      },
+      "RearLeftFrequencyFormula": {
+        "JSExt": 0,
+        "Interpreter": 1,
+        "Expression": "var rlrps = revolutionPerSecond($prop('UDPConnectorDataPlugin.WheelExt_2_AngularSpeed'));\r\n// Lockup percentage (0.0 to 1.0)\r\nvar lockup = longitudinalWheelSlipPercent($prop('UDPConnectorDataPlugin.WheelExt_2_RimRadius'), $prop('UDPConnectorDataPlugin.WheelExt_2_AngularSpeed'));\r\n\r\n// Additional rising frequency element (only applies if lockup > 0.75)\r\nvar risingFrequency = 0;\r\nif (lockup > 0.75) {\r\n    // Scale the rising element from 0 to a max value (e.g., 40) as lockup moves from 0.75 to 1.0\r\n    risingFrequency = (lockup - 0.75) / 0.25 * 40; // Adjust \"40\" to control the maximum added frequency\r\n}\r\n\r\n// Final frequency calculation\r\nvar frequency = ((rlrps+30) + risingFrequency)*-1;\r\nvar frequency = Math.max(frequency, 30);\r\n\r\n// Return the resulting frequency\r\nreturn frequency;\r\n",
+        "PreExpression": "function longitudinalWheelSlipPercent(radius, angularSpeed) {\r\n    let speedKMH = $prop('MaxSpeedKmh');\r\n    let speedMS = speedKMH * (5/18);\r\n    let groundSpeedMS = radius * angularSpeed;\r\n    return (speedMS - groundSpeedMS) / Math.max(groundSpeedMS, speedMS);\r\n}\r\n\r\nfunction revolutionPerSecond(angularSpeed) {\r\n    return angularSpeed/6.28;\r\n}"
+      },
+      "RearRightFrequencyFormula": {
+        "JSExt": 0,
+        "Interpreter": 1,
+        "Expression": "var rrrps = revolutionPerSecond($prop('UDPConnectorDataPlugin.WheelExt_3_AngularSpeed'));\r\n// Lockup percentage (0.0 to 1.0)\r\nvar lockup = longitudinalWheelSlipPercent($prop('UDPConnectorDataPlugin.WheelExt_3_RimRadius'), $prop('UDPConnectorDataPlugin.WheelExt_3_AngularSpeed'));\r\n\r\n// Additional rising frequency element (only applies if lockup > 0.75)\r\nvar risingFrequency = 0;\r\nif (lockup > 0.75) {\r\n    // Scale the rising element from 0 to a max value (e.g., 40) as lockup moves from 0.75 to 1.0\r\n    risingFrequency = (lockup - 0.75) / 0.25 * 40; // Adjust \"40\" to control the maximum added frequency\r\n}\r\n\r\n// Final frequency calculation\r\nvar frequency = ((rrrps+30) + risingFrequency)*-1;\r\nvar frequency = Math.max(frequency, 30);\r\n\r\n// Return the resulting frequency\r\nreturn frequency;",
+        "PreExpression": "function longitudinalWheelSlipPercent(radius, angularSpeed) {\r\n    let speedKMH = $prop('MaxSpeedKmh');\r\n    let speedMS = speedKMH * (5/18);\r\n    let groundSpeedMS = radius * angularSpeed;\r\n    return (speedMS - groundSpeedMS) / Math.max(groundSpeedMS, speedMS);\r\n}\r\n\r\nfunction revolutionPerSecond(angularSpeed) {\r\n    return angularSpeed/6.28;\r\n}"
+      },
+      "ContainerId": "23a4e0d8-6d66-4774-970b-2851792e4ed2",
+      "AggregationMode": "Corners",
+      "Filter": {
+        "GammaValue": 1.0,
+        "InputGain": 100.0,
+        "MinimumForce": 0,
+        "Threshold": 5,
+        "FilterType": "GammaFilter"
+      },
+      "Output": {
+        "UsePrehemptiveMode": false,
+        "Frequency": 80,
+        "UseHighFrequency": true,
+        "HighFrequency": 44,
+        "WhiteNoise": 10,
+        "UseWhiteNoise": false,
+        "FrequencyBasedOnPreFilter": false,
+        "Harmonics": 0,
+        "HoldMode": 1,
+        "Delay": 5,
+        "DelayEnabled": true,
+        "AssignToChannelGroup": true,
+        "ChannelGroupName": "Viper Brakes",
+        "OutputType": "ToneOutput"
+      }
+    }
+  ],
+  "AutoCalibrationRatio2": 0,
+  "OutputMode": 1,
+  "GlobalGain": 50.0,
+  "UseProfileGain": false,
+  "LastLoaded": "0001-01-01T00:00:00",
+  "Name": "Rangey - 4 Wheel tyre slip x surge brakes only",
+  "ProfileId": "c044b6bb-bb62-4830-96e7-00dd0471d7bc",
+  "GameCode": "AssettoCorsa",
+  "CarChoice": null
+}

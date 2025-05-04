@@ -182,25 +182,25 @@
           "FrontLeftFormula": {
             "JSExt": 0,
             "Interpreter": 1,
-            "Expression": "if ($prop('UDPConnectorDataPlugin.WheelFLSurface') == 'Kerb' || isnull($prop('UDPConnectorDataPlugin.WheelFLSurfaceVibrationGain'),0) > 0)\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelFLSurfaceVibrationGain'));\r\nreturn 0;",
+            "Expression": "if ($prop('UDPConnectorDataPlugin.WheelFLSurface') == 'Kerb')\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelFLSurfaceVibrationGain'));\r\nreturn 0;",
             "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\treturn 100 * speedRatio;\r\n}"
           },
           "FrontRightFormula": {
             "JSExt": 0,
             "Interpreter": 1,
-            "Expression": "if ($prop('UDPConnectorDataPlugin.WheelFRSurface') == 'Kerb' || isnull($prop('UDPConnectorDataPlugin.WheelFRSurfaceVibrationGain'),0) > 0)\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelFRSurfaceVibrationGain'));\r\nreturn 0;",
+            "Expression": "if ($prop('UDPConnectorDataPlugin.WheelFRSurface') == 'Kerb')\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelFRSurfaceVibrationGain'));\r\nreturn 0;",
             "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\treturn 100 * speedRatio;\r\n}"
           },
           "RearLeftFormula": {
             "JSExt": 0,
             "Interpreter": 1,
-            "Expression": "if ($prop('UDPConnectorDataPlugin.WheelRLSurface') == 'Kerb' || isnull($prop('UDPConnectorDataPlugin.WheelRLSurfaceVibrationGain'),0) > 0)\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelRLSurfaceVibrationGain'));\r\nreturn 0;",
+            "Expression": "if ($prop('UDPConnectorDataPlugin.WheelRLSurface') == 'Kerb')\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelRLSurfaceVibrationGain'));\r\nreturn 0;",
             "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\treturn 100 * speedRatio;\r\n}"
           },
           "RearRightFormula": {
             "JSExt": 0,
             "Interpreter": 1,
-            "Expression": "\r\nif ($prop('UDPConnectorDataPlugin.WheelRRSurface') == 'Kerb' || isnull($prop('UDPConnectorDataPlugin.WheelRRSurfaceVibrationGain'),0) > 0)\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelRRSurfaceVibrationGain'));\r\nreturn 0;",
+            "Expression": "\r\nif ($prop('UDPConnectorDataPlugin.WheelRRSurface') == 'Kerb')\r\nreturn evaluateGain($prop('UDPConnectorDataPlugin.WheelRRSurfaceVibrationGain'));\r\nreturn 0;",
             "PreExpression": "function mapRange(value, oldMin, oldMax, newMin, newMax) {\r\n\treturn Math.max(Math.min(((value - oldMin) * (newMax - newMin) / (oldMax - oldMin)) + newMin, newMax), newMin);\r\n}\r\n\r\nfunction evaluateGain(gainProp) {\r\n\tlet speedKMH = isnull($prop('SpeedKmh'),0); \r\n\tif ( speedKMH < 3) return 0;\r\n\tlet vibrationGain = isnull(gainProp, 0);\r\n\tlet speedRatio = mapRange($prop('SpeedKmh'), 3, 50, 0, 1);\r\n\tif (vibrationGain > 0) return Math.min(100, 5 * vibrationGain * speedRatio * 100);\r\n\treturn 100 * speedRatio;\r\n}"
           },
           "ForceFrequencies": false,
