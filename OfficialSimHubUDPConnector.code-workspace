@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "D:/SteamLibrary/steamapps/common/assettocorsa"
+		}
+	],
+	"settings": {
+		"files.readonlyInclude": {
+			"D:/SteamLibrary/steamapps/common/assettocorsa/**": true
+		}
+	}
+}
