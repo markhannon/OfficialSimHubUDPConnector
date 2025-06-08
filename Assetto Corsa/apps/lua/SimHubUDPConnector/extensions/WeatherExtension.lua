@@ -95,8 +95,9 @@ function WeatherExtension:update(dt, customData)
     customData.WeatherExt_RainIntensity = sim.rainIntensity
     customData.WeatherExt_RainWetness = sim.rainWetness
     customData.WeatherExt_WeatherType = sim.weatherType
-    customData.WeatherExt_WeatherUpcomingType = getWeatherTypeName(sim.weatherConditions.upcomingType)
+    customData.WeatherExt_WeatherUpcomingType = sim.weatherConditions.upcomingType
     customData.WeatherExt_WeatherTypeName = getWeatherTypeName(sim.weatherType)
+    customData.WeatherExt_WeatherUpcomingTypeName = getWeatherTypeName(sim.weatherConditions.upcomingType)
     customData.WeatherExt_WeatherIcon = 'https://acstuff.ru/images/icons_24/' .. tolowerAndnderscore(ui.weatherIcon(sim.weatherType)) .. '.png'
     customData.WeatherExt_WindDirectionDeg = sim.windDirectionDeg
     customData.WeatherExt_WindSpeedKmh = sim.windSpeedKmh
