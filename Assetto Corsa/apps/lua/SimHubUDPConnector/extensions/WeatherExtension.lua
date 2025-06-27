@@ -9,7 +9,7 @@ function WeatherExtension:new (o)
     return o
  end
 
-local carState = ac.getCar(0)
+-- local carState = ac.getCar(0)
 local sim = ac.getSim()
 
 local function getWeatherTypeName(weatherType)
