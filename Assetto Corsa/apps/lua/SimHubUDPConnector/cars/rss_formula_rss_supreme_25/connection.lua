@@ -6,30 +6,32 @@ local Ignition_RSS = ac.connect({
 }, true, ac.SharedNamespace.Shared)
 
 local OvertakeSystemKey = carId .. "_OvertakeSystem"
-local OvertakeSystemharedData = {
+local OvertakeSystemsharedData = {
 	ac.StructItem.key(OvertakeSystemKey .. "_" .. 0),
 	SystemAvailable = ac.StructItem.boolean(), -- This is provided for GUI apps and is basically always true.
-	status = ac.StructItem.int32(),         -- 0 = Time Out 1 = Cool down 2 = Available 3 = in use
-	CoolDown = ac.StructItem.float(),       -- OTS cooldown remaining time
+	status = ac.StructItem.int32(),            -- 0 = Time Out 1 = Cool down 2 = Available 3 = in use
+	CoolDown = ac.StructItem.float(),          -- OTS cooldown remaining time
 	CoolDownTime = ac.StructItem.float(),
-	RemainingTime = ac.StructItem.float(),  -- OTS remaining available time
+	RemainingTime = ac.StructItem.float(),     -- OTS remaining available time
 }
-local OvertakeSystem = ac.connect(OvertakeSystemharedData, true, ac.SharedNamespace.Shared)
+local OvertakeSystem = ac.connect(OvertakeSystemsharedData, true, ac.SharedNamespace.Shared)
 
 local RSSSupremeSystemKey = carId .. "_RSSSupremeSystem"
 local RSSSupremeSystemsharedData = {
-	ac.StructItem.key(RSSSupremeSystemKey .. "_" .. 0),
-	FuelMap = ac.StructItem.int32(),
-	ThrottleMap = ac.StructItem.int32(),
-	Throttleinput = ac.StructItem.float(),
-	StartMode = ac.StructItem.boolean(),
-	AttackWarning = ac.StructItem.boolean()
+    ac.StructItem.key(RSSSupremeSystemKey .. "_" .. 0),
+    FuelMap = ac.StructItem.int32(),
+    ThrottleMap = ac.StructItem.int32(),
+    Throttleinput = ac.StructItem.float(),
+    StartMode = ac.StructItem.boolean(),
+    AttackWarning = ac.StructItem.boolean(),
+	OTSOverlay = ac.StructItem.boolean(),
+	LimitSpeed = ac.StructItem.int32()
 }
 local RSSSupreme = ac.connect(RSSSupremeSystemsharedData, true, ac.SharedNamespace.Shared)
 
 function connection:carScript(customData)
 	customData.IgnitionMode = Ignition_RSS.Mode
-	addCarData(OvertakeSystem, OvertakeSystemharedData, 'OvertakeSystem_', customData)
+	addCarData(OvertakeSystem, OvertakeSystemsharedData, 'OvertakeSystem_', customData)
 	addCarData(RSSSupreme, RSSSupremeSystemsharedData, 'RSSSupreme_', customData)
 end
 

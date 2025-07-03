@@ -40,16 +40,28 @@
           },
           "ForceFrequencies": false,
           "FrontLeftFrequencyFormula": {
-            "Expression": ""
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "const DEFAULT_FREQUENCY = 26;\r\nconst MIN_FREQUENCY = 20;\r\nconst MAX_FREQUENCY = 120;\r\n\r\nreturn getFrequency(DEFAULT_FREQUENCY, MIN_FREQUENCY, MAX_FREQUENCY, $prop('UDPConnectorDataPlugin.WheelFLSurfaceVibrationLength'), $prop('UDPConnectorDataPlugin.WheelFLAngularSpeed'), $prop('UDPConnectorDataPlugin.WheelFLRimRadius'));",
+            "PreExpression": "// Frequency = Speed/waveLength\r\nfunction getFrequency(defaultFrequency, minFrequency, maxFrequency, vibrationLength, angularSpeed, wheelRadius) {\r\n   if (vibrationLength == 0) return defaultFrequency;\r\n   let speed = angularSpeed * wheelRadius ;\r\n   let frequency = speed / vibrationLength;\r\n   return Math.max(minFrequency, Math.min(frequency, maxFrequency));\r\n}"
           },
           "FrontRightFrequencyFormula": {
-            "Expression": ""
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "const DEFAULT_FREQUENCY = 26;\r\nconst MIN_FREQUENCY = 20;\r\nconst MAX_FREQUENCY = 120;\r\n\r\nreturn getFrequency(DEFAULT_FREQUENCY, MIN_FREQUENCY, MAX_FREQUENCY, $prop('UDPConnectorDataPlugin.WheelFRSurfaceVibrationLength'), $prop('UDPConnectorDataPlugin.WheelFRAngularSpeed'), $prop('UDPConnectorDataPlugin.WheelFRRimRadius'));",
+            "PreExpression": "// Frequency = Speed/waveLength\r\nfunction getFrequency(defaultFrequency, minFrequency, maxFrequency, vibrationLength, angularSpeed, wheelRadius) {\r\n   if (vibrationLength == 0) return defaultFrequency;\r\n   let speed = angularSpeed * wheelRadius ;\r\n   let frequency = speed / vibrationLength;\r\n   return Math.max(minFrequency, Math.min(frequency, maxFrequency));\r\n}"
           },
           "RearLeftFrequencyFormula": {
-            "Expression": ""
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "const DEFAULT_FREQUENCY = 26;\r\nconst MIN_FREQUENCY = 20;\r\nconst MAX_FREQUENCY = 120;\r\n\r\nreturn getFrequency(DEFAULT_FREQUENCY, MIN_FREQUENCY, MAX_FREQUENCY, $prop('UDPConnectorDataPlugin.WheelRLSurfaceVibrationLength'), $prop('UDPConnectorDataPlugin.WheelRLAngularSpeed'), $prop('UDPConnectorDataPlugin.WheelRLRimRadius'));",
+            "PreExpression": "// Frequency = Speed/waveLength\r\nfunction getFrequency(defaultFrequency, minFrequency, maxFrequency, vibrationLength, angularSpeed, wheelRadius) {\r\n   if (vibrationLength == 0) return defaultFrequency;\r\n   let speed = angularSpeed * wheelRadius ;\r\n   let frequency = speed / vibrationLength;\r\n   return Math.max(minFrequency, Math.min(frequency, maxFrequency));\r\n}"
           },
           "RearRightFrequencyFormula": {
-            "Expression": ""
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "const DEFAULT_FREQUENCY = 26;\r\nconst MIN_FREQUENCY = 20;\r\nconst MAX_FREQUENCY = 120;\r\n\r\nreturn getFrequency(DEFAULT_FREQUENCY, MIN_FREQUENCY, MAX_FREQUENCY, $prop('UDPConnectorDataPlugin.WheelRRSurfaceVibrationLength'), $prop('UDPConnectorDataPlugin.WheelRRAngularSpeed'), $prop('UDPConnectorDataPlugin.WheelRRRimRadius'));",
+            "PreExpression": "// Frequency = Speed/waveLength\r\nfunction getFrequency(defaultFrequency, minFrequency, maxFrequency, vibrationLength, angularSpeed, wheelRadius) {\r\n   if (vibrationLength == 0) return defaultFrequency;\r\n   let speed = angularSpeed * wheelRadius ;\r\n   let frequency = speed / vibrationLength;\r\n   return Math.max(minFrequency, Math.min(frequency, maxFrequency));\r\n}"
           },
           "ContainerId": "7ec91635-5a94-4c28-a242-be5bb87bb6a5",
           "AggregationMode": "Corners",
@@ -76,7 +88,7 @@
         {
           "ContainerType": "CustomEffectContainer",
           "IsEnabled": true,
-          "Gain": 30.181818181818244,
+          "Gain": 29.696969696969745,
           "Description": "Road Rumble on ExtraTurf",
           "FrontLeftFormula": {
             "JSExt": 0,
@@ -104,16 +116,28 @@
           },
           "ForceFrequencies": false,
           "FrontLeftFrequencyFormula": {
-            "Expression": ""
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "const DEFAULT_FREQUENCY = 26;\r\nconst MIN_FREQUENCY = 20;\r\nconst MAX_FREQUENCY = 120;\r\n\r\nreturn getFrequency(DEFAULT_FREQUENCY, MIN_FREQUENCY, MAX_FREQUENCY, $prop('UDPConnectorDataPlugin.WheelFLSurfaceVibrationLength'), $prop('UDPConnectorDataPlugin.WheelFLAngularSpeed'), $prop('UDPConnectorDataPlugin.WheelFLRimRadius'));",
+            "PreExpression": "// Frequency = Speed/waveLength\r\nfunction getFrequency(defaultFrequency, minFrequency, maxFrequency, vibrationLength, angularSpeed, wheelRadius) {\r\n   if (vibrationLength == 0) return defaultFrequency;\r\n   let speed = angularSpeed * wheelRadius ;\r\n   let frequency = speed / vibrationLength;\r\n   return Math.max(minFrequency, Math.min(frequency, maxFrequency));\r\n}"
           },
           "FrontRightFrequencyFormula": {
-            "Expression": ""
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "const DEFAULT_FREQUENCY = 26;\r\nconst MIN_FREQUENCY = 20;\r\nconst MAX_FREQUENCY = 120;\r\n\r\nreturn getFrequency(DEFAULT_FREQUENCY, MIN_FREQUENCY, MAX_FREQUENCY, $prop('UDPConnectorDataPlugin.WheelFRSurfaceVibrationLength'), $prop('UDPConnectorDataPlugin.WheelFRAngularSpeed'), $prop('UDPConnectorDataPlugin.WheelFRRimRadius'));",
+            "PreExpression": "// Frequency = Speed/waveLength\r\nfunction getFrequency(defaultFrequency, minFrequency, maxFrequency, vibrationLength, angularSpeed, wheelRadius) {\r\n   if (vibrationLength == 0) return defaultFrequency;\r\n   let speed = angularSpeed * wheelRadius ;\r\n   let frequency = speed / vibrationLength;\r\n   return Math.max(minFrequency, Math.min(frequency, maxFrequency));\r\n}"
           },
           "RearLeftFrequencyFormula": {
-            "Expression": ""
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "const DEFAULT_FREQUENCY = 26;\r\nconst MIN_FREQUENCY = 20;\r\nconst MAX_FREQUENCY = 120;\r\n\r\nreturn getFrequency(DEFAULT_FREQUENCY, MIN_FREQUENCY, MAX_FREQUENCY, $prop('UDPConnectorDataPlugin.WheelRLSurfaceVibrationLength'), $prop('UDPConnectorDataPlugin.WheelRLAngularSpeed'), $prop('UDPConnectorDataPlugin.WheelRLRimRadius'));",
+            "PreExpression": "// Frequency = Speed/waveLength\r\nfunction getFrequency(defaultFrequency, minFrequency, maxFrequency, vibrationLength, angularSpeed, wheelRadius) {\r\n   if (vibrationLength == 0) return defaultFrequency;\r\n   let speed = angularSpeed * wheelRadius ;\r\n   let frequency = speed / vibrationLength;\r\n   return Math.max(minFrequency, Math.min(frequency, maxFrequency));\r\n}"
           },
           "RearRightFrequencyFormula": {
-            "Expression": ""
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "const DEFAULT_FREQUENCY = 26;\r\nconst MIN_FREQUENCY = 20;\r\nconst MAX_FREQUENCY = 120;\r\n\r\nreturn getFrequency(DEFAULT_FREQUENCY, MIN_FREQUENCY, MAX_FREQUENCY, $prop('UDPConnectorDataPlugin.WheelRRSurfaceVibrationLength'), $prop('UDPConnectorDataPlugin.WheelRRAngularSpeed'), $prop('UDPConnectorDataPlugin.WheelRRRimRadius'));",
+            "PreExpression": "// Frequency = Speed/waveLength\r\nfunction getFrequency(defaultFrequency, minFrequency, maxFrequency, vibrationLength, angularSpeed, wheelRadius) {\r\n   if (vibrationLength == 0) return defaultFrequency;\r\n   let speed = angularSpeed * wheelRadius ;\r\n   let frequency = speed / vibrationLength;\r\n   return Math.max(minFrequency, Math.min(frequency, maxFrequency));\r\n}"
           },
           "ContainerId": "3dcbb8f3-cbad-4c90-8c08-bad3503a40d9",
           "AggregationMode": "Corners",
@@ -140,7 +164,7 @@
         {
           "ContainerType": "CustomEffectContainer",
           "IsEnabled": true,
-          "Gain": 84.969696969697,
+          "Gain": 85.454545454545041,
           "Description": "Road Rumble on Gravel",
           "FrontLeftFormula": {
             "JSExt": 0,
@@ -168,16 +192,28 @@
           },
           "ForceFrequencies": false,
           "FrontLeftFrequencyFormula": {
-            "Expression": ""
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "const DEFAULT_FREQUENCY = 26;\r\nconst MIN_FREQUENCY = 20;\r\nconst MAX_FREQUENCY = 120;\r\n\r\nreturn getFrequency(DEFAULT_FREQUENCY, MIN_FREQUENCY, MAX_FREQUENCY, $prop('UDPConnectorDataPlugin.WheelFLSurfaceVibrationLength'), $prop('UDPConnectorDataPlugin.WheelFLAngularSpeed'), $prop('UDPConnectorDataPlugin.WheelFLRimRadius'));",
+            "PreExpression": "// Frequency = Speed/waveLength\r\nfunction getFrequency(defaultFrequency, minFrequency, maxFrequency, vibrationLength, angularSpeed, wheelRadius) {\r\n   if (vibrationLength == 0) return defaultFrequency;\r\n   let speed = angularSpeed * wheelRadius ;\r\n   let frequency = speed / vibrationLength;\r\n   return Math.max(minFrequency, Math.min(frequency, maxFrequency));\r\n}"
           },
           "FrontRightFrequencyFormula": {
-            "Expression": ""
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "const DEFAULT_FREQUENCY = 26;\r\nconst MIN_FREQUENCY = 20;\r\nconst MAX_FREQUENCY = 120;\r\n\r\nreturn getFrequency(DEFAULT_FREQUENCY, MIN_FREQUENCY, MAX_FREQUENCY, $prop('UDPConnectorDataPlugin.WheelFRSurfaceVibrationLength'), $prop('UDPConnectorDataPlugin.WheelFRAngularSpeed'), $prop('UDPConnectorDataPlugin.WheelFRRimRadius'));",
+            "PreExpression": "// Frequency = Speed/waveLength\r\nfunction getFrequency(defaultFrequency, minFrequency, maxFrequency, vibrationLength, angularSpeed, wheelRadius) {\r\n   if (vibrationLength == 0) return defaultFrequency;\r\n   let speed = angularSpeed * wheelRadius ;\r\n   let frequency = speed / vibrationLength;\r\n   return Math.max(minFrequency, Math.min(frequency, maxFrequency));\r\n}"
           },
           "RearLeftFrequencyFormula": {
-            "Expression": ""
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "const DEFAULT_FREQUENCY = 26;\r\nconst MIN_FREQUENCY = 20;\r\nconst MAX_FREQUENCY = 120;\r\n\r\nreturn getFrequency(DEFAULT_FREQUENCY, MIN_FREQUENCY, MAX_FREQUENCY, $prop('UDPConnectorDataPlugin.WheelRLSurfaceVibrationLength'), $prop('UDPConnectorDataPlugin.WheelRLAngularSpeed'), $prop('UDPConnectorDataPlugin.WheelRLRimRadius'));",
+            "PreExpression": "// Frequency = Speed/waveLength\r\nfunction getFrequency(defaultFrequency, minFrequency, maxFrequency, vibrationLength, angularSpeed, wheelRadius) {\r\n   if (vibrationLength == 0) return defaultFrequency;\r\n   let speed = angularSpeed * wheelRadius ;\r\n   let frequency = speed / vibrationLength;\r\n   return Math.max(minFrequency, Math.min(frequency, maxFrequency));\r\n}"
           },
           "RearRightFrequencyFormula": {
-            "Expression": ""
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "const DEFAULT_FREQUENCY = 26;\r\nconst MIN_FREQUENCY = 20;\r\nconst MAX_FREQUENCY = 120;\r\n\r\nreturn getFrequency(DEFAULT_FREQUENCY, MIN_FREQUENCY, MAX_FREQUENCY, $prop('UDPConnectorDataPlugin.WheelRRSurfaceVibrationLength'), $prop('UDPConnectorDataPlugin.WheelRRAngularSpeed'), $prop('UDPConnectorDataPlugin.WheelRRRimRadius'));",
+            "PreExpression": "// Frequency = Speed/waveLength\r\nfunction getFrequency(defaultFrequency, minFrequency, maxFrequency, vibrationLength, angularSpeed, wheelRadius) {\r\n   if (vibrationLength == 0) return defaultFrequency;\r\n   let speed = angularSpeed * wheelRadius ;\r\n   let frequency = speed / vibrationLength;\r\n   return Math.max(minFrequency, Math.min(frequency, maxFrequency));\r\n}"
           },
           "ContainerId": "df7c2d5f-8169-46a4-8d06-5c117ce473aa",
           "AggregationMode": "Corners",
@@ -232,16 +268,28 @@
           },
           "ForceFrequencies": false,
           "FrontLeftFrequencyFormula": {
-            "Expression": ""
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "const DEFAULT_FREQUENCY = 26;\r\nconst MIN_FREQUENCY = 20;\r\nconst MAX_FREQUENCY = 120;\r\n\r\nreturn getFrequency(DEFAULT_FREQUENCY, MIN_FREQUENCY, MAX_FREQUENCY, $prop('UDPConnectorDataPlugin.WheelFLSurfaceVibrationLength'), $prop('UDPConnectorDataPlugin.WheelFLAngularSpeed'), $prop('UDPConnectorDataPlugin.WheelFLRimRadius'));",
+            "PreExpression": "// Frequency = Speed/waveLength\r\nfunction getFrequency(defaultFrequency, minFrequency, maxFrequency, vibrationLength, angularSpeed, wheelRadius) {\r\n   if (vibrationLength == 0) return defaultFrequency;\r\n   let speed = angularSpeed * wheelRadius ;\r\n   let frequency = speed / vibrationLength;\r\n   return Math.max(minFrequency, Math.min(frequency, maxFrequency));\r\n}"
           },
           "FrontRightFrequencyFormula": {
-            "Expression": ""
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "const DEFAULT_FREQUENCY = 26;\r\nconst MIN_FREQUENCY = 20;\r\nconst MAX_FREQUENCY = 120;\r\n\r\nreturn getFrequency(DEFAULT_FREQUENCY, MIN_FREQUENCY, MAX_FREQUENCY, $prop('UDPConnectorDataPlugin.WheelFRSurfaceVibrationLength'), $prop('UDPConnectorDataPlugin.WheelFRAngularSpeed'), $prop('UDPConnectorDataPlugin.WheelFRRimRadius'));",
+            "PreExpression": "// Frequency = Speed/waveLength\r\nfunction getFrequency(defaultFrequency, minFrequency, maxFrequency, vibrationLength, angularSpeed, wheelRadius) {\r\n   if (vibrationLength == 0) return defaultFrequency;\r\n   let speed = angularSpeed * wheelRadius ;\r\n   let frequency = speed / vibrationLength;\r\n   return Math.max(minFrequency, Math.min(frequency, maxFrequency));\r\n}"
           },
           "RearLeftFrequencyFormula": {
-            "Expression": ""
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "const DEFAULT_FREQUENCY = 26;\r\nconst MIN_FREQUENCY = 20;\r\nconst MAX_FREQUENCY = 120;\r\n\r\nreturn getFrequency(DEFAULT_FREQUENCY, MIN_FREQUENCY, MAX_FREQUENCY, $prop('UDPConnectorDataPlugin.WheelRLSurfaceVibrationLength'), $prop('UDPConnectorDataPlugin.WheelRLAngularSpeed'), $prop('UDPConnectorDataPlugin.WheelRLRimRadius'));",
+            "PreExpression": "// Frequency = Speed/waveLength\r\nfunction getFrequency(defaultFrequency, minFrequency, maxFrequency, vibrationLength, angularSpeed, wheelRadius) {\r\n   if (vibrationLength == 0) return defaultFrequency;\r\n   let speed = angularSpeed * wheelRadius ;\r\n   let frequency = speed / vibrationLength;\r\n   return Math.max(minFrequency, Math.min(frequency, maxFrequency));\r\n}"
           },
           "RearRightFrequencyFormula": {
-            "Expression": ""
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "const DEFAULT_FREQUENCY = 26;\r\nconst MIN_FREQUENCY = 20;\r\nconst MAX_FREQUENCY = 120;\r\n\r\nreturn getFrequency(DEFAULT_FREQUENCY, MIN_FREQUENCY, MAX_FREQUENCY, $prop('UDPConnectorDataPlugin.WheelRRSurfaceVibrationLength'), $prop('UDPConnectorDataPlugin.WheelRRAngularSpeed'), $prop('UDPConnectorDataPlugin.WheelRRRimRadius'));",
+            "PreExpression": "// Frequency = Speed/waveLength\r\nfunction getFrequency(defaultFrequency, minFrequency, maxFrequency, vibrationLength, angularSpeed, wheelRadius) {\r\n   if (vibrationLength == 0) return defaultFrequency;\r\n   let speed = angularSpeed * wheelRadius ;\r\n   let frequency = speed / vibrationLength;\r\n   return Math.max(minFrequency, Math.min(frequency, maxFrequency));\r\n}"
           },
           "ContainerId": "1261e52d-10b9-48ef-b9a1-b287441ef5fb",
           "AggregationMode": "Corners",
@@ -296,16 +344,28 @@
           },
           "ForceFrequencies": false,
           "FrontLeftFrequencyFormula": {
-            "Expression": ""
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "const DEFAULT_FREQUENCY = 26;\r\nconst MIN_FREQUENCY = 20;\r\nconst MAX_FREQUENCY = 120;\r\n\r\nreturn getFrequency(DEFAULT_FREQUENCY, MIN_FREQUENCY, MAX_FREQUENCY, $prop('UDPConnectorDataPlugin.WheelFLSurfaceVibrationLength'), $prop('UDPConnectorDataPlugin.WheelFLAngularSpeed'), $prop('UDPConnectorDataPlugin.WheelFLRimRadius'));",
+            "PreExpression": "// Frequency = Speed/waveLength\r\nfunction getFrequency(defaultFrequency, minFrequency, maxFrequency, vibrationLength, angularSpeed, wheelRadius) {\r\n   if (vibrationLength == 0) return defaultFrequency;\r\n   let speed = angularSpeed * wheelRadius ;\r\n   let frequency = speed / vibrationLength;\r\n   return Math.max(minFrequency, Math.min(frequency, maxFrequency));\r\n}"
           },
           "FrontRightFrequencyFormula": {
-            "Expression": ""
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "const DEFAULT_FREQUENCY = 26;\r\nconst MIN_FREQUENCY = 20;\r\nconst MAX_FREQUENCY = 120;\r\n\r\nreturn getFrequency(DEFAULT_FREQUENCY, MIN_FREQUENCY, MAX_FREQUENCY, $prop('UDPConnectorDataPlugin.WheelFRSurfaceVibrationLength'), $prop('UDPConnectorDataPlugin.WheelFRAngularSpeed'), $prop('UDPConnectorDataPlugin.WheelFRRimRadius'));",
+            "PreExpression": "// Frequency = Speed/waveLength\r\nfunction getFrequency(defaultFrequency, minFrequency, maxFrequency, vibrationLength, angularSpeed, wheelRadius) {\r\n   if (vibrationLength == 0) return defaultFrequency;\r\n   let speed = angularSpeed * wheelRadius ;\r\n   let frequency = speed / vibrationLength;\r\n   return Math.max(minFrequency, Math.min(frequency, maxFrequency));\r\n}"
           },
           "RearLeftFrequencyFormula": {
-            "Expression": ""
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "const DEFAULT_FREQUENCY = 26;\r\nconst MIN_FREQUENCY = 20;\r\nconst MAX_FREQUENCY = 120;\r\n\r\nreturn getFrequency(DEFAULT_FREQUENCY, MIN_FREQUENCY, MAX_FREQUENCY, $prop('UDPConnectorDataPlugin.WheelRLSurfaceVibrationLength'), $prop('UDPConnectorDataPlugin.WheelRLAngularSpeed'), $prop('UDPConnectorDataPlugin.WheelRLRimRadius'));",
+            "PreExpression": "// Frequency = Speed/waveLength\r\nfunction getFrequency(defaultFrequency, minFrequency, maxFrequency, vibrationLength, angularSpeed, wheelRadius) {\r\n   if (vibrationLength == 0) return defaultFrequency;\r\n   let speed = angularSpeed * wheelRadius ;\r\n   let frequency = speed / vibrationLength;\r\n   return Math.max(minFrequency, Math.min(frequency, maxFrequency));\r\n}"
           },
           "RearRightFrequencyFormula": {
-            "Expression": ""
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "const DEFAULT_FREQUENCY = 26;\r\nconst MIN_FREQUENCY = 20;\r\nconst MAX_FREQUENCY = 120;\r\n\r\nreturn getFrequency(DEFAULT_FREQUENCY, MIN_FREQUENCY, MAX_FREQUENCY, $prop('UDPConnectorDataPlugin.WheelRRSurfaceVibrationLength'), $prop('UDPConnectorDataPlugin.WheelRRAngularSpeed'), $prop('UDPConnectorDataPlugin.WheelRRRimRadius'));",
+            "PreExpression": "// Frequency = Speed/waveLength\r\nfunction getFrequency(defaultFrequency, minFrequency, maxFrequency, vibrationLength, angularSpeed, wheelRadius) {\r\n   if (vibrationLength == 0) return defaultFrequency;\r\n   let speed = angularSpeed * wheelRadius ;\r\n   let frequency = speed / vibrationLength;\r\n   return Math.max(minFrequency, Math.min(frequency, maxFrequency));\r\n}"
           },
           "ContainerId": "df145dfc-87c2-462c-9412-e3f90b3a6a7e",
           "AggregationMode": "Corners",
@@ -360,16 +420,28 @@
           },
           "ForceFrequencies": false,
           "FrontLeftFrequencyFormula": {
-            "Expression": ""
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "const DEFAULT_FREQUENCY = 26;\r\nconst MIN_FREQUENCY = 20;\r\nconst MAX_FREQUENCY = 120;\r\n\r\nreturn getFrequency(DEFAULT_FREQUENCY, MIN_FREQUENCY, MAX_FREQUENCY, $prop('UDPConnectorDataPlugin.WheelFLSurfaceVibrationLength'), $prop('UDPConnectorDataPlugin.WheelFLAngularSpeed'), $prop('UDPConnectorDataPlugin.WheelFLRimRadius'));",
+            "PreExpression": "// Frequency = Speed/waveLength\r\nfunction getFrequency(defaultFrequency, minFrequency, maxFrequency, vibrationLength, angularSpeed, wheelRadius) {\r\n   if (vibrationLength == 0) return defaultFrequency;\r\n   let speed = angularSpeed * wheelRadius ;\r\n   let frequency = speed / vibrationLength;\r\n   return Math.max(minFrequency, Math.min(frequency, maxFrequency));\r\n}"
           },
           "FrontRightFrequencyFormula": {
-            "Expression": ""
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "const DEFAULT_FREQUENCY = 26;\r\nconst MIN_FREQUENCY = 20;\r\nconst MAX_FREQUENCY = 120;\r\n\r\nreturn getFrequency(DEFAULT_FREQUENCY, MIN_FREQUENCY, MAX_FREQUENCY, $prop('UDPConnectorDataPlugin.WheelFRSurfaceVibrationLength'), $prop('UDPConnectorDataPlugin.WheelFRAngularSpeed'), $prop('UDPConnectorDataPlugin.WheelFRRimRadius'));",
+            "PreExpression": "// Frequency = Speed/waveLength\r\nfunction getFrequency(defaultFrequency, minFrequency, maxFrequency, vibrationLength, angularSpeed, wheelRadius) {\r\n   if (vibrationLength == 0) return defaultFrequency;\r\n   let speed = angularSpeed * wheelRadius ;\r\n   let frequency = speed / vibrationLength;\r\n   return Math.max(minFrequency, Math.min(frequency, maxFrequency));\r\n}"
           },
           "RearLeftFrequencyFormula": {
-            "Expression": ""
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "const DEFAULT_FREQUENCY = 26;\r\nconst MIN_FREQUENCY = 20;\r\nconst MAX_FREQUENCY = 120;\r\n\r\nreturn getFrequency(DEFAULT_FREQUENCY, MIN_FREQUENCY, MAX_FREQUENCY, $prop('UDPConnectorDataPlugin.WheelRLSurfaceVibrationLength'), $prop('UDPConnectorDataPlugin.WheelRLAngularSpeed'), $prop('UDPConnectorDataPlugin.WheelRLRimRadius'));",
+            "PreExpression": "// Frequency = Speed/waveLength\r\nfunction getFrequency(defaultFrequency, minFrequency, maxFrequency, vibrationLength, angularSpeed, wheelRadius) {\r\n   if (vibrationLength == 0) return defaultFrequency;\r\n   let speed = angularSpeed * wheelRadius ;\r\n   let frequency = speed / vibrationLength;\r\n   return Math.max(minFrequency, Math.min(frequency, maxFrequency));\r\n}"
           },
           "RearRightFrequencyFormula": {
-            "Expression": ""
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "const DEFAULT_FREQUENCY = 26;\r\nconst MIN_FREQUENCY = 20;\r\nconst MAX_FREQUENCY = 120;\r\n\r\nreturn getFrequency(DEFAULT_FREQUENCY, MIN_FREQUENCY, MAX_FREQUENCY, $prop('UDPConnectorDataPlugin.WheelRRSurfaceVibrationLength'), $prop('UDPConnectorDataPlugin.WheelRRAngularSpeed'), $prop('UDPConnectorDataPlugin.WheelRRRimRadius'));",
+            "PreExpression": "// Frequency = Speed/waveLength\r\nfunction getFrequency(defaultFrequency, minFrequency, maxFrequency, vibrationLength, angularSpeed, wheelRadius) {\r\n   if (vibrationLength == 0) return defaultFrequency;\r\n   let speed = angularSpeed * wheelRadius ;\r\n   let frequency = speed / vibrationLength;\r\n   return Math.max(minFrequency, Math.min(frequency, maxFrequency));\r\n}"
           },
           "ContainerId": "1efea112-6bc2-46d8-bf82-d9b95d3e914a",
           "AggregationMode": "Corners",
@@ -396,7 +468,7 @@
         {
           "ContainerType": "CustomEffectContainer",
           "IsEnabled": true,
-          "Gain": 70.4242424242425,
+          "Gain": 69.939393939393767,
           "Description": "Road Rumble on Ice",
           "FrontLeftFormula": {
             "JSExt": 0,
@@ -424,16 +496,28 @@
           },
           "ForceFrequencies": false,
           "FrontLeftFrequencyFormula": {
-            "Expression": ""
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "const DEFAULT_FREQUENCY = 26;\r\nconst MIN_FREQUENCY = 20;\r\nconst MAX_FREQUENCY = 120;\r\n\r\nreturn getFrequency(DEFAULT_FREQUENCY, MIN_FREQUENCY, MAX_FREQUENCY, $prop('UDPConnectorDataPlugin.WheelFLSurfaceVibrationLength'), $prop('UDPConnectorDataPlugin.WheelFLAngularSpeed'), $prop('UDPConnectorDataPlugin.WheelFLRimRadius'));",
+            "PreExpression": "// Frequency = Speed/waveLength\r\nfunction getFrequency(defaultFrequency, minFrequency, maxFrequency, vibrationLength, angularSpeed, wheelRadius) {\r\n   if (vibrationLength == 0) return defaultFrequency;\r\n   let speed = angularSpeed * wheelRadius ;\r\n   let frequency = speed / vibrationLength;\r\n   return Math.max(minFrequency, Math.min(frequency, maxFrequency));\r\n}"
           },
           "FrontRightFrequencyFormula": {
-            "Expression": ""
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "const DEFAULT_FREQUENCY = 26;\r\nconst MIN_FREQUENCY = 20;\r\nconst MAX_FREQUENCY = 120;\r\n\r\nreturn getFrequency(DEFAULT_FREQUENCY, MIN_FREQUENCY, MAX_FREQUENCY, $prop('UDPConnectorDataPlugin.WheelFRSurfaceVibrationLength'), $prop('UDPConnectorDataPlugin.WheelFRAngularSpeed'), $prop('UDPConnectorDataPlugin.WheelFRRimRadius'));",
+            "PreExpression": "// Frequency = Speed/waveLength\r\nfunction getFrequency(defaultFrequency, minFrequency, maxFrequency, vibrationLength, angularSpeed, wheelRadius) {\r\n   if (vibrationLength == 0) return defaultFrequency;\r\n   let speed = angularSpeed * wheelRadius ;\r\n   let frequency = speed / vibrationLength;\r\n   return Math.max(minFrequency, Math.min(frequency, maxFrequency));\r\n}"
           },
           "RearLeftFrequencyFormula": {
-            "Expression": ""
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "const DEFAULT_FREQUENCY = 26;\r\nconst MIN_FREQUENCY = 20;\r\nconst MAX_FREQUENCY = 120;\r\n\r\nreturn getFrequency(DEFAULT_FREQUENCY, MIN_FREQUENCY, MAX_FREQUENCY, $prop('UDPConnectorDataPlugin.WheelRLSurfaceVibrationLength'), $prop('UDPConnectorDataPlugin.WheelRLAngularSpeed'), $prop('UDPConnectorDataPlugin.WheelRLRimRadius'));",
+            "PreExpression": "// Frequency = Speed/waveLength\r\nfunction getFrequency(defaultFrequency, minFrequency, maxFrequency, vibrationLength, angularSpeed, wheelRadius) {\r\n   if (vibrationLength == 0) return defaultFrequency;\r\n   let speed = angularSpeed * wheelRadius ;\r\n   let frequency = speed / vibrationLength;\r\n   return Math.max(minFrequency, Math.min(frequency, maxFrequency));\r\n}"
           },
           "RearRightFrequencyFormula": {
-            "Expression": ""
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "const DEFAULT_FREQUENCY = 26;\r\nconst MIN_FREQUENCY = 20;\r\nconst MAX_FREQUENCY = 120;\r\n\r\nreturn getFrequency(DEFAULT_FREQUENCY, MIN_FREQUENCY, MAX_FREQUENCY, $prop('UDPConnectorDataPlugin.WheelRRSurfaceVibrationLength'), $prop('UDPConnectorDataPlugin.WheelRRAngularSpeed'), $prop('UDPConnectorDataPlugin.WheelRRRimRadius'));",
+            "PreExpression": "// Frequency = Speed/waveLength\r\nfunction getFrequency(defaultFrequency, minFrequency, maxFrequency, vibrationLength, angularSpeed, wheelRadius) {\r\n   if (vibrationLength == 0) return defaultFrequency;\r\n   let speed = angularSpeed * wheelRadius ;\r\n   let frequency = speed / vibrationLength;\r\n   return Math.max(minFrequency, Math.min(frequency, maxFrequency));\r\n}"
           },
           "ContainerId": "0e3f5bc9-a255-4561-bdc6-af5e4f43b9db",
           "AggregationMode": "Corners",
@@ -460,7 +544,7 @@
         {
           "ContainerType": "CustomEffectContainer",
           "IsEnabled": true,
-          "Gain": 60.242424242424022,
+          "Gain": 59.757575757575751,
           "Description": "Road Rumble on Snow",
           "FrontLeftFormula": {
             "JSExt": 0,
@@ -488,16 +572,28 @@
           },
           "ForceFrequencies": false,
           "FrontLeftFrequencyFormula": {
-            "Expression": ""
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "const DEFAULT_FREQUENCY = 26;\r\nconst MIN_FREQUENCY = 20;\r\nconst MAX_FREQUENCY = 120;\r\n\r\nreturn getFrequency(DEFAULT_FREQUENCY, MIN_FREQUENCY, MAX_FREQUENCY, $prop('UDPConnectorDataPlugin.WheelFLSurfaceVibrationLength'), $prop('UDPConnectorDataPlugin.WheelFLAngularSpeed'), $prop('UDPConnectorDataPlugin.WheelFLRimRadius'));",
+            "PreExpression": "// Frequency = Speed/waveLength\r\nfunction getFrequency(defaultFrequency, minFrequency, maxFrequency, vibrationLength, angularSpeed, wheelRadius) {\r\n   if (vibrationLength == 0) return defaultFrequency;\r\n   let speed = angularSpeed * wheelRadius ;\r\n   let frequency = speed / vibrationLength;\r\n   return Math.max(minFrequency, Math.min(frequency, maxFrequency));\r\n}"
           },
           "FrontRightFrequencyFormula": {
-            "Expression": ""
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "const DEFAULT_FREQUENCY = 26;\r\nconst MIN_FREQUENCY = 20;\r\nconst MAX_FREQUENCY = 120;\r\n\r\nreturn getFrequency(DEFAULT_FREQUENCY, MIN_FREQUENCY, MAX_FREQUENCY, $prop('UDPConnectorDataPlugin.WheelFRSurfaceVibrationLength'), $prop('UDPConnectorDataPlugin.WheelFRAngularSpeed'), $prop('UDPConnectorDataPlugin.WheelFRRimRadius'));",
+            "PreExpression": "// Frequency = Speed/waveLength\r\nfunction getFrequency(defaultFrequency, minFrequency, maxFrequency, vibrationLength, angularSpeed, wheelRadius) {\r\n   if (vibrationLength == 0) return defaultFrequency;\r\n   let speed = angularSpeed * wheelRadius ;\r\n   let frequency = speed / vibrationLength;\r\n   return Math.max(minFrequency, Math.min(frequency, maxFrequency));\r\n}"
           },
           "RearLeftFrequencyFormula": {
-            "Expression": ""
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "const DEFAULT_FREQUENCY = 26;\r\nconst MIN_FREQUENCY = 20;\r\nconst MAX_FREQUENCY = 120;\r\n\r\nreturn getFrequency(DEFAULT_FREQUENCY, MIN_FREQUENCY, MAX_FREQUENCY, $prop('UDPConnectorDataPlugin.WheelRLSurfaceVibrationLength'), $prop('UDPConnectorDataPlugin.WheelRLAngularSpeed'), $prop('UDPConnectorDataPlugin.WheelRLRimRadius'));",
+            "PreExpression": "// Frequency = Speed/waveLength\r\nfunction getFrequency(defaultFrequency, minFrequency, maxFrequency, vibrationLength, angularSpeed, wheelRadius) {\r\n   if (vibrationLength == 0) return defaultFrequency;\r\n   let speed = angularSpeed * wheelRadius ;\r\n   let frequency = speed / vibrationLength;\r\n   return Math.max(minFrequency, Math.min(frequency, maxFrequency));\r\n}"
           },
           "RearRightFrequencyFormula": {
-            "Expression": ""
+            "JSExt": 0,
+            "Interpreter": 1,
+            "Expression": "const DEFAULT_FREQUENCY = 26;\r\nconst MIN_FREQUENCY = 20;\r\nconst MAX_FREQUENCY = 120;\r\n\r\nreturn getFrequency(DEFAULT_FREQUENCY, MIN_FREQUENCY, MAX_FREQUENCY, $prop('UDPConnectorDataPlugin.WheelRRSurfaceVibrationLength'), $prop('UDPConnectorDataPlugin.WheelRRAngularSpeed'), $prop('UDPConnectorDataPlugin.WheelRRRimRadius'));",
+            "PreExpression": "// Frequency = Speed/waveLength\r\nfunction getFrequency(defaultFrequency, minFrequency, maxFrequency, vibrationLength, angularSpeed, wheelRadius) {\r\n   if (vibrationLength == 0) return defaultFrequency;\r\n   let speed = angularSpeed * wheelRadius ;\r\n   let frequency = speed / vibrationLength;\r\n   return Math.max(minFrequency, Math.min(frequency, maxFrequency));\r\n}"
           },
           "ContainerId": "ba97aa5a-74e4-42ce-ac35-124c3920a254",
           "AggregationMode": "Corners",
@@ -522,7 +618,7 @@
           }
         }
       ],
-      "ContainerId": "22acbdde-6bd5-4102-ab71-345d8ec5ea92",
+      "ContainerId": "9a5a7ba2-549c-4d7a-8605-658b145ce124",
       "Filter": null,
       "Output": null
     }

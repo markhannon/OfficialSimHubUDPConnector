@@ -41,7 +41,7 @@ function LegacyDataExtension:update(dt, customData)
     customData.ExtraG = carState.extraG
     customData.FPS = sim.fps
     customData.FuelMap = carState.fuelMap
-    customData. Handbrake = carState.handbrake
+    customData.Handbrake = carState.handbrake
     customData.HazardLights = carState.hazardLights
     customData.HeadlightsActive = carState.headlightsActive
     customData.HighBeam = not carState.lowBeams

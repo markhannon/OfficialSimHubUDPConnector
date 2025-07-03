@@ -45,12 +45,20 @@ end
 function RoadRumbleExtension:update(dt, customData)
     customData.WheelFLSurfaceVibrationGain = wheelsState[0].surfaceVibrationGain
     customData.WheelFLSurfaceVibrationLength = wheelsState[0].surfaceVibrationLength
+    customData.WheelFLAngularSpeed = wheelsState[0].angularSpeed
+    customData.WheelFLRimRadius = wheelsState[0].rimRadius
     customData.WheelFRSurfaceVibrationGain = wheelsState[1].surfaceVibrationGain
     customData.WheelFRSurfaceVibrationLength = wheelsState[1].surfaceVibrationLength
+    customData.WheelFRAngularSpeed = wheelsState[1].angularSpeed
+    customData.WheelFRRimRadius = wheelsState[1].rimRadius
     customData.WheelRLSurfaceVibrationGain = wheelsState[2].surfaceVibrationGain
     customData.WheelRLSurfaceVibrationLength = wheelsState[2].surfaceVibrationLength
+    customData.WheelRLAngularSpeed = wheelsState[2].angularSpeed
+    customData.WheelRLRimRadius = wheelsState[2].rimRadius
     customData.WheelRRSurfaceVibrationGain = wheelsState[3].surfaceVibrationGain
     customData.WheelRRSurfaceVibrationLength = wheelsState[3].surfaceVibrationLength
+    customData.WheelRRAngularSpeed = wheelsState[3].angularSpeed
+    customData.WheelRRRimRadius = wheelsState[3].rimRadius
     if ac.getPatchVersionCode() >= 3334 then
         -- if (cspVersion:versionCompare("0.2.7") > -1) then
         -- this part is required for the Road Rumble effect
