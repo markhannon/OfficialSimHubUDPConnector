@@ -15,6 +15,7 @@ local ExtensionsSettings
 local ExtensionsSettingsLayout = {
 	LegacyDataExtension = true,
 	CollisionsExtension = true,
+	LeaderBoardExtension = false,
 	RoadRumbleExtension = true,
 	OnlineOvertakeExtension = false,
 	TyreOptimalTempExtension = false,
