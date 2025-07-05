@@ -28,17 +28,18 @@ end
 function LeaderBoardExtension:update(dt, customData)
 
 	for i, c in ac.iterateCars.leaderboard() do
+
 		if (c.isActive == true) then
 			customData["Position_" .. toIndex(i) .. "_IsActive"] = true
 			customData["Position_" .. toIndex(i) .. "_DriverName"] = ac.getDriverName(c.index)
 			if (c.isInPit == true and c.lapCount > 0) then
 				pitTimer[c.index] = pitTimer[c.index] + dt
-				lastPitTime[c.index] = c.lapCount
+				lastPitLap[c.index] = c.lapCount
 			end
 			if (c.isInPit ~= true and pitTimer[c.index] ~= 0) then
 				lastPitTime[c.index] = pitTimer[c.index]
 				pitTimer[c.index] = 0
-				customData["Position_" .. toIndex(i) .. "_LastPitTime"] = lastPitTime[c.index]
+				customData["Position_" .. toIndex(i) .. "_LastPitTime"] = math.floor(lastPitTime[c.index]+0.5)
 				customData["Position_" .. toIndex(i) .. "_LastPitLap"] = lastPitLap[c.index]
 			end
 			customData["Position_" .. toIndex(i) .. "_IsInPit"] = c.isInPit
