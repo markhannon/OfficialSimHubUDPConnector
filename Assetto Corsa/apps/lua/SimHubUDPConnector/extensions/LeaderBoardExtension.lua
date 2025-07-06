@@ -16,7 +16,7 @@ local lastPitTime = {}
 local lastPitLap = {}
 local pitTimer = {}
 for i, c in ac.iterateCars.leaderboard() do
-	lastPitTime[c.index] = nil
+	lastPitTime[c.index] = 0
 	lastPitLap[c.index] = 0
 	pitTimer[c.index] = 0
 end
@@ -29,33 +29,32 @@ function LeaderBoardExtension:update(dt, customData)
 
 	for i, c in ac.iterateCars.leaderboard() do
 
-		if (c.isActive == true) then
-			customData["Position_" .. toIndex(i) .. "_IsActive"] = true
+		if (c.isConnected == true) then
+			customData["Position_" .. toIndex(i) .. "_IsConnected"] = true
 			customData["Position_" .. toIndex(i) .. "_DriverName"] = ac.getDriverName(c.index)
-			if (c.isInPit == true and c.lapCount > 0) then
-				pitTimer[c.index] = pitTimer[c.index] + dt
+			if (c.isInPit == true and pitTimer[c.index] == 0) then
+				ac.console(ac.getDriverName(c.index) .. " entering the pits")
 				lastPitLap[c.index] = c.lapCount
+			end
+			if (c.isInPit == true) then
+				pitTimer[c.index] = pitTimer[c.index] + dt
 			end
 			if (c.isInPit ~= true and pitTimer[c.index] ~= 0) then
 				lastPitTime[c.index] = pitTimer[c.index]
 				pitTimer[c.index] = 0
-				customData["Position_" .. toIndex(i) .. "_LastPitTime"] = math.floor(lastPitTime[c.index]+0.5)
-				customData["Position_" .. toIndex(i) .. "_LastPitLap"] = lastPitLap[c.index]
+				if (c.lapCount > 0) then
+					ac.console(ac.getDriverName(c.index) .. " leaving the pits")
+					-- customData["Position_" .. toIndex(i) .. "_LastPitTime"] = tonumber(string.format("%.1f", lastPitTime[c.index]))
+					customData["Position_" .. toIndex(i) .. "_LastPitTime"] = lastPitTime[c.index]
+					customData["Position_" .. toIndex(i) .. "_LastPitLap"] = lastPitLap[c.index]
+				end
 			end
 			customData["Position_" .. toIndex(i) .. "_IsInPit"] = c.isInPit
 			customData["Position_" .. toIndex(i) .. "_LapCount"] = c.lapCount
 			customData["Position_" .. toIndex(i) .. "_Number"] = ac.getDriverNumber(c.index)
 			customData["Position_" .. toIndex(i) .. "_TyreCompound"] = ac.getTyresName(c.index, c.compoundIndex)
 		else
-			customData["Position_" .. toIndex(i) .. "_IsActive"] = false
-			customData["Position_" .. toIndex(i) .. "_DriverName"] = nil
-			customData["Position_" .. toIndex(i) .. "_IsInPit"] = nil
-			customData["Position_" .. toIndex(i) .. "_LastPitTime"] = nil
-			customData["Position_" .. toIndex(i) .. "_LastPitLap"] = nil
-			customData["Position_" .. toIndex(i) .. "_LapCount"] = nil
-			customData["Position_" .. toIndex(i) .. "_Number"] = nil
-			customData["Position_" .. toIndex(i) .. "_TyreCompound"] = nil
-				
+			customData["Position_" .. toIndex(i) .. "_IsConnected"] = false
 		end
 		
 	end
