@@ -1,5 +1,6 @@
--- Extension created by Mark Hannon
--- Does not work with replays
+-- Extension created by Mark Hannon <mark.hannon@gmail.com>
+--
+-- Generates leaderboard style properties for SimHub dashboards
 ---@diagnostic disable: param-type-mismatch
 require("extensions.Extension")
 
@@ -12,43 +13,120 @@ function LeaderBoardExtension:new(o)
 	return o
 end
 
-local lastPitTime = {}
-local lastPitLap = {}
-local pitTimer = {}
-for i, c in ac.iterateCars.leaderboard() do
-	lastPitTime[c.index] = 0
-	lastPitLap[c.index] = 0
-	pitTimer[c.index] = 0
+-- helper function to format position with two digits
+local function _idx(i)
+	return string.format("%02d", tostring(i))
 end
 
-local function _idx(i)
-	return string.format("%02d",tostring(i))
+-- Lap of the last pit stop (indexed by car_id)
+local lastPitLap = {}
+-- Number of seconds in the last pit stop (indexed by car_id)
+local lastPitTime = {}
+-- Number of seconds in pit for this stop (indexed by car_id)
+local thisPitTime = {}
+-- Number of times car has pitted (indexed by car_id)
+local pitStops = {}
+
+-- Table of cars used to store car_id in sorted list
+local allCars = {}
+
+local connectedCars = {}
+local unconnectedCars = {}
+
+for i, c in ac.iterateCars() do
+	table.insert(allCars, c.index)
+	lastPitLap[c.index] = 0
+	lastPitTime[c.index] = 0
+	thisPitTime[c.index] = 0
+	pitStops[c.index] = 0
 end
+
+-- Filter function to remove all non connected cars from table
+local function filterConnectedCars(allCars)
+	local _connected = {}
+	local _unconnected = {}
+	for i, carIndex in ipairs(allCars) do
+		if (ac.getCar(carIndex).isConnected == true) then
+			table.insert(_connected, carIndex)
+		else
+			table.insert(_unconnected, carIndex)
+		end
+	end
+	return _connected, _unconnected
+end
+
+-- Sort function to sort a table of car_ids by bestLapTimeMs
+-- Used in practice and qualify sessions
+local function sortCarsByBestLapTimeMs(left, right)
+	return ac.getCar(left).bestLapTimeMs < ac.getCar(right).bestLapTimeMs
+end
+
+-- Sort function to sort a table of car_ids by totalSpline.
+-- Used in race sessions
+local function sortCarsByTotalSpline(left, right)
+	return (ac.getCar(left).lapCount + ac.getCar(left).splinePosition) >
+		(ac.getCar(right).lapCount + ac.getCar(right).splinePosition)
+end
+
+-- Timestamp to delay expensive sort operations
+local timeSinceLastUpdate = 0
+
+-- Minimum time between updates
+local minimumTimeBetweenUpdates = 0.3
 
 function LeaderBoardExtension:update(dt, customData)
-	for i, c in ac.iterateCars.leaderboard() do
-		customData["Position_" .. _idx(i) .. "_BestLapTimeMs"] = c.bestLapTimeMs
-		customData["Position_" .. _idx(i) .. "_RacePosition"] = c.racePosition
-		customData["Position_" .. _idx(i) .. "_IsConnected"] = c.isConnected
-		customData["Position_" .. _idx(i) .. "_DriverName"] = ac.getDriverName(c.index)
-		customData["Position_" .. _idx(i) .. "_Number"] = ac.getDriverNumber(c.index)
-		customData["Position_" .. _idx(i) .. "_IsInPit"] = c.isInPit
-		customData["Position_" .. _idx(i) .. "_LapCount"] = c.lapCount
-		customData["Position_" .. _idx(i) .. "_TyreCompound"] = ac.getTyresName(c.index, c.compoundIndex)
-		if (c.isInPit == true and pitTimer[c.index] == 0) then
-			lastPitLap[c.index] = c.lapCount
+	timeSinceLastUpdate = timeSinceLastUpdate + dt
+	for i, c in ac.iterateCars() do
+		if (c.isInPit == true and thisPitTime[i] == 0) then
+			lastPitLap[i] = c.lapCount
+			pitStops[i] = pitStops[i] + 1
 		end
 		if (c.isInPit == true) then
-			pitTimer[c.index] = pitTimer[c.index] + dt
+			thisPitTime[i] = thisPitTime[i] + dt
 		end
-		if (c.isInPit ~= true and pitTimer[c.index] ~= 0) then
-			lastPitTime[c.index] = pitTimer[c.index]
-			pitTimer[c.index] = 0
-			if (c.lapCount > 0) then
-				customData["Position_" .. _idx(i) .. "_LastPitTime"] = tonumber(string.format("%.1f", lastPitTime[c.index]))
-				customData["Position_" .. _idx(i) .. "_LastPitLap"] = lastPitLap[c.index]
-			end
+		if (c.isInPit ~= true and thisPitTime[i] ~= 0) then
+			lastPitTime[i] = thisPitTime[i]
+			thisPitTime[i] = 0
 		end
+	end
+	if (timeSinceLastUpdate > minimumTimeBetweenUpdates) then
+		connectedCars, unconnectedCars = filterConnectedCars(allCars)
+		if (ac.getSessionName(ac.getSim().currentSessionIndex) == 'Race') then
+			table.sort(connectedCars, sortCarsByTotalSpline)
+			customData.LeaderBoardExtensionSession = 'Race'
+		else
+			table.sort(connectedCars, sortCarsByBestLapTimeMs)
+			customData.LeaderBoardExtensionSession = 'Practice or Qualify'
+		end
+
+		for i, carIndex in ipairs(connectedCars) do
+			car = ac.getCar(carIndex)
+			customData["Position_" .. _idx(i) .. "_IsConnected"] = true
+			customData["Position_" .. _idx(i) .. "_DriverName"] = ac.getDriverName(carIndex)
+			customData["Position_" .. _idx(i) .. "_Number"] = ac.getDriverNumber(carIndex)
+			customData["Position_" .. _idx(i) .. "_IsInPit"] = car.isInPit
+			customData["Position_" .. _idx(i) .. "_LapCount"] = car.lapCount
+			customData["Position_" .. _idx(i) .. "_TyreCompound"] = ac.getTyresName(carIndex, car.compoundIndex)
+			customData["Position_" .. _idx(i) .. "_LastPitTime"] = tonumber(string.format("%.1f",
+				lastPitTime[carIndex]))
+			customData["Position_" .. _idx(i) .. "_LastPitLap"] = lastPitLap[carIndex]
+			customData["Position_" .. _idx(i) .. "_PitStops"] = pitStops[carIndex]
+		end
+
+		local offset = #connectedCars
+		for i, carIndex in ipairs(unconnectedCars) do
+			customData["Position_" .. _idx(i+offset) .. "_IsConnected"] = false
+			customData["Position_" .. _idx(i+offset) .. "_DriverName"] = nil
+			customData["Position_" .. _idx(i+offset) .. "_Number"] = nil
+			customData["Position_" .. _idx(i+offset) .. "_IsInPit"] = nil
+			customData["Position_" .. _idx(i+offset) .. "_LapCount"] = nil
+			customData["Position_" .. _idx(i+offset) .. "_TyreCompound"] = nil
+			customData["Position_" .. _idx(i+offset) .. "_LastPitTime"] = nil
+			customData["Position_" .. _idx(i+offset) .. "_LastPitLap"] = nil
+			customData["Position_" .. _idx(i+offset) .. "_PitStops"] = nil
+		end
+
+		timeSinceLastUpdate = 0
 	end
 end
 
