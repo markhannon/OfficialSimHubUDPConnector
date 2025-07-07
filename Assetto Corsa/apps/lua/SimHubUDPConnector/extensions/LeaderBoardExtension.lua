@@ -77,14 +77,14 @@ local minimumTimeBetweenUpdates = 0.3
 function LeaderBoardExtension:update(dt, customData)
 	timeSinceLastUpdate = timeSinceLastUpdate + dt
 	for i, c in ac.iterateCars() do
-		if (c.isInPit == true and thisPitTime[c.index] == 0) then
+		if (c.isInPitlane == true and thisPitTime[c.index] == 0) then
 			lastPitLap[c.index] = c.lapCount
 			pitStops[c.index] = pitStops[c.index] + 1
 		end
-		if (c.isInPit == true) then
+		if (c.isInPitlane == true) then
 			thisPitTime[c.index] = thisPitTime[c.index] + dt
 		end
-		if (c.isInPit ~= true and thisPitTime[c.index] ~= 0) then
+		if (c.isInPitlane ~= true and thisPitTime[c.index] ~= 0) then
 			lastPitTime[c.index] = thisPitTime[c.index]
 			thisPitTime[c.index] = 0
 		end
