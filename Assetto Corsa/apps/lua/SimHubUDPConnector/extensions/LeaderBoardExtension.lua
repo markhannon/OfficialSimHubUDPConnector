@@ -91,7 +91,7 @@ function LeaderBoardExtension:update(dt, customData)
 	end
 	if (timeSinceLastUpdate > minimumTimeBetweenUpdates) then
 		connectedCars, unconnectedCars = filterConnectedCars(allCars)
-		if (ac.getSessionName(ac.getSim().currentSessionIndex) == 'Race') then
+		if (ac.getSim().raceSessionType == 3) then
 			table.sort(connectedCars, sortCarsByTotalSpline)
 			customData.LeaderBoardExtensionSession = 'Race'
 		else
@@ -107,8 +107,10 @@ function LeaderBoardExtension:update(dt, customData)
 			customData["Position_" .. _idx(i) .. "_IsInPit"] = car.isInPit
 			customData["Position_" .. _idx(i) .. "_LapCount"] = car.lapCount
 			customData["Position_" .. _idx(i) .. "_TyreCompound"] = ac.getTyresName(carIndex, car.compoundIndex)
-			customData["Position_" .. _idx(i) .. "_LastPitTime"] = math.floor(lastPitTime[carIndex]+0.5)
-			customData["Position_" .. _idx(i) .. "_LastPitLap"] = lastPitLap[carIndex]
+			if (thisPitTime[carIndex] == 0) then
+				customData["Position_" .. _idx(i) .. "_LastPitTime"] = math.floor(lastPitTime[carIndex]+0.5)
+				customData["Position_" .. _idx(i) .. "_LastPitLap"] = lastPitLap[carIndex]
+			end
 			customData["Position_" .. _idx(i) .. "_PitStops"] = pitStops[carIndex]
 		end
 
