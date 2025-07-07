@@ -77,16 +77,16 @@ local minimumTimeBetweenUpdates = 0.3
 function LeaderBoardExtension:update(dt, customData)
 	timeSinceLastUpdate = timeSinceLastUpdate + dt
 	for i, c in ac.iterateCars() do
-		if (c.isInPit == true and thisPitTime[i] == 0) then
-			lastPitLap[i] = c.lapCount
-			pitStops[i] = pitStops[i] + 1
+		if (c.isInPit == true and thisPitTime[c.index] == 0) then
+			lastPitLap[c.index] = c.lapCount
+			pitStops[c.index] = pitStops[c.index] + 1
 		end
 		if (c.isInPit == true) then
-			thisPitTime[i] = thisPitTime[i] + dt
+			thisPitTime[c.index] = thisPitTime[c.index] + dt
 		end
-		if (c.isInPit ~= true and thisPitTime[i] ~= 0) then
-			lastPitTime[i] = thisPitTime[i]
-			thisPitTime[i] = 0
+		if (c.isInPit ~= true and thisPitTime[c.index] ~= 0) then
+			lastPitTime[c.index] = thisPitTime[c.index]
+			thisPitTime[c.index] = 0
 		end
 	end
 	if (timeSinceLastUpdate > minimumTimeBetweenUpdates) then
@@ -107,8 +107,7 @@ function LeaderBoardExtension:update(dt, customData)
 			customData["Position_" .. _idx(i) .. "_IsInPit"] = car.isInPit
 			customData["Position_" .. _idx(i) .. "_LapCount"] = car.lapCount
 			customData["Position_" .. _idx(i) .. "_TyreCompound"] = ac.getTyresName(carIndex, car.compoundIndex)
-			customData["Position_" .. _idx(i) .. "_LastPitTime"] = tonumber(string.format("%.1f",
-				lastPitTime[carIndex]))
+			customData["Position_" .. _idx(i) .. "_LastPitTime"] = math.floor(lastPitTime[carIndex]+0.5)
 			customData["Position_" .. _idx(i) .. "_LastPitLap"] = lastPitLap[carIndex]
 			customData["Position_" .. _idx(i) .. "_PitStops"] = pitStops[carIndex]
 		end
