@@ -59,10 +59,31 @@ local function loadLuaScript(scriptName, scriptFolder, silent)
 	return ret
 end
 
+---Try to load a car script based on a filter
+---@param scriptName string
+---@param carId string
+---@param silent boolean
+---@return unknown ret
+local function loadLuaCarFilterScript(scriptName, carId, silent)
+	local filtersRelativePath = "cars/filters" .. "/"
+	local filtersPath = ac.dirname() .. "/" .. filtersRelativePath
+	local connectionFolder = nil
+	local ret = io.scanDir(filtersPath, function (fileName, fileAttributes, callbackData)
+		if carId:startsWith(fileName) then
+			connectionFolder = filtersRelativePath .. fileName
+			return loadLuaScript(scriptName, connectionFolder, false)
+		end
+	end)
+	return ret
+end
+
 local function tryLoadCarConnection()
 	local carId = ac.getCarID(0)
 	local carFolder = "cars/" .. carId
 	carScript = loadLuaScript("connection", carFolder, true)
+	if (not carScript) then
+		carScript = loadLuaCarFilterScript("connection", carId, true)
+	end
 end
 
 ---Check if a list contains a value.
