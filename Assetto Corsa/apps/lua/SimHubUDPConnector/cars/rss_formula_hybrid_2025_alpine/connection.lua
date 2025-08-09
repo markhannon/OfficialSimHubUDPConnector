@@ -45,15 +45,7 @@ local function initialize()
 
 end
 
-function connection:carScript(customData)
-	drs()
-    customData.IgnitionMode = Ignition_RSS.Mode
-	customData.DRSDetection = DRSDetection
-	customData.DRSFlag = DRSFlag
-    addCarData(FHSystem, FHSystemsharedData, 'FHSystem_', customData)
-end
-
-function drs()
+local function drs()
     if not INITIALIZED then initialize() end
     CarPos = CAR.splinePosition
     DRSDetection = false
@@ -78,6 +70,14 @@ function drs()
             DRSDetection = true
         end
     end
+end
+
+function connection:carScript(customData)
+	drs()
+    customData.IgnitionMode = Ignition_RSS.Mode
+	customData.DRSDetection = DRSDetection
+	customData.DRSFlag = DRSFlag
+    addCarData(FHSystem, FHSystemsharedData, 'FHSystem_', customData)
 end
 
 return connection

@@ -17,9 +17,12 @@ local ExtensionsSettingsLayout = {
 	CollisionsExtension = true,
 	RoadRumbleExtension = true,
 	OnlineOvertakeExtension = false,
+	WheelExtension = false,
 	TyreOptimalTempExtension = false,
-	WheelExtension = false
+	LeaderBoardExtension = false,
 }
+local obsoleteExtensions = {"TyreOptimalTempExtension", "LeaderBoardExtension"}
+
 local manifest = ac.INIConfig.load(ac.dirname() .. '/manifest.ini', ac.INIFormat.Extended)
 local appVersion = manifest:get('ABOUT', 'VERSION', "0.0.0")
 local socket = require('shared/socket')
@@ -68,7 +71,7 @@ local function loadLuaCarFilterScript(scriptName, carId, silent)
 	local filtersRelativePath = "cars/filters" .. "/"
 	local filtersPath = ac.dirname() .. "/" .. filtersRelativePath
 	local connectionFolder = nil
-	local ret = io.scanDir(filtersPath, function (fileName, fileAttributes, callbackData)
+	local ret = io.scanDir(filtersPath, function(fileName, fileAttributes, callbackData)
 		if carId:startsWith(fileName) then
 			connectionFolder = filtersRelativePath .. fileName
 			return loadLuaScript(scriptName, connectionFolder, false)
@@ -104,7 +107,7 @@ local function loadExtensions()
 	-- Scan for new extensions.
 	io.scanDir(ac.dirname() .. "/extensions", function(fileName, fileAttributes, callbackData)
 		local extName = fileName:replace(".lua", "")
-		if extName ~= "Extension" and extName ~= "SampleUserExtension" then
+		if extName ~= "Extension" and extName ~= "SampleUserExtension" and not table.contains(obsoleteExtensions, extName) then
 			if ExtensionsSettingsLayout[extName] == nil then
 				ExtensionsSettingsLayout[extName] = false
 			end
@@ -112,6 +115,15 @@ local function loadExtensions()
 		end
 	end)
 	ExtensionsSettings = ac.storage(ExtensionsSettingsLayout)
+	for index, key in ipairs(obsoleteExtensions) do
+		local useTyreExt = false
+		if ExtensionsSettings[key] then
+			useTyreExt = true
+		end
+		if useTyreExt then
+			ExtensionsSettings["TyreExtension"] = true
+		end
+	end
 	table.sort(detectedExtensions)
 	for _, extName in pairs(detectedExtensions) do
 		if ExtensionsSettings[extName] then

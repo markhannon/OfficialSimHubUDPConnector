@@ -18,6 +18,7 @@ function LegacyDataExtension:update(dt, customData)
     customData.Brake = carState.brake
     customData.CarDirection = carState.compass
     customData.CarForceFeedback = carState.ffbMultiplier * 100
+    customData.CarName = ac.getCarName(0)
     customData.Clutch = (carState.autoClutch) and (carState.clutch) or (1 - carState.clutch)
 
     customData.DifferentialPreload = carState.differentialPreload
@@ -61,7 +62,7 @@ function LegacyDataExtension:update(dt, customData)
     customData.MGUHChargingBatteries = carState.mguhChargingBatteries
     customData.MGUKDelivery = carState.mgukDelivery
     customData.MGUKDeliveryCount = carState.mgukDeliveryCount
-    customData.MGUKDeliveryName = ac.getMGUKDeliveryName(0 -1)
+    customData.MGUKDeliveryName = ac.getMGUKDeliveryName(0,carState.mgukDelivery)
     customData.MGUKRecovery = carState.mgukRecovery -- 0 to 10 (10 for 100%)		
     customData.OilPressure = carState.oilPressure
     customData.OilTemperature = carState.oilTemperature
@@ -69,6 +70,7 @@ function LegacyDataExtension:update(dt, customData)
     customData.SteerLock = carState.steerLock
     customData.TC2 = carState.tractionControl2
     customData.Throttle = carState.gas
+    customData.TrackName = ac.getTrackName()
     customData.Turn = ac.getTrackSectorName(ac.worldCoordinateToTrackProgress(carState.position))
     customData.TurningLeftLights = carState.turningLeftLights
     customData.TurningRightLights = carState.turningRightLights
