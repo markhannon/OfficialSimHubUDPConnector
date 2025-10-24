@@ -16,6 +16,8 @@ local DRIFTSharedData = {
   Profiling = ac.StructItem.boolean(),
   FocusedDriverName = ac.StructItem.string(128),
   FocusedCarIndex = ac.StructItem.int16(),
+  FocusedCarProximity = ac.StructItem.float(),
+  FocusedCarDriftAngle = ac.StructItem.float(),
   Stats = ac.StructItem.array(ac.StructItem.string(512),32)
 }
 StatsConnection = ac.connect(DRIFTSharedData, false, ac.SharedNamespace.Shared)
@@ -24,6 +26,8 @@ function DRIFTStatsExtension:update(dt, customData)
     customData[prefix .. "_Profiling"] = StatsConnection.Profiling 
     customData[prefix .. "_FocusedCarIndex"] = StatsConnection.FocusedCarIndex
     customData[prefix .. "_FocusedDriverName"] = StatsConnection.FocusedDriverName
+    customData[prefix .. "_FocusedCarProximity"] = StatsConnection.FocusedCarProximity
+    customData[prefix .. "_FocusedCarDriftAngle"] = StatsConnection.FocusedCarDriftAngle
     if StatsConnection.Profiling then
         for index = 0, 32, 1 do
             local jsonData = ffi.string(StatsConnection.Stats[index])

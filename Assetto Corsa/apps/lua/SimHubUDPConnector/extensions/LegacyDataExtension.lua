@@ -66,6 +66,8 @@ function LegacyDataExtension:update(dt, customData)
     customData.MGUKRecovery = carState.mgukRecovery -- 0 to 10 (10 for 100%)		
     customData.OilPressure = carState.oilPressure
     customData.OilTemperature = carState.oilTemperature
+    customData.P2PStatus = carState.p2pStatus
+    customData.P2PActivations = carState.p2pActivations
     customData.Steer = carState.steer
     customData.SteerLock = carState.steerLock
     customData.TC2 = carState.tractionControl2
