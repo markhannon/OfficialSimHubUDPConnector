@@ -21,8 +21,8 @@ local MPHSystemsharedData = {
 	ac.StructItem.key(MPHystemKey .. "_0" ),
 	BrakeMigration = ac.StructItem.float(),
 	BrakeMigrationRamp = ac.StructItem.float(),
-    FuelTarget = ac.StructItem.float(),
 	PopupTime = ac.StructItem.float(),
+	LapChangePageTime = ac.StructItem.float(),
 	AntiStall = ac.StructItem.boolean(),
 	AutoKill = ac.StructItem.boolean(),
 	ARB_Front = ac.StructItem.int32(),
@@ -51,12 +51,13 @@ function script.FuelUsed()
 end
 
 function script.ReadyToStart()
+	local AirJackPos = ac.getCarPhysics(0).scriptControllerInputs[103]
 	if Ignition_RSS.Mode > 0 then
 		IGTimer = IGTimer + ac.getDeltaT()
 	else
 		IGTimer = 0
 	end
-	if IGTimer > 2.5 and Ignition_RSS.Mode == 1 and  CAR.gear == 1 then
+	if AirJackPos == 0 and Ignition_RSS.Mode == 1 and IGTimer > 2.5 and CAR.gear == 1 then
 		return true
 	else
 		return false

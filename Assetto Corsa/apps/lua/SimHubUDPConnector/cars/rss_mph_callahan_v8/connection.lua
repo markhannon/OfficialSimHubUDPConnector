@@ -5,6 +5,11 @@ local LastFuel = CAR.fuel
 local LastLapCount = 0
 local BattLevel = 1
 local SOC_DELTA = "0.0"
+local IGTimer = 0
+local BoxDistance = 9999
+local BosPos = CAR.pitTransform.position
+local StopFlag = false
+local PitLimiter = false
 
 local connection = {}
 local carId = ac.getCarID(0)
@@ -13,24 +18,28 @@ local Ignition_RSS = ac.connect({
 	Mode = ac.StructItem.int32()
 }, true, ac.SharedNamespace.Shared)
 
-MPHystemKey = "RSS_MPH_System"
+local MPHystemKey = "RSS_MPH_System"
 local MPHSystemsharedData = {
 	ac.StructItem.key(MPHystemKey .. "_0"),
 	BrakeMigration = ac.StructItem.float(),
 	BrakeMigrationRamp = ac.StructItem.float(),
 	FuelTarget = ac.StructItem.float(),
+    PopupTime = ac.StructItem.float(),
+	LapChangePageTime = ac.StructItem.float(),
 	AntiStall = ac.StructItem.boolean(),
 	AutoKill = ac.StructItem.boolean(),
 	ARB_Front = ac.StructItem.int32(),
-	ARB_Rear = ac.StructItem.int32(),
+	ARB_Rear =  ac.StructItem.int32(),
 	ThrottleMap = ac.StructItem.int32(),
-	PitLimitSpeed = ac.StructItem.int32()
+    PitLimitSpeed = ac.StructItem.int32()
 }
-MPHSystem = ac.connect(MPHSystemsharedData, false, ac.SharedNamespace.Shared)
+local MPHSystem = ac.connect(MPHSystemsharedData, false, ac.SharedNamespace.Shared)
 
 function connection:carScript(customData)
 	customData.IgnitionMode = Ignition_RSS.Mode
 	customData.FuelUsed = script.FuelUsed()
+	customData.ReadyToStart = script.ReadyToStart()
+	customData.PitBoxDistance = script.PitBoxDistance()
 	if SIM.isInMainMenu then
 		customData.SetUp_TC_GRIP = CAR.tractionControl2
 		customData.SetUp_Wiper = CAR.wiperMode
@@ -64,4 +73,38 @@ function script.FuelUsed()
 	return FuelBase - CAR.fuel
 end
 
+function script.ReadyToStart()
+	AirJackPos = ac.getCarPhysics(0).scriptControllerInputs[103]
+	if Ignition_RSS.Mode > 0 then
+		IGTimer = IGTimer + ac.getDeltaT()
+	else
+		IGTimer = 0
+	end
+	if AirJackPos == 0 and Ignition_RSS.Mode == 1 and IGTimer > 2.5 and CAR.gear == 1 then
+		return true
+	else
+		return false
+	end
+end
+
+function script.PitBoxDistance()
+	PitLimiter = CAR.manualPitsSpeedLimiterEnabled and not SIM.isReplayActive or CAR.isInPitlane and true or false
+
+	if PitLimiter and not StopFlag then
+		BoxDistance = math.distance(BosPos,CAR.position)
+		if Ignition_RSS.Mode ~= 2 then
+			StopFlag = true
+		end
+	else
+		BoxDistance = 9999
+	end
+
+	if not PitLimiter then
+		StopFlag = false
+	end
+
+	return BoxDistance
+end
+
 return connection
+
