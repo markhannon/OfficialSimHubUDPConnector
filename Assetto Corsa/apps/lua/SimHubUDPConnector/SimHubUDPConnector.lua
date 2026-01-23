@@ -42,7 +42,7 @@ local jsonBuffer = {}
 local ROUNDING = 3
 local MULT = 10 ^ ROUNDING
 local benchDone = false
-local slowUpdateTimer = 0 local slowUpdateRate = 1 / 60 -- 60 Hz
+local slowUpdateTimer = 0 local slowUpdateRate = 1 / 75 -- 75 Hz
 
 local function encodeValue(v)
 	if v == nil then jsonBuffer[#jsonBuffer+1] = "null" return end
@@ -381,7 +381,7 @@ function script.update(dt)
 			print("Car script for " .. ac.getCarID(0) .. " generated an error : " .. err)
 		end)
 	end
-	local jsonData = ultraJSON(customData)
+	local jsonData = JSON.stringify(customData) -- ultraJSON(customData)
 
 	-- if not benchDone then
 	-- 	bench("JSON.stringify", function()
