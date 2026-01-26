@@ -19,7 +19,7 @@ local ExtensionsSettingsLayout = {
 	TyreOptimalTempExtension = false,
 	LeaderBoardExtension = false,
 }
-local obsoleteExtensions = {"TyreOptimalTempExtension", "LeaderBoardExtension"}
+local obsoleteExtensions = { "TyreOptimalTempExtension", "LeaderBoardExtension" }
 
 local manifest = ac.INIConfig.load(ac.dirname() .. '/manifest.ini', ac.INIFormat.Extended)
 local appVersion = manifest:get('ABOUT', 'VERSION', "0.0.0")
@@ -28,83 +28,93 @@ local udp = socket.udp()
 local debugOn = AppSettings.log and type(AppSettings.log) == "boolean" or false ---@type boolean
 local carState = ac.getCar(0)
 local cspVersion = ac.getPatchVersion()
-local customData = {CSPVersion = cspVersion}
-local customFastData = {}
-local lastFastData = {}
+local customData = { CSPVersion = cspVersion }
+-- local customFastData = {}
+-- local lastFastData = {}
 local carScript = nil
 local detectedExtensions = {} ---@type string[]
 local loadedExtensions = {}
-local loadedHightPriorityExtensions = {}
+-- local loadedHightPriorityExtensions = {}
 local repoVersion = "0.0.0"
 local updatingApp = false
-local highPriorityExtensions = {"RoadRumbleExtension", "CollisionsExtension"}
+-- local highPriorityExtensions = {"RoadRumbleExtension", "CollisionsExtension"}
 local jsonBuffer = {}
 local ROUNDING = 3
 local MULT = 10 ^ ROUNDING
 local benchDone = false
-local slowUpdateTimer = 0 local slowUpdateRate = 1 / 75 -- 75 Hz
+local slowUpdateTimer = 0
+local slowUpdateRate = 1 / 75                           -- 75 Hz
 
 local function encodeValue(v)
-	if v == nil then jsonBuffer[#jsonBuffer+1] = "null" return end
-    local tv = type(v)
-    if tv == "number" then
-		if v ~= v or v == math.huge or v == -math.huge then jsonBuffer[#jsonBuffer+1] = "null" return end
-		if v % 1 == 0 then jsonBuffer[#jsonBuffer+1] = tostring(v) return end
+	if v == nil then
+		jsonBuffer[#jsonBuffer + 1] = "null"
+		return
+	end
+	local tv = type(v)
+	if tv == "number" then
+		if v ~= v or v == math.huge or v == -math.huge then
+			jsonBuffer[#jsonBuffer + 1] = "null"
+			return
+		end
+		if v % 1 == 0 then
+			jsonBuffer[#jsonBuffer + 1] = tostring(v)
+			return
+		end
 		v = math.floor(v * MULT + 0.5) / MULT
-        jsonBuffer[#jsonBuffer+1] = tostring(v)
-    elseif tv == "boolean" then
-        jsonBuffer[#jsonBuffer+1] = v and "true" or "false"
-    elseif tv == "string" then
-        jsonBuffer[#jsonBuffer+1] = '"'
-        jsonBuffer[#jsonBuffer+1] = v
-        jsonBuffer[#jsonBuffer+1] = '"'
-    elseif tv == "table" then
-        -- assume array
-        jsonBuffer[#jsonBuffer+1] = "["
-        for i = 1, #v do
-            encodeValue(v[i])
-            jsonBuffer[#jsonBuffer+1] = ","
-        end
-        if v[1] then
-            jsonBuffer[#jsonBuffer] = "]"
-        else
-            jsonBuffer[#jsonBuffer+1] = "]"
-        end
-    else
-        -- fallback
-        local s = tostring(v)
-		jsonBuffer[#jsonBuffer+1] = '"'
-		jsonBuffer[#jsonBuffer+1] = s
-		jsonBuffer[#jsonBuffer+1] = '"'
-    end
+		jsonBuffer[#jsonBuffer + 1] = tostring(v)
+	elseif tv == "boolean" then
+		jsonBuffer[#jsonBuffer + 1] = v and "true" or "false"
+	elseif tv == "string" then
+		jsonBuffer[#jsonBuffer + 1] = '"'
+		jsonBuffer[#jsonBuffer + 1] = v
+		jsonBuffer[#jsonBuffer + 1] = '"'
+	elseif tv == "table" then
+		-- assume array
+		jsonBuffer[#jsonBuffer + 1] = "["
+		for i = 1, #v do
+			encodeValue(v[i])
+			jsonBuffer[#jsonBuffer + 1] = ","
+		end
+		if v[1] then
+			jsonBuffer[#jsonBuffer] = "]"
+		else
+			jsonBuffer[#jsonBuffer + 1] = "]"
+		end
+	else
+		-- fallback
+		local s = tostring(v)
+		jsonBuffer[#jsonBuffer + 1] = '"'
+		jsonBuffer[#jsonBuffer + 1] = s
+		jsonBuffer[#jsonBuffer + 1] = '"'
+	end
 end
 
 local function ultraJSON(t)
-    table.clear(jsonBuffer)
-    jsonBuffer[#jsonBuffer+1] = "{"
-    for k, v in pairs(t) do
-        jsonBuffer[#jsonBuffer+1] = '"'
-        jsonBuffer[#jsonBuffer+1] = k
-        jsonBuffer[#jsonBuffer+1] = '":'
-        encodeValue(v)
-        jsonBuffer[#jsonBuffer+1] = ","
-    end
-    if jsonBuffer[#jsonBuffer] == "," then
-        jsonBuffer[#jsonBuffer] = "}"
-    else
-        jsonBuffer[#jsonBuffer+1] = "}"
-    end
-    return table.concat(jsonBuffer)
+	table.clear(jsonBuffer)
+	jsonBuffer[#jsonBuffer + 1] = "{"
+	for k, v in pairs(t) do
+		jsonBuffer[#jsonBuffer + 1] = '"'
+		jsonBuffer[#jsonBuffer + 1] = k
+		jsonBuffer[#jsonBuffer + 1] = '":'
+		encodeValue(v)
+		jsonBuffer[#jsonBuffer + 1] = ","
+	end
+	if jsonBuffer[#jsonBuffer] == "," then
+		jsonBuffer[#jsonBuffer] = "}"
+	else
+		jsonBuffer[#jsonBuffer + 1] = "}"
+	end
+	return table.concat(jsonBuffer)
 end
 
 
 local function bench(label, fn)
-    local t0 = os.clock()
-    for _ = 1, 20000 do
-        fn()
-    end
-    local t1 = os.clock()
-    print(label .. " : " .. (t1 - t0))
+	local t0 = os.clock()
+	for _ = 1, 20000 do
+		fn()
+	end
+	local t1 = os.clock()
+	print(label .. " : " .. (t1 - t0))
 end
 
 ---Loads a lua script.
@@ -156,7 +166,7 @@ local function tryLoadCarConnection()
 	local carFolder = "cars/" .. carId
 	carScript = loadLuaScript("connection", carFolder, true)
 	if (not carScript) then
-	---@diagnostic disable-next-line: param-type-mismatch
+		---@diagnostic disable-next-line: param-type-mismatch
 		carScript = loadLuaCarFilterScript("connection", carId, true)
 	end
 end
@@ -200,11 +210,11 @@ local function loadExtensions()
 	table.sort(detectedExtensions)
 	for _, extName in pairs(detectedExtensions) do
 		if ExtensionsSettings[extName] then
-			if table.contains(highPriorityExtensions, extName) then
-				loadedHightPriorityExtensions[extName] = loadLuaScript(extName, "extensions")
-			else
-				loadedExtensions[extName] = loadLuaScript(extName, "extensions")
-			end
+			-- if table.contains(highPriorityExtensions, extName) then
+			-- 	loadedHightPriorityExtensions[extName] = loadLuaScript(extName, "extensions")
+			-- else
+			loadedExtensions[extName] = loadLuaScript(extName, "extensions")
+			-- end
 		end
 	end
 end
@@ -331,19 +341,19 @@ function addProp(prefix, obj, fieldName, to)
 	to[propName] = obj[fieldName]
 end
 
-local function fastDataChanged(a, b)
-    for k, v in pairs(a) do
-        if b[k] ~= v then return true end
-    end
-    for k, v in pairs(b) do
-        if a[k] ~= v then return true end
-    end
-    return false
-end
+-- local function fastDataChanged(a, b)
+--     for k, v in pairs(a) do
+--         if b[k] ~= v then return true end
+--     end
+--     for k, v in pairs(b) do
+--         if a[k] ~= v then return true end
+--     end
+--     return false
+-- end
 
 local function disposeExtension(extension)
 	if extension and extension.dispose then
-		try(function ()
+		try(function()
 			extension:dispose()
 		end)
 	end
@@ -351,9 +361,9 @@ end
 
 local function drawExtensionSettingsTab(extension)
 	if extension and extension.drawSettingsTab then
-		try(function ()
+		try(function()
 			extension:drawSettingsTab()
-		end, function (err)
+		end, function(err)
 			print("Extension settings tab generated an error : " .. err)
 		end)
 	end
@@ -366,6 +376,9 @@ function script.update(dt)
 	if (carState == nil) then return end
 	table.clear(customData)
 	customData.CSPVersion = cspVersion
+	-- customData = {
+	-- 	CSPVersion = cspVersion
+	-- }
 	for extName, ext in pairs(loadedExtensions) do
 		try(function()
 			ext:update(dt, customData)
@@ -381,13 +394,13 @@ function script.update(dt)
 			print("Car script for " .. ac.getCarID(0) .. " generated an error : " .. err)
 		end)
 	end
-	local jsonData = JSON.stringify(customData) -- ultraJSON(customData)
+	local jsonData = ultraJSON(customData) -- JSON.stringify(customData)
 
 	-- if not benchDone then
 	-- 	bench("JSON.stringify", function()
 	-- 		ac.debug("stringify", JSON.stringify(customData))
 	-- 	end)
-	
+
 	-- 	bench("ultraJSON", function()
 	-- 		ac.debug("ultraJSON", ultraJSON(customData))
 	-- 	end)
@@ -401,8 +414,14 @@ function script.update(dt)
 	end
 end
 
+--[[
+Deactivated due to latency issue with
+[SIM_CALLBACKS]
+FRAME_BEGIN = updateHighPriority
+
 function script.updateHighPriority(dt)
 	table.clear(customFastData)
+	--customFastData = {}
 	for extName, ext in pairs(loadedHightPriorityExtensions) do
 		try(function()
 			ext:update(dt, customFastData)
@@ -417,7 +436,7 @@ function script.updateHighPriority(dt)
 			debugData(customFastData)
 		end
 	end
-end
+end ]]
 
 function script.onStop()
 	udp:close()
@@ -443,19 +462,19 @@ function script.windowMain(dt)
 					value = not value
 					ExtensionsSettings[extName] = value
 					if value then
-						if table.contains(highPriorityExtensions, extName) then
-							loadedHightPriorityExtensions[extName] = loadLuaScript(extName, "extensions")
-						else
-							loadedExtensions[extName] = loadLuaScript(extName, "extensions")
-						end
+						-- if table.contains(highPriorityExtensions, extName) then
+						-- 	loadedHightPriorityExtensions[extName] = loadLuaScript(extName, "extensions")
+						-- else
+						loadedExtensions[extName] = loadLuaScript(extName, "extensions")
+						-- end
 					else
-						if table.contains(highPriorityExtensions, extName) then
-							disposeExtension(loadedHightPriorityExtensions[extName])
-							loadedHightPriorityExtensions[extName] = nil
-						else
-							disposeExtension(loadedExtensions[extName])
-							loadedExtensions[extName] = nil
-						end
+						-- if table.contains(highPriorityExtensions, extName) then
+						-- 	disposeExtension(loadedHightPriorityExtensions[extName])
+						-- 	loadedHightPriorityExtensions[extName] = nil
+						-- else
+						disposeExtension(loadedExtensions[extName])
+						loadedExtensions[extName] = nil
+						-- end
 						package.loaded["extensions." .. extName] = nil
 					end
 				end
