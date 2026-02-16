@@ -22,6 +22,9 @@ function LegacyDataExtension:update(dt, customData)
     customData.IsDriftBonusOn = carState.isDriftBonusOn
     customData.IsDriftValid = carState.isDriftValid
     -- end
+    customData.ABSModes = carState.absModes
+    customData.ABSMode = carState.absMode
+    customData.ABSInAction = carState.absInAction
     customData.DistanceDrivenTotalKm = carState.distanceDrivenTotalKm
     customData.DistanceDrivenSessionKm = carState.distanceDrivenSessionKm
     customData.ExtraA = carState.extraA
@@ -36,7 +39,11 @@ function LegacyDataExtension:update(dt, customData)
     customData.Handbrake = carState.handbrake
     customData.HazardLights = carState.hazardLights
     customData.HeadlightsActive = carState.headlightsActive
-    customData.HighBeam = not carState.lowBeams
+    customData.HasFlashingLights = carState.hasFlashingLights
+    customData.FlashingLights = carState.flashingLightsActive
+    customData.HasLowBeams = carState.hasLowBeams
+    customData.LowBeams = carState.lowBeams
+    customData.HighBeams = carState.highBeams
     customData.IngameHours = sim.timeHours
     customData.IngameMinutes = sim.timeMinutes
     customData.IsInPitlane = carState.isInPitlane
@@ -61,7 +68,11 @@ function LegacyDataExtension:update(dt, customData)
     customData.P2PActivations = carState.p2pActivations
     customData.Steer = carState.steer
     customData.SteerLock = carState.steerLock
+    customData.TCMode = carState.tractionControlMode
+    customData.TCModes = carState.tractionControlModes
+    customData.TCInAction = carState.tractionControlInAction
     customData.TC2 = carState.tractionControl2
+    customData.TC2Modes = carState.tractionControl2Modes
     customData.Throttle = carState.gas
     customData.TrackName = ac.getTrackName()
     customData.Turn = ac.getTrackSectorName(ac.worldCoordinateToTrackProgress(carState.position))
