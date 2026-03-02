@@ -45,6 +45,17 @@ local benchDone = false
 local slowUpdateTimer = 0
 local slowUpdateRate = 1 / 75                           -- 75 Hz
 
+local jsonEscapes = {
+	['\\'] = '\\\\',
+	['"']  = '\\"',
+	['\n'] = '\\n',
+	['\r'] = '\\r',
+	['\t'] = '\\t',
+}
+local function escapeString(s)
+	return s:gsub('[\\"\n\r\t]', jsonEscapes)
+end
+
 local function encodeValue(v)
 	if v == nil then
 		jsonBuffer[#jsonBuffer + 1] = "null"
@@ -66,7 +77,7 @@ local function encodeValue(v)
 		jsonBuffer[#jsonBuffer + 1] = v and "true" or "false"
 	elseif tv == "string" then
 		jsonBuffer[#jsonBuffer + 1] = '"'
-		jsonBuffer[#jsonBuffer + 1] = v
+		jsonBuffer[#jsonBuffer + 1] = escapeString(v)
 		jsonBuffer[#jsonBuffer + 1] = '"'
 	elseif tv == "table" then
 		-- assume array
@@ -84,7 +95,7 @@ local function encodeValue(v)
 		-- fallback
 		local s = tostring(v)
 		jsonBuffer[#jsonBuffer + 1] = '"'
-		jsonBuffer[#jsonBuffer + 1] = s
+		jsonBuffer[#jsonBuffer + 1] = escapeString(s)
 		jsonBuffer[#jsonBuffer + 1] = '"'
 	end
 end
@@ -394,7 +405,8 @@ function script.update(dt)
 			print("Car script for " .. ac.getCarID(0) .. " generated an error : " .. err)
 		end)
 	end
-	local jsonData = ultraJSON(customData) -- JSON.stringify(customData)
+	local jsonData = ultraJSON(customData) -- 
+--	local jsonData = JSON.stringify(customData)
 
 	-- if not benchDone then
 	-- 	bench("JSON.stringify", function()
