@@ -1,13 +1,4 @@
-require("extensions.Extension")
-
 LegacyDataExtension = {}
-
-function LegacyDataExtension:new (o)
-    o = o or Extension:new(o)
-    setmetatable(o, self)
-    self.__index = self
-    return o
- end
 
 local carState = ac.getCar(0)
 local sim = ac.getSim()
@@ -18,6 +9,7 @@ function LegacyDataExtension:update(dt, customData)
     customData.Brake = carState.brake
     customData.CarDirection = carState.compass
     customData.CarForceFeedback = carState.ffbMultiplier * 100
+    customData.CarName = ac.getCarName(0)
     customData.Clutch = (carState.autoClutch) and (carState.clutch) or (1 - carState.clutch)
 
     customData.DifferentialPreload = carState.differentialPreload
@@ -30,6 +22,9 @@ function LegacyDataExtension:update(dt, customData)
     customData.IsDriftBonusOn = carState.isDriftBonusOn
     customData.IsDriftValid = carState.isDriftValid
     -- end
+    customData.ABSModes = carState.absModes
+    customData.ABSMode = carState.absMode
+    customData.ABSInAction = carState.absInAction
     customData.DistanceDrivenTotalKm = carState.distanceDrivenTotalKm
     customData.DistanceDrivenSessionKm = carState.distanceDrivenSessionKm
     customData.ExtraA = carState.extraA
@@ -44,7 +39,11 @@ function LegacyDataExtension:update(dt, customData)
     customData.Handbrake = carState.handbrake
     customData.HazardLights = carState.hazardLights
     customData.HeadlightsActive = carState.headlightsActive
-    customData.HighBeam = not carState.lowBeams
+    customData.HasFlashingLights = carState.hasFlashingLights
+    customData.FlashingLights = carState.flashingLightsActive
+    customData.HasLowBeams = carState.hasLowBeams
+    customData.LowBeams = carState.lowBeams
+    customData.HighBeams = carState.highBeams
     customData.IngameHours = sim.timeHours
     customData.IngameMinutes = sim.timeMinutes
     customData.IsInPitlane = carState.isInPitlane
@@ -61,14 +60,21 @@ function LegacyDataExtension:update(dt, customData)
     customData.MGUHChargingBatteries = carState.mguhChargingBatteries
     customData.MGUKDelivery = carState.mgukDelivery
     customData.MGUKDeliveryCount = carState.mgukDeliveryCount
-    customData.MGUKDeliveryName = ac.getMGUKDeliveryName(0 -1)
+    customData.MGUKDeliveryName = ac.getMGUKDeliveryName(0,carState.mgukDelivery)
     customData.MGUKRecovery = carState.mgukRecovery -- 0 to 10 (10 for 100%)		
     customData.OilPressure = carState.oilPressure
     customData.OilTemperature = carState.oilTemperature
+    customData.P2PStatus = carState.p2pStatus
+    customData.P2PActivations = carState.p2pActivations
     customData.Steer = carState.steer
     customData.SteerLock = carState.steerLock
+    customData.TCMode = carState.tractionControlMode
+    customData.TCModes = carState.tractionControlModes
+    customData.TCInAction = carState.tractionControlInAction
     customData.TC2 = carState.tractionControl2
+    customData.TC2Modes = carState.tractionControl2Modes
     customData.Throttle = carState.gas
+    customData.TrackName = ac.getTrackName()
     customData.Turn = ac.getTrackSectorName(ac.worldCoordinateToTrackProgress(carState.position))
     customData.TurningLeftLights = carState.turningLeftLights
     customData.TurningRightLights = carState.turningRightLights

@@ -1,13 +1,4 @@
-require("extensions.Extension")
-
 MediaExtension = {}
-
-function MediaExtension:new (o)
-    o = o or Extension:new(o)
-    setmetatable(o, self)
-    self.__index = self
-    return o
- end
 
 local function time(value)
   if value == -1 then return '--:--' end
