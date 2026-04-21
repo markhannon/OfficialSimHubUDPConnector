@@ -47,52 +47,87 @@ end
 --- END
 
 -- Constant to define minimum time between updates
-local MINIMUM_TIME_BETWEEN_UPDATES = 1
+local MINIMUM_TIME_BETWEEN_UPDATES = 0.2
 
 -- helper function to format position with two digits
 local function _idx(i)
 	return string.format("%02d", tostring(i))
 end
 
--- helper function to split cars table into one with
--- connected cars and one with unconnected cars
-local function classifyCars(cars)
-	local _connected = {}
-	local _unconnected = {}
-	for i, carIndex in ipairs(cars) do
-		if (ac.getCar(carIndex).isConnected == true) then
-			table.insert(_connected, carIndex)
-		else
-			table.insert(_unconnected, carIndex)
+local function hasValidBestLapTime(bestLapTimeMs)
+	return bestLapTimeMs ~= nil and bestLapTimeMs > 0
+end
+
+local function isRaceSession()
+	return ac.getSim().raceSessionType == 3
+end
+
+local function makeLeaderboardEntry(car)
+	return {
+		car = car,
+		driverName = ac.getDriverName(car.index) or "",
+		bestLapTimeMs = car.bestLapTimeMs
+	}
+end
+
+local function hasDriverName(entry)
+	return entry.driverName ~= ""
+end
+
+local function shouldIncludePracticeQualifyingEntry(entry)
+	if not hasDriverName(entry) then
+		return false
+	end
+
+	return entry.car.isConnected or hasValidBestLapTime(entry.bestLapTimeMs)
+end
+
+local function sortPracticeQualifyingEntries(entries)
+	table.sort(entries, function(left, right)
+		local leftHasValidTime = hasValidBestLapTime(left.bestLapTimeMs)
+		local rightHasValidTime = hasValidBestLapTime(right.bestLapTimeMs)
+
+		if leftHasValidTime ~= rightHasValidTime then
+			return leftHasValidTime
+		end
+
+		if leftHasValidTime and rightHasValidTime and left.bestLapTimeMs ~= right.bestLapTimeMs then
+			return left.bestLapTimeMs < right.bestLapTimeMs
+		end
+
+		if left.car.isConnected ~= right.car.isConnected then
+			return left.car.isConnected
+		end
+
+		if left.driverName ~= right.driverName then
+			return left.driverName < right.driverName
+		end
+
+		return left.car.index < right.car.index
+	end)
+end
+
+local function buildLeaderboardEntries()
+	local entries = {}
+	for i, car in ac.iterateCars.leaderboard() do
+		local entry = makeLeaderboardEntry(car)
+		if isRaceSession() then
+			table.insert(entries, entry)
+		elseif shouldIncludePracticeQualifyingEntry(entry) then
+			table.insert(entries, entry)
 		end
 	end
-	return _connected, _unconnected
-end
 
--- Sort function to sort a table of car_ids by bestLapTimeMs
--- Used in practice and qualify sessions
-local function sortCarsByTime(left, right)
-	return ac.getCar(left).bestLapTimeMs < ac.getCar(right).bestLapTimeMs
-end
+	if not isRaceSession() then
+		sortPracticeQualifyingEntries(entries)
+	end
 
--- Sort function to sort a table of car_ids by lapCount + splinePosition
--- Used in race sessions to determine position order.
-local function sortCarsByPosition(left, right)
-	return (ac.getCar(left).lapCount + ac.getCar(left).splinePosition) >
-	(ac.getCar(right).lapCount + ac.getCar(right).splinePosition)
-end
-
--- Table of cars used to store car_id in sorted list
--- Seperate tables for connected and unconnectedCars
-local cars = {}
-local carsConnected = {}
-local carsNotConnected = {}
-for i, car in ac.iterateCars() do
-	table.insert(cars, car.index)
+	return entries
 end
 
 -- Timestamp to delay expensive sort operations
 local timeSinceLastUpdate = 0
+local lastPublishedLeaderboardCount = 0
 
 function TyreExtension:update(dt, customData)
 	customData.TyreCompound = ac.getTyresName(0, carState.compoundIndex)
@@ -119,31 +154,19 @@ function TyreExtension:update(dt, customData)
 
 	-- Leaderboard
 	timeSinceLastUpdate = timeSinceLastUpdate + dt
-	local car
 	if (timeSinceLastUpdate > MINIMUM_TIME_BETWEEN_UPDATES) then
+		local leaderboardEntries = buildLeaderboardEntries()
 
-		-- Create seperate tables of connected and not-connected cars
-		carsConnected, carsNotConnected = classifyCars(cars)
-
-		-- Sort the connected car table as per appropriate rules for session.
-		if (ac.getSim().raceSessionType == 3) then
-			table.sort(carsConnected, sortCarsByPosition)
-		else
-			table.sort(carsConnected, sortCarsByTime)
+		for i, entry in ipairs(leaderboardEntries) do
+			customData["Position_" .. _idx(i) .. "_TyreCompound"] = ac.getTyresName(entry.car.index,
+				entry.car.compoundIndex)
 		end
 
-		-- Update the tyre data for connected cars
-		for i, carIndex in ipairs(carsConnected) do
-			car = ac.getCar(carIndex)
-			customData["Position_" .. _idx(i) .. "_TyreCompound"] = ac.getTyresName(carIndex, car.compoundIndex)
+		for i = #leaderboardEntries + 1, lastPublishedLeaderboardCount do
+			customData["Position_" .. _idx(i) .. "_TyreCompound"] = nil
 		end
 
-		-- Clear the tyre data for unconnected cars
-		local offset = #carsConnected
-		for i, carIndex in ipairs(carsNotConnected) do
-			customData["Position_" .. _idx(i+offset) .. "_TyreCompound"] = nil
-		end
-
+		lastPublishedLeaderboardCount = #leaderboardEntries
 		timeSinceLastUpdate = 0
 	end
 end
