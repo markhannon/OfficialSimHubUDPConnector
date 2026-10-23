@@ -3,7 +3,10 @@
 -- Collects pit stop related state for every connected car, keyed by
 -- driver name, and publishes it as a single JSON string once per second.
 -- Sample outputs:
+-- UDPConnectorDataPlugin.PitStops
 -- {"Mark Hannon":{"Fuel":49.732711791992,"LapCount":0,"IsRepairing":false,"IsChangingTyres":false,"IsRefueling":false,"IsRequestingPitStop":false,"CarIndex":0,"TyreCompound":"S","IsInPitlane":true,"IsInPit":false}}
+-- UDPConnectorDataPlugin.Stints
+--  
 ---@diagnostic disable: param-type-mismatch
 
 PitStopExtension = {}
@@ -88,7 +91,7 @@ function PitStopExtension:update(dt, customData)
     end
 
     customData.PitStops = JSON.stringify(pitStops)
-    customData.StintData = JSON.stringify(stints)
+    customData.Stints = JSON.stringify(stints)
 end
 
 return PitStopExtension
