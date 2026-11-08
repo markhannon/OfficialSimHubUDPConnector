@@ -63,7 +63,7 @@ local function stintData(car, elapsed)
 
     return {
         CarIndex = car.index,
-        LapsSincePit = math.max(0, car.lapCount - state.pitLapCount),
+        LapsSincePit = math.max(0, car.lapCount - state.pitLapCount +1),
         SecondsLastPit = state.secondsInPit,
     }
 end
