@@ -38,33 +38,34 @@ end
 local stintState = {}
 
 -- Build the per-car stint data: laps since the last pit stop and the
--- seconds spent in the pit box (car.isInPit) during the last/current stop
+-- seconds spent in a pit stop during the last/current stop
 ---@param car ac.StateCar
 ---@param elapsed number seconds since the previous update
 ---@return table
 local function stintData(car, elapsed)
+    local isInPit = car.isInPitlane or car.isInPit or car.isRefueling or car.isChangingTyres or car.isRepairing
     local state = stintState[car.index]
     if state == nil then
-        state = { pitLapCount = car.lapCount, secondsInPit = 0, wasInPit = false }
+        state = { pittedLap = car.lapCount, pittedSeconds = 0, isInPit = false }
         stintState[car.index] = state
     end
 
-    if car.isInPit then
-        if not state.wasInPit then
+    if isInPit then
+        if not state.isInPit then
             -- New stop: restart the timer
-            state.secondsInPit = 0
+            state.pittedSeconds = 0
         end
-        state.secondsInPit = state.secondsInPit + elapsed
-    elseif state.wasInPit then
+        state.pittedSeconds = state.pittedSeconds + elapsed
+    elseif state.isInPit then
         -- Stop finished: the stint starts from the current lap
-        state.pitLapCount = car.lapCount
+        state.pittedLap = car.lapCount
     end
-    state.wasInPit = car.isInPit
+    state.isInPit = isInPit
 
     return {
         CarIndex = car.index,
-        LapsSincePit = math.max(0, car.lapCount - state.pitLapCount +1),
-        SecondsLastPit = state.secondsInPit,
+        LapsSincePit = math.max(0, car.lapCount - state.pittedLap +1),
+        SecondsLastPit = state.pittedSeconds,
     }
 end
 
