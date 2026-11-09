@@ -43,7 +43,7 @@ local stintState = {}
 ---@param elapsed number seconds since the previous update
 ---@return table
 local function stintData(car, elapsed)
-    local isInPit = car.isInPitlane or car.isInPit or car.isRefueling or car.isChangingTyres or car.isRepairing
+    local isInPit = car.isInPitlane
     local state = stintState[car.index]
     if state == nil then
         state = { pittedLap = car.lapCount, pittedSeconds = 0, isInPit = false }
